@@ -2,22 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 1s ease-in-out forwards;
-}
-
 body {
   font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden;
 }
 
 @layer utilities {
@@ -105,18 +91,4 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* 3D effect styles */
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.perspective {
-  perspective: 1000px;
-}
-
-/* Smooth transitions for 3D movement */
-a {
-  transition: transform 0.2s ease-out;
 }

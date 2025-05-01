@@ -1,103 +1,193 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect } from 'react';
+import { useMotionValue, useSpring, useMotionTemplate, motion } from 'framer-motion';
+import Image from 'next/image';
+import EyeAnimation from '@/components/eye-animation';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  // Raw motion values
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+
+  // Smooth values (used by Eye and Links)
+  const springX = useSpring(rawX, { stiffness: isMobile ? 30 : 250, damping: isMobile ? 20 : 30 });
+  const springY = useSpring(rawY, { stiffness: isMobile ? 30 : 250, damping: isMobile ? 20 : 30 });
+
+  useEffect(() => {
+    let idleTimeout: NodeJS.Timeout | null = null;
+    let driftInterval: NodeJS.Timeout | null = null;
+
+    const startDrift = () => {
+      driftInterval = setInterval(() => {
+        const driftX = (Math.random() - 0.5) * 0.3;
+        const driftY = (Math.random() - 0.5) * 0.3;
+        rawX.set(rawX.get() + driftX);
+        rawY.set(rawY.get() + driftY);
+      }, 1000);
+    };
+
+    const stopDrift = () => {
+      if (driftInterval) clearInterval(driftInterval);
+    };
+
+    const handleTap = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      const x = touch.clientX / window.innerWidth - 0.5;
+      const y = touch.clientY / window.innerHeight - 0.5;
+      rawX.set(x);
+      rawY.set(y);
+    };
+
+    if (typeof window !== 'undefined') {
+      if (isMobile) {
+        // Idle look-around
+        startDrift();
+
+        window.addEventListener('touchstart', handleTap);
+      } else {
+        const handleMouseMove = (e: MouseEvent) => {
+          const x = e.clientX / window.innerWidth - 0.5;
+          const y = e.clientY / window.innerHeight - 0.5;
+
+          rawX.set(x);
+          rawY.set(y);
+
+          // Restart idle drift timer
+          if (idleTimeout) clearTimeout(idleTimeout);
+          idleTimeout = setTimeout(() => startDrift(), 5000);
+          stopDrift();
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+      }
+    }
+
+    return () => {
+      if (idleTimeout) clearTimeout(idleTimeout);
+      if (driftInterval) clearInterval(driftInterval);
+      window.removeEventListener('mousemove', () => {});
+      window.removeEventListener('touchstart', handleTap);
+    };
+  }, []);
+
+  return (
+    <main className='relative h-screen w-full overflow-hidden bg-white'>
+      <EyeAnimation mouseX={springX} mouseY={springY} />
+      <div className='absolute inset-0 flex items-center justify-center'>
+        <div className='grid grid-cols-3 gap-x-40 gap-y-20'>
+          {[
+            { href: 'https://github.com', label: 'GitHub', pos: 'top-20 left-20', depth: 1.5 },
+            {
+              href: 'https://kj.meowtin.com',
+              pos: 'top-10 right-40',
+              depth: 2,
+              imageUrl: '/okie-dokie-karaoke-logo.png',
+              imageAlt: 'Okie Dokie Karaoke',
+            },
+            {
+              href: 'https://dribbble.com',
+              label: 'Dribbble',
+              pos: 'bottom-40 left-10',
+              depth: 1.2,
+            },
+            {
+              href: 'https://behance.net',
+              label: 'Behance',
+              pos: 'bottom-20 right-20',
+              depth: 1.8,
+            },
+            { href: '/projects', label: 'Projects', pos: 'top-40 left-40', depth: 2.2 },
+            { href: '/contact', label: 'Contact', pos: 'bottom-10 right-40', depth: 1.3 },
+          ].map((link, i) => (
+            <PortfolioLink
+              key={i}
+              href={link.href}
+              label={link.label}
+              position={link.pos}
+              mouseX={springX}
+              mouseY={springY}
+              depth={link.depth}
+              imageUrl={link.imageUrl}
+              imageAlt={link.imageAlt}
+              imageSize={200}
+              imageBg='bg-white'
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+    </main>
+  );
+}
+
+function PortfolioLink({
+  href,
+  label,
+  position,
+  mouseX,
+  mouseY,
+  depth,
+  imageUrl,
+  imageAlt,
+  imageSize = 200,
+  imageBg,
+}: {
+  href: string;
+  label?: string;
+  position: string;
+  mouseX: any;
+  mouseY: any;
+  depth: number;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageSize?: number;
+  imageBg?: string;
+}) {
+  const x = useMotionTemplate`${mouseX} * ${-20 * depth}px`;
+  const y = useMotionTemplate`${mouseY} * ${-20 * depth}px`;
+  const rotateX = useMotionTemplate`${mouseY} * 10deg`;
+  const rotateY = useMotionTemplate`${mouseX} * -10deg`;
+  const animationDelay = position.includes('top') ? '0.5s' : '1s';
+
+  return (
+    <motion.a
+      href={href}
+      className={`absolute ${position} ${
+        !imageUrl ? 'rounded-full border border-black px-4 py-2' : ''
+      } text-sm font-medium text-black opacity-0 transition-opacity duration-1000 hover:scale-105 animate-fade-in`}
+      style={{
+        animationDelay,
+        x,
+        y,
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+        perspective: '1000px',
+      }}
+    >
+      {imageUrl ? (
+        <div
+          className={`relative overflow-hidden ${imageBg || ''}`}
+          style={{
+            width: `${imageSize}px`,
+            height: `${imageSize}px`,
+            maxWidth: '200px',
+            maxHeight: '200px',
+          }}
         >
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src={imageUrl || '/placeholder.svg'}
+            alt={imageAlt || ''}
+            fill
+            style={{ objectFit: 'contain' }}
+            sizes={`${imageSize}px`}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </div>
+      ) : (
+        label
+      )}
+    </motion.a>
   );
 }
