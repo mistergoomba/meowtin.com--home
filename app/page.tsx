@@ -145,10 +145,12 @@ function PortfolioLink({
   imageSize?: number;
   imageBg?: string;
 }) {
-  const x = useMotionTemplate`${mouseX} * ${-20 * depth}px`;
-  const y = useMotionTemplate`${mouseY} * ${-20 * depth}px`;
-  const rotateX = useMotionTemplate`${mouseY} * 10deg`;
-  const rotateY = useMotionTemplate`${mouseX} * -10deg`;
+  const transform = useMotionTemplate`
+  translate3d(${mouseX} * ${-20 * depth}px, ${mouseY} * ${-20 * depth}px, 0)
+  rotateX(${mouseY} * 10deg)
+  rotateY(${mouseX} * -10deg)
+`;
+
   const animationDelay = position.includes('top') ? '0.5s' : '1s';
 
   return (
@@ -159,10 +161,7 @@ function PortfolioLink({
       } text-sm font-medium text-black opacity-0 transition-opacity duration-1000 hover:scale-105 animate-fade-in`}
       style={{
         animationDelay,
-        x,
-        y,
-        rotateX,
-        rotateY,
+        transform,
         transformStyle: 'preserve-3d',
         perspective: '1000px',
       }}
