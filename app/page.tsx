@@ -81,57 +81,61 @@ export default function Home() {
 
   return (
     <main className='relative h-screen w-full overflow-hidden bg-white'>
-      {/* Eye animation component that follows cursor/touch */}
       <EyeAnimation mouseX={springX} mouseY={springY} />
-      <div className='absolute inset-0 flex items-center justify-center'>
-        {/* Grid layout for portfolio links */}
-        <div className='grid grid-cols-4 gap-x-20 gap-y-20'>
-          {/* Portfolio links array with their properties */}
+
+      {/* Okie Dokie Karaoke Logo - Upper Right */}
+      <div className='absolute top-10 right-60 z-10'>
+        <PortfolioLink
+          href='https://kj.meowtin.com'
+          position=''
+          mouseX={rawX}
+          mouseY={rawY}
+          depth={2.2}
+          imageUrl='/okie-dokie-karaoke-logo.png'
+          imageAlt='Okie Dokie Karaoke'
+          imageSize={150}
+        />
+      </div>
+
+      {/* Social Icons Cluster - Lower Left */}
+      <div className='absolute bottom-10 left-10 z-10'>
+        <div className='relative w-[250px] h-[250px]'>
           {[
             {
               href: 'https://www.facebook.com/mistergoombaremix',
               icon: FaFacebookF,
-              pos: 'top-20 left-20',
+              style: 'top-0 left-0',
               depth: 1.5,
             },
             {
               href: 'https://www.instagram.com/mistergoomba',
               icon: FaInstagram,
-              pos: 'top-10 right-40',
+              style: 'top-10 left-20',
               depth: 2,
             },
             {
               href: 'https://www.tiktok.com/@mrgoomba',
               icon: FaTiktok,
-              pos: 'bottom-40 left-10',
+              style: 'bottom-12 right-10',
               depth: 1.2,
             },
             {
               href: 'https://www.youtube.com/@mistergoomba',
               icon: FaYoutube,
-              pos: 'bottom-20 right-20',
+              style: 'bottom-10 left-5',
               depth: 1.8,
             },
-            {
-              href: 'https://kj.meowtin.com',
-              pos: 'top-40 left-40',
-              depth: 2.2,
-              imageUrl: '/okie-dokie-karaoke-logo.png',
-              imageAlt: 'Okie Dokie Karaoke',
-            },
           ].map((link, i) => (
-            <PortfolioLink
-              key={i}
-              href={link.href}
-              position={link.pos}
-              mouseX={rawX}
-              mouseY={rawY}
-              depth={link.depth}
-              imageUrl={link.imageUrl}
-              imageAlt={link.imageAlt}
-              imageSize={200}
-              Icon={link.icon}
-            />
+            <div key={i} className={`absolute ${link.style}`}>
+              <PortfolioLink
+                href={link.href}
+                position=''
+                mouseX={rawX}
+                mouseY={rawY}
+                depth={link.depth}
+                Icon={link.icon}
+              />
+            </div>
           ))}
         </div>
       </div>
