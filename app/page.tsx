@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useMotionValue, useSpring, useMotionTemplate, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import EyeAnimation from '@/components/eye-animation';
+import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 export default function Home() {
   // Check if the device is mobile for responsive behavior
@@ -84,44 +85,52 @@ export default function Home() {
       <EyeAnimation mouseX={springX} mouseY={springY} />
       <div className='absolute inset-0 flex items-center justify-center'>
         {/* Grid layout for portfolio links */}
-        <div className='grid grid-cols-3 gap-x-40 gap-y-20'>
+        <div className='grid grid-cols-4 gap-x-20 gap-y-20'>
           {/* Portfolio links array with their properties */}
           {[
-            { href: 'https://github.com', label: 'GitHub', pos: 'top-20 left-20', depth: 1.5 },
             {
-              href: 'https://kj.meowtin.com',
-              pos: 'top-10 right-40',
-              depth: 2,
-              imageUrl: '/okie-dokie-karaoke-logo.png',
-              imageAlt: 'Okie Dokie Karaoke',
+              href: 'https://www.facebook.com/mistergoombaremix',
+              icon: FaFacebookF,
+              pos: 'top-20 left-20',
+              depth: 1.5,
             },
             {
-              href: 'https://dribbble.com',
-              label: 'Dribbble',
+              href: 'https://www.instagram.com/mistergoomba',
+              icon: FaInstagram,
+              pos: 'top-10 right-40',
+              depth: 2,
+            },
+            {
+              href: 'https://www.tiktok.com/@mrgoomba',
+              icon: FaTiktok,
               pos: 'bottom-40 left-10',
               depth: 1.2,
             },
             {
-              href: 'https://behance.net',
-              label: 'Behance',
+              href: 'https://www.youtube.com/@mistergoomba',
+              icon: FaYoutube,
               pos: 'bottom-20 right-20',
               depth: 1.8,
             },
-            { href: '/projects', label: 'Projects', pos: 'top-40 left-40', depth: 2.2 },
-            { href: '/contact', label: 'Contact', pos: 'bottom-10 right-40', depth: 1.3 },
+            {
+              href: 'https://kj.meowtin.com',
+              pos: 'top-40 left-40',
+              depth: 2.2,
+              imageUrl: '/okie-dokie-karaoke-logo.png',
+              imageAlt: 'Okie Dokie Karaoke',
+            },
           ].map((link, i) => (
             <PortfolioLink
               key={i}
               href={link.href}
-              label={link.label}
               position={link.pos}
-              mouseX={springX}
-              mouseY={springY}
+              mouseX={rawX}
+              mouseY={rawY}
               depth={link.depth}
               imageUrl={link.imageUrl}
               imageAlt={link.imageAlt}
               imageSize={200}
-              imageBg='bg-white'
+              Icon={link.icon}
             />
           ))}
         </div>
@@ -131,9 +140,9 @@ export default function Home() {
 }
 
 // PortfolioLink component for individual portfolio items
+
 function PortfolioLink({
   href,
-  label,
   position,
   mouseX,
   mouseY,
@@ -141,10 +150,9 @@ function PortfolioLink({
   imageUrl,
   imageAlt,
   imageSize = 200,
-  imageBg,
+  Icon,
 }: {
   href: string;
-  label?: string;
   position: string;
   mouseX: any;
   mouseY: any;
@@ -152,35 +160,57 @@ function PortfolioLink({
   imageUrl?: string;
   imageAlt?: string;
   imageSize?: number;
-  imageBg?: string;
+  Icon?: any;
 }) {
-  // Create 3D transform template for motion effects
-  const transform = useMotionTemplate`
-  translate3d(${mouseX} * ${-20 * depth}px, ${mouseY} * ${-20 * depth}px, 0)
-  rotateX(${mouseY} * 10deg)
-  rotateY(${mouseX} * -10deg)
-`;
+  // State to track this element's 3D transform
+  const [transform, setTransform] = useState('');
 
-  // Staggered animation delay based on position
-  const animationDelay = position.includes('top') ? '0.5s' : '1s';
+  // Update transform when mouse position changes
+  useEffect(() => {
+    const updateTransform = () => {
+      const x = mouseX.get() * -20 * depth;
+      const y = mouseY.get() * -20 * depth;
+      const rotateX = mouseY.get() * 10;
+      const rotateY = mouseX.get() * -10;
+
+      setTransform(`translate3d(${x}px, ${y}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+    };
+
+    // Set up listeners for motion value changes
+    const unsubscribeX = mouseX.on('change', updateTransform);
+    const unsubscribeY = mouseY.on('change', updateTransform);
+
+    // Initial update
+    updateTransform();
+
+    // Cleanup
+    return () => {
+      unsubscribeX();
+      unsubscribeY();
+    };
+  }, [mouseX, mouseY, depth]);
 
   return (
-    <motion.a
+    <a
       href={href}
+      target={href.startsWith('http') ? '_blank' : undefined}
+      rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
       className={`absolute ${position} ${
-        !imageUrl ? 'rounded-full border border-black px-4 py-2' : ''
+        !imageUrl && !Icon ? 'rounded-full border border-black px-4 py-2' : ''
       } text-sm font-medium text-black opacity-0 transition-opacity duration-1000 hover:scale-105 animate-fade-in`}
       style={{
-        animationDelay,
+        animationDelay: `3s`,
         transform,
         transformStyle: 'preserve-3d',
         perspective: '1000px',
+        transition: 'transform 0.2s ease-out, scale 0.2s ease-out',
       }}
     >
-      {/* Render either an image or text label */}
-      {imageUrl ? (
+      {Icon ? (
+        <Icon className='w-12 h-12 text-black transition' />
+      ) : imageUrl ? (
         <div
-          className={`relative overflow-hidden ${imageBg || ''}`}
+          className={`relative overflow-hidden`}
           style={{
             width: `${imageSize}px`,
             height: `${imageSize}px`,
@@ -197,8 +227,8 @@ function PortfolioLink({
           />
         </div>
       ) : (
-        label
+        ''
       )}
-    </motion.a>
+    </a>
   );
 }

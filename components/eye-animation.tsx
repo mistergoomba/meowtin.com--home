@@ -54,6 +54,34 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
   const eyelidPaths = getEyelidPaths();
 
+  const updateIris = () => {
+    if (!eyeRef.current) return;
+    const eye = eyeRef.current.getBoundingClientRect();
+    const centerX = eye.left + eye.width / 2;
+    const centerY = eye.top + eye.height / 2;
+
+    let x = mouseX.get();
+    let y = mouseY.get();
+
+    if (Math.abs(x) <= 1 && Math.abs(y) <= 1) {
+      x = centerX + x * eye.width;
+      y = centerY + y * eye.height;
+    }
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    const maxX = Math.min(eye.width, eye.height) / 2;
+    const maxY = Math.min(eye.width, eye.height) / 1.5;
+    const dampen = Math.min(1, distance / 100);
+
+    const offsetX = (dx / distance) * maxX * dampen || 0;
+    const offsetY = (dy / distance) * maxY * dampen || 0;
+
+    setIrisOffset({ x: offsetX, y: offsetY });
+  };
+
   useEffect(() => {
     const timer1 = setTimeout(() => setAnimationStage(1), 600); // Show line
     const timer2 = setTimeout(() => setAnimationStage(2), 1500); // Open eye
@@ -113,34 +141,6 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
   // Update irisOffset when motion values change
   useMotionValueEvent(mouseX, 'change', () => updateIris());
   useMotionValueEvent(mouseY, 'change', () => updateIris());
-
-  const updateIris = () => {
-    if (!eyeRef.current) return;
-    const eye = eyeRef.current.getBoundingClientRect();
-    const centerX = eye.left + eye.width / 2;
-    const centerY = eye.top + eye.height / 2;
-
-    let x = mouseX.get();
-    let y = mouseY.get();
-
-    if (Math.abs(x) <= 1 && Math.abs(y) <= 1) {
-      x = centerX + x * eye.width;
-      y = centerY + y * eye.height;
-    }
-
-    const dx = x - centerX;
-    const dy = y - centerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    const maxX = Math.min(eye.width, eye.height) / 2;
-    const maxY = Math.min(eye.width, eye.height) / 1.5;
-    const dampen = Math.min(1, distance / 100);
-
-    const offsetX = (dx / distance) * maxX * dampen || 0;
-    const offsetY = (dy / distance) * maxY * dampen || 0;
-
-    setIrisOffset({ x: offsetX, y: offsetY });
-  };
 
   return (
     <div className='absolute inset-0 flex items-center justify-center'>
