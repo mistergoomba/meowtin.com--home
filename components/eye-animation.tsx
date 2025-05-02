@@ -6,7 +6,6 @@ import { motion, useMotionValueEvent } from 'framer-motion';
 export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: any }) {
   const [animationStage, setAnimationStage] = useState(0);
   const eyeRef = useRef<SVGSVGElement>(null);
-  const [isBlinking, setIsBlinking] = useState(false);
   const [blinkStage, setBlinkStage] = useState(0);
   const [irisOffset, setIrisOffset] = useState({ x: 0, y: 0 });
   const blinkTimeoutRef = useRef<NodeJS.Timeout>(null);
@@ -31,16 +30,16 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
     // Top eyelid fill paths for different blink stages
     const topFillPaths = [
-      'M0,0 L200,0 L200,30 Q100,0 0,30 Z', // Fully open
-      'M0,0 L200,0 L200,40 Q100,20 0,40 Z', // Half closed
+      'M0,0 L200,0 L200,37 Q100,-5 0,37 Z', // Fully open
+      'M0,0 L200,0 L200,43 Q100,20 0,43 Z', // Half closed
       'M0,0 L200,0 L200,50 Q100,50 0,50 Z', // Fully closed
       'M0,0 L200,0 L200,40 Q100,20 0,40 Z', // Half open
     ];
 
     // Bottom eyelid fill paths for different blink stages
     const bottomFillPaths = [
-      'M0,70 Q100,100 200,70 L200,100 L0,100 Z', // Fully open
-      'M0,60 Q100,80 200,60 L200,100 L0,100 Z', // Half closed
+      'M0,63 Q100,105 200,63 L200,100 L0,100 Z', // Fully open
+      'M0,57 Q100,80 200,57 L200,100 L0,100 Z', // Half closed
       'M0,50 Q100,50 200,50 L200,100 L0,100 Z', // Fully closed
       'M0,60 Q100,80 200,60 L200,100 L0,100 Z', // Half open
     ];
