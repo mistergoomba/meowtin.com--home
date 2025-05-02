@@ -150,7 +150,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             initial={{ width: 0, x: -300 }}
             animate={{ width: 200, x: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className='absolute top-[50px] left-0 h-[3px] bg-black'
+            className='absolute top-[50px] left-0 h-[3px] bg-white'
           />
         )}
 
@@ -160,10 +160,8 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             height='100'
             viewBox='0 0 200 100'
             ref={eyeRef}
-            className='absolute top-0 left-0'
+            className='absolute top-0 left-0 pointer-events-none'
           >
-            <rect x='0' y='0' width='200' height='100' fill='white' />
-
             {/* Iris */}
             <motion.g
               animate={{ x: irisOffset.x, y: irisOffset.y }}
@@ -180,20 +178,20 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             </motion.g>
 
             {/* Top eyelid - filled shape that covers the iris */}
-            <motion.path d={eyelidPaths.topFillPath} transition={{ duration: 0.1 }} fill='white' />
+            <motion.path d={eyelidPaths.topFillPath} transition={{ duration: 0.1 }} fill='black' />
 
             {/* Bottom eyelid - filled shape that covers the iris */}
             <motion.path
               d={eyelidPaths.bottomFillPath}
               transition={{ duration: 0.1 }}
-              fill='white'
+              fill='black'
             />
 
             {/* Eye outline (top lid) - drawn on top */}
             <motion.path
               d={eyelidPaths.topPath}
               transition={{ duration: 0.1 }}
-              stroke='black'
+              stroke='white'
               strokeWidth='3'
               fill='none'
             />
@@ -202,7 +200,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             <motion.path
               d={eyelidPaths.bottomPath}
               transition={{ duration: 0.1 }}
-              stroke='black'
+              stroke='white'
               strokeWidth='3'
               fill='none'
             />
