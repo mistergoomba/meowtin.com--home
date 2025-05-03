@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 function ArtPreview() {
   const [previewImages, setPreviewImages] = useState<Array<{ key: string; img1: string }>>([]);
