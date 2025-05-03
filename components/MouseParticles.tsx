@@ -17,8 +17,8 @@ function Particles() {
   // Increased influence radius for mouse
   const influenceRadius = 3.0;
 
-  // Increased base opacity for faster initial appearance
-  const baseOpacity = 0.6;
+  // Reduced base opacity to make stars dimmer by default
+  const baseOpacity = 0.3;
   const maxOpacity = 0.9;
 
   // Store time for throbbing effect
@@ -93,6 +93,9 @@ function Particles() {
     );
   }, []);
 
+  // Optimize the Particles component for better performance
+
+  // 1. Memoize the positions, alphas, sizes, and colors arrays
   const { positions, alphas, sizes, colors } = useMemo(() => {
     const count = 100;
     const posArray = new Float32Array(count * 3);
@@ -129,7 +132,7 @@ function Particles() {
       sizes: sizeArray,
       colors: colorArray,
     };
-  }, [starColorPalettes]);
+  }, [starColorPalettes, STAR_SIZE_FACTOR, baseOpacity]);
 
   const alphaRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
   const sizeRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
@@ -166,48 +169,54 @@ function Particles() {
     };
   }, []);
 
+  // 2. Optimize the useFrame function to reduce calculations
   useFrame((state) => {
     if (!mesh.current || !alphaRef.current || !sizeRef.current) return;
 
-    // Increased time update for faster throbbing
-    timeRef.current += 0.02;
+    // Update time for throbbing effect - use smaller increment for smoother animation
+    timeRef.current += 0.008;
 
     const positions = mesh.current.geometry.attributes.position.array as Float32Array;
+    const alphaArray = alphaRef.current.array as Float32Array;
+    const sizeArray = sizeRef.current.array as Float32Array;
+
+    // Pre-calculate values outside the loop
+    const mouseXPos = mouse.x;
+    const mouseYPos = mouse.y;
+    const currentTime = timeRef.current;
+    const influenceRadiusSq = influenceRadius * influenceRadius;
+    const opacityRange = maxOpacity - baseOpacity;
+    const proximityIncrease = 0.15 * STAR_SIZE_FACTOR;
+
     for (let i = 0; i < alphas.length; i++) {
       const x = positions[i * 3 + 0];
       const y = positions[i * 3 + 1];
-      const z = positions[i * 3 + 2];
 
-      // Calculate distance to mouse in 3D space
-      const dx = mouse.x - x;
-      const dy = mouse.y - y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      // Calculate distance to mouse in 3D space - only use x and y for better performance
+      const dx = mouseXPos - x;
+      const dy = mouseYPos - y;
+      const distSq = dx * dx + dy * dy;
 
-      // Calculate influence factor (0 to 1)
-      // Smoother falloff with quadratic easing
-      const t = Math.max(0, Math.min(1, 1 - (dist * dist) / (influenceRadius * influenceRadius)));
+      // Calculate influence factor (0 to 1) with quadratic easing
+      const t = Math.max(0, Math.min(1, 1 - distSq / influenceRadiusSq));
 
-      // Increased throbbing effect for more dynamic movement
-      const throb = t * Math.sin(timeRef.current * 4 + phaseRef.current[i]) * 0.4 + 0.8;
+      // Calculate throbbing effect - stronger when closer to mouse
+      const phase = phaseRef.current[i];
+      const throb = t * Math.sin(currentTime * 3 + phase) * 0.3 + 0.7;
 
       // Combine base opacity, proximity effect, and throbbing
-      const a = baseOpacity + t * (maxOpacity - baseOpacity) * throb;
+      alphaArray[i] = baseOpacity + t * opacityRange * throb;
 
       // Size increase on proximity scaled by STAR_SIZE_FACTOR
-      const baseSize = sizes[i];
-      const proximityIncrease = 0.2 * STAR_SIZE_FACTOR;
-      const s = baseSize + t * proximityIncrease * throb;
-
-      alphaRef.current.setX(i, a);
-      sizeRef.current.setX(i, s);
+      sizeArray[i] = sizes[i] + t * proximityIncrease * throb;
     }
 
     alphaRef.current.needsUpdate = true;
     sizeRef.current.needsUpdate = true;
 
-    // SLOWED DOWN ROTATION SPEED
-    mesh.current.rotation.x += 0.00002 + mouse.y * 0.0004;
-    mesh.current.rotation.y += 0.00002 + mouse.x * 0.0004;
+    // SLOWED DOWN ROTATION SPEED - use smaller increments for smoother rotation
+    mesh.current.rotation.x += 0.00002 + mouseYPos * 0.0003;
+    mesh.current.rotation.y += 0.00002 + mouseXPos * 0.0003;
   });
 
   const uniforms = useMemo(

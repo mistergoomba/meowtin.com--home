@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValueEvent } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: any }) {
   const [animationStage, setAnimationStage] = useState(0);
   const eyeRef = useRef<SVGSVGElement>(null);
   const [blinkStage, setBlinkStage] = useState(0);
   const [irisOffset, setIrisOffset] = useState({ x: 0, y: 0 });
-  const blinkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastMousePosRef = useRef({ x: 0, y: 0 });
+  const autoAnimateRef = useRef<NodeJS.Timeout | null>(null);
 
   // Get eyelid paths based on blink stage - with pointed ends
   const getEyelidPaths = () => {
@@ -46,57 +48,28 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
   const eyelidPaths = getEyelidPaths();
 
-  // Update iris position based on mouse position
-  const updateIris = () => {
-    if (!eyeRef.current || typeof window === 'undefined') return;
-
-    const eye = eyeRef.current.getBoundingClientRect();
-    if (eye.width === 0 || eye.height === 0) return; // Prevents NaN offsets
-    const eyeCenterX = eye.left + eye.width / 2;
-    const eyeCenterY = eye.top + eye.height / 2;
-
-    // Get normalized mouse position (-0.5 to 0.5)
-    const x = mouseX.get();
-    const y = mouseY.get();
-
-    // Calculate direction vector
-    // We're using window coordinates for better positioning
-    const windowCenterX = window.innerWidth / 2;
-    const windowCenterY = window.innerHeight / 2;
-    const dx = x * window.innerWidth + windowCenterX - eyeCenterX;
-    const dy = y * window.innerHeight + windowCenterY - eyeCenterY;
-
-    // Calculate distance for normalization
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    // Set maximum movement distances - REDUCED for less exaggerated movement
-    const maxDistanceX = Math.min(eye.width, eye.height) / 2.5;
-    const maxDistanceY = Math.min(eye.width, eye.height) / 4.0;
-
-    // Calculate normalized offsets with reduced horizontal exaggeration
-    let offsetX = 0;
-    let offsetY = 0;
-
-    if (distance > 0) {
-      // Base movement with limits
-      offsetX = (dx / distance) * Math.min(Math.abs(dx), maxDistanceX);
-      offsetY = (dy / distance) * Math.min(Math.abs(dy), maxDistanceY);
-
-      // Reduced horizontal exaggeration
-      offsetX *= 1.2;
-    }
-
-    setIrisOffset({ x: offsetX, y: offsetY });
-  };
-
-  // Set mounted state
+  // Mark component as hydrated after mount
   useEffect(() => {
-    setIsMounted(true);
+    setIsHydrated(true);
+
+    // Start with a small movement to ensure animation starts
+    setTimeout(() => {
+      setIrisOffset({ x: 5, y: 2 });
+    }, 2000);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (autoAnimateRef.current) {
+        clearInterval(autoAnimateRef.current);
+      }
+    };
   }, []);
 
   // Start animation sequence
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isHydrated) return;
 
     const timer1 = setTimeout(() => setAnimationStage(1), 600); // Show line
     const timer2 = setTimeout(() => setAnimationStage(2), 1500); // Open eye
@@ -105,11 +78,13 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, [isMounted]);
+  }, [isHydrated]);
 
-  // Set up blinking
+  // Handle blinking
   useEffect(() => {
-    if (!isMounted || animationStage !== 2) return; // Only start blinking after eye is open
+    if (!isHydrated || animationStage !== 2) return;
+
+    let blinkTimeoutId: NodeJS.Timeout | null = null;
 
     // Function to handle a single blink cycle
     const doBlink = () => {
@@ -135,42 +110,160 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
     // Schedule random blinks
     const scheduleBlink = () => {
       const nextBlinkDelay = Math.random() * 4000 + 2000; // Random delay between 2-6 seconds
-      return setTimeout(() => {
+      blinkTimeoutId = setTimeout(() => {
         doBlink();
-        if (blinkTimeoutRef.current) {
-          clearTimeout(blinkTimeoutRef.current);
-        }
-        blinkTimeoutRef.current = scheduleBlink() as NodeJS.Timeout;
+        blinkTimeoutId = scheduleBlink();
       }, nextBlinkDelay);
+
+      return blinkTimeoutId;
     };
 
     // Start the blinking cycle
-    blinkTimeoutRef.current = scheduleBlink() as NodeJS.Timeout;
+    blinkTimeoutId = scheduleBlink();
 
     return () => {
-      if (blinkTimeoutRef.current) {
-        clearTimeout(blinkTimeoutRef.current);
+      if (blinkTimeoutId) clearTimeout(blinkTimeoutId);
+    };
+  }, [animationStage, isHydrated]);
+
+  // Direct DOM-based approach for eye movement
+  useEffect(() => {
+    if (!isHydrated || animationStage !== 2) return;
+
+    // Function to update iris position
+    const updateIrisPosition = () => {
+      if (!eyeRef.current) return;
+
+      try {
+        // Get current mouse position from props
+        const currentX = mouseX.get();
+        const currentY = mouseY.get();
+
+        // Store last valid mouse position
+        if (
+          currentX !== undefined &&
+          currentY !== undefined &&
+          !isNaN(currentX) &&
+          !isNaN(currentY)
+        ) {
+          lastMousePosRef.current = { x: currentX, y: currentY };
+        }
+
+        const x = lastMousePosRef.current.x;
+        const y = lastMousePosRef.current.y;
+
+        // Get eye dimensions
+        const eye = eyeRef.current.getBoundingClientRect();
+        if (eye.width === 0 || eye.height === 0) return;
+
+        const eyeCenterX = eye.left + eye.width / 2;
+        const eyeCenterY = eye.top + eye.height / 2;
+
+        // Calculate direction vector
+        const windowCenterX = window.innerWidth / 2;
+        const windowCenterY = window.innerHeight / 2;
+        const dx = x * window.innerWidth + windowCenterX - eyeCenterX;
+        const dy = y * window.innerHeight + windowCenterY - eyeCenterY;
+
+        // Calculate distance for normalization
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Set maximum movement distances
+        const maxDistanceX = Math.min(eye.width, eye.height) / 2.8;
+        const maxDistanceY = Math.min(eye.width, eye.height) / 6.0;
+
+        // Calculate normalized offsets
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (distance > 0) {
+          offsetX = (dx / distance) * Math.min(Math.abs(dx), maxDistanceX);
+          offsetY = (dy / distance) * Math.min(Math.abs(dy), maxDistanceY);
+        }
+
+        // Update iris position with smooth transition
+        setIrisOffset((prev) => ({
+          x: prev.x + (offsetX - prev.x) * 0.1,
+          y: prev.y + (offsetY - prev.y) * 0.1,
+        }));
+      } catch (error) {
+        console.error('Error updating iris position:', error);
+      }
+
+      // Continue animation loop
+      animationFrameRef.current = requestAnimationFrame(updateIrisPosition);
+    };
+
+    // Start animation loop
+    animationFrameRef.current = requestAnimationFrame(updateIrisPosition);
+
+    // Fallback animation if no mouse movement is detected
+    let lastOffsetX = 0;
+    let lastOffsetY = 0;
+    let noMovementCounter = 0;
+
+    autoAnimateRef.current = setInterval(() => {
+      // Check if iris has moved
+      const currentOffsetX = irisOffset.x;
+      const currentOffsetY = irisOffset.y;
+
+      if (
+        Math.abs(currentOffsetX - lastOffsetX) < 0.1 &&
+        Math.abs(currentOffsetY - lastOffsetY) < 0.1
+      ) {
+        noMovementCounter++;
+
+        // If no movement for 3 checks (3 seconds), start auto animation
+        if (noMovementCounter >= 3) {
+          // Generate random eye movement
+          const randomX = (Math.random() - 0.5) * 0.4;
+          const randomY = (Math.random() - 0.5) * 0.2;
+
+          // Update last mouse position
+          lastMousePosRef.current = { x: randomX, y: randomY };
+
+          // Reset counter after applying movement
+          noMovementCounter = 0;
+        }
+      } else {
+        // Reset counter if movement detected
+        noMovementCounter = 0;
+      }
+
+      // Update last position
+      lastOffsetX = currentOffsetX;
+      lastOffsetY = currentOffsetY;
+    }, 1000);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (autoAnimateRef.current) {
+        clearInterval(autoAnimateRef.current);
       }
     };
-  }, [animationStage, isMounted]);
+  }, [isHydrated, animationStage, mouseX, mouseY]);
 
-  // Update iris position when mouse moves
+  // Add direct mouse event listener as a fallback
   useEffect(() => {
-    if (!isMounted || animationStage !== 2) return;
+    if (!isHydrated || animationStage !== 2) return;
 
-    const unsubscribeX = mouseX.onChange(updateIris);
-    const unsubscribeY = mouseY.onChange(updateIris);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (typeof window === 'undefined') return;
 
-    // Trigger once on open
-    setTimeout(() => updateIris(), 100);
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+
+      lastMousePosRef.current = { x, y };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
-      unsubscribeX();
-      unsubscribeY();
+      window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [isMounted, animationStage, mouseX, mouseY]);
-
-  if (!isMounted) return null;
+  }, [isHydrated, animationStage]);
 
   return (
     <div className='absolute inset-0 flex items-center justify-center'>
@@ -206,15 +299,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
             {/* Iris group - clipped by the eye opening */}
             <g clipPath='url(#eyeClip)'>
-              <motion.g
-                animate={{ x: irisOffset.x, y: irisOffset.y }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 450,
-                  damping: 22,
-                  mass: 0.35,
-                }}
-              >
+              <g style={{ transform: `translate(${irisOffset.x}px, ${irisOffset.y}px)` }}>
                 {/* Iris (colored part) */}
                 <circle cx='100' cy='50' r='25' fill='#5b8fb9' stroke='none' />
 
@@ -223,26 +308,14 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
                 {/* Light reflection */}
                 <circle cx='110' cy='40' r='5' fill='white' stroke='none' opacity='0.7' />
-              </motion.g>
+              </g>
             </g>
 
             {/* Eye outline (top lid) - drawn on top */}
-            <motion.path
-              d={eyelidPaths.topPath}
-              transition={{ duration: 0.1 }}
-              stroke='white'
-              strokeWidth='3'
-              fill='none'
-            />
+            <path d={eyelidPaths.topPath} stroke='white' strokeWidth='3' fill='none' />
 
             {/* Eye outline (bottom lid) - drawn on top */}
-            <motion.path
-              d={eyelidPaths.bottomPath}
-              transition={{ duration: 0.1 }}
-              stroke='white'
-              strokeWidth='3'
-              fill='none'
-            />
+            <path d={eyelidPaths.bottomPath} stroke='white' strokeWidth='3' fill='none' />
           </svg>
         )}
       </div>

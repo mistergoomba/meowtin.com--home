@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 
 interface PortfolioLinkProps {
@@ -54,7 +54,7 @@ export default function PortfolioLink({
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   // Influence radius for mouse proximity (larger than stars for slower falloff)
-  const influenceRadius = 600;
+  const influenceRadius = 400;
 
   // Check if we're on mobile
   useEffect(() => {
@@ -71,88 +71,100 @@ export default function PortfolioLink({
   }, []);
 
   // Autonomous floating amplitude (how far it moves) - reduced on mobile
-  const floatAmplitudeX = (isMobile ? 8 : 20) + Math.random() * (isMobile ? 8 : 15);
-  const floatAmplitudeY = (isMobile ? 8 : 20) + Math.random() * (isMobile ? 8 : 15);
-  const rotateAmplitude = (isMobile ? 3 : 8) + Math.random() * (isMobile ? 4 : 8);
+  const floatAmplitudeX = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
+  const floatAmplitudeY = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
+  const rotateAmplitude = (isMobile ? 2 : 5) + Math.random() * (isMobile ? 3 : 5); // 2-5 degrees on mobile, 5-10 on desktop
 
   // Update transform and effects when mouse position changes
+  const updateEffects = useCallback(() => {
+    if (!linkRef.current) return;
+
+    // Get mouse position in page coordinates
+    const mouseXPage = mouseX.get() * window.innerWidth + window.innerWidth / 2;
+    const mouseYPage = mouseY.get() * window.innerHeight + window.innerHeight / 2;
+
+    // Get link position
+    const linkRect = linkRef.current.getBoundingClientRect();
+    const linkCenterX = linkRect.left + linkRect.width / 2;
+    const linkCenterY = linkRect.top + linkRect.height / 2;
+
+    // Calculate distance to mouse
+    const dx = mouseXPage - linkCenterX;
+    const dy = mouseYPage - linkCenterY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Update time for animations - use smaller increment for smoother animation
+    timeRef.current += 0.004;
+    const currentTime = timeRef.current;
+
+    // Calculate autonomous floating movement
+    const newOffsetX = Math.sin(currentTime * 0.5 + floatPhaseX.current) * floatAmplitudeX;
+    const newOffsetY = Math.sin(currentTime * 0.4 + floatPhaseY.current) * floatAmplitudeY;
+    const newRotateZ = Math.sin(currentTime * 0.3 + rotatePhase.current) * rotateAmplitude;
+
+    setOffsetX(newOffsetX);
+    setOffsetY(newOffsetY);
+    setRotateZ(newRotateZ);
+
+    // Calculate 3D transform based on mouse position (exaggerated)
+    // Reduce movement on mobile
+    const mouseMultiplier = isMobile ? -15 : -30;
+    const rotateMultiplier = isMobile ? 8 : 15;
+
+    const x = mouseX.get() * mouseMultiplier * depth + newOffsetX;
+    const y = mouseY.get() * mouseMultiplier * depth + newOffsetY;
+    const rotateX = mouseY.get() * rotateMultiplier;
+    const rotateY = mouseX.get() * -rotateMultiplier;
+
+    setTransform(
+      `translate3d(${x}px, ${y}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${newRotateZ}deg)`
+    );
+
+    // Calculate influence factor (0 to 1) with smoother falloff
+    const distanceSq = distance * distance;
+    const influenceRadiusSq = influenceRadius * influenceRadius;
+    const t = Math.max(0, Math.min(1, 1 - distanceSq / influenceRadiusSq));
+
+    // Calculate throbbing effect - exaggerated
+    const throb = t * Math.sin(currentTime * 1.5 + phaseRef.current) * 0.3 + 0.7;
+
+    // Update scale and opacity based on proximity and throbbing
+    const baseScale = 1.0;
+    const baseOpacity = 0.8;
+    const maxOpacity = 1.0;
+
+    // Reduce scale effect on mobile
+    const scaleEffect = isMobile ? 0.1 : 0.2;
+    setScale(baseScale + t * scaleEffect * throb);
+    setOpacity(baseOpacity + t * (maxOpacity - baseOpacity) * throb);
+  }, [
+    mouseX,
+    mouseY,
+    depth,
+    isMobile,
+    floatAmplitudeX,
+    floatAmplitudeY,
+    rotateAmplitude,
+    influenceRadius,
+  ]);
+
+  // 2. Optimize the animation loop with requestAnimationFrame
   useEffect(() => {
-    let animationFrame: number;
+    let animationFrameId: number;
 
-    const updateEffects = () => {
-      if (!linkRef.current) return;
-
-      // Get mouse position in page coordinates
-      const mouseXPage = mouseX.get() * window.innerWidth + window.innerWidth / 2;
-      const mouseYPage = mouseY.get() * window.innerHeight + window.innerHeight / 2;
-
-      // Get link position
-      const linkRect = linkRef.current.getBoundingClientRect();
-      const linkCenterX = linkRect.left + linkRect.width / 2;
-      const linkCenterY = linkRect.top + linkRect.height / 2;
-
-      // Calculate distance to mouse
-      const dx = mouseXPage - linkCenterX;
-      const dy = mouseYPage - linkCenterY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      // Update time for animations
-      timeRef.current += 0.008;
-
-      // Calculate autonomous floating movement
-      const newOffsetX = Math.sin(timeRef.current * 0.7 + floatPhaseX.current) * floatAmplitudeX;
-      const newOffsetY = Math.sin(timeRef.current * 0.6 + floatPhaseY.current) * floatAmplitudeY;
-      const newRotateZ = Math.sin(timeRef.current * 0.4 + rotatePhase.current) * rotateAmplitude;
-
-      setOffsetX(newOffsetX);
-      setOffsetY(newOffsetY);
-      setRotateZ(newRotateZ);
-
-      // Calculate 3D transform based on mouse position (more exaggerated)
-      // Reduce movement on mobile
-      const mouseMultiplier = isMobile ? -20 : -40;
-      const rotateMultiplier = isMobile ? 12 : 25;
-
-      const x = mouseX.get() * mouseMultiplier * depth + newOffsetX;
-      const y = mouseY.get() * mouseMultiplier * depth + newOffsetY;
-      const rotateX = mouseY.get() * rotateMultiplier;
-      const rotateY = mouseX.get() * -rotateMultiplier;
-
-      setTransform(
-        `translate3d(${x}px, ${y}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${newRotateZ}deg)`
-      );
-
-      // Calculate influence factor (0 to 1) with smoother falloff
-      const t = Math.max(
-        0,
-        Math.min(1, 1 - (distance * distance) / (influenceRadius * influenceRadius))
-      );
-
-      // Calculate throbbing effect - more dramatic
-      const throb = t * Math.sin(timeRef.current * 2 + phaseRef.current) * 0.4 + 0.8;
-
-      // Update scale and opacity based on proximity and throbbing
-      const baseScale = 1.0;
-      const baseOpacity = 0.8;
-      const maxOpacity = 1.0;
-
-      // Increased scale effect
-      const scaleEffect = isMobile ? 0.15 : 0.3;
-      setScale(baseScale + t * scaleEffect * throb);
-      setOpacity(baseOpacity + t * (maxOpacity - baseOpacity) * throb);
-
-      // Continue animation loop
-      animationFrame = requestAnimationFrame(updateEffects);
+    const animationLoop = () => {
+      updateEffects();
+      animationFrameId = requestAnimationFrame(animationLoop);
     };
 
     // Start animation loop
-    animationFrame = requestAnimationFrame(updateEffects);
+    animationFrameId = requestAnimationFrame(animationLoop);
 
     // Cleanup
     return () => {
-      cancelAnimationFrame(animationFrame);
+      cancelAnimationFrame(animationFrameId);
     };
-  }, [mouseX, mouseY, depth, isMobile]);
+  }, [updateEffects]);
 
   return (
     <a
