@@ -48,10 +48,17 @@ export default function Home() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isClient, setIsClient] = useState(false);
 
+  // Track gyroscope support and permission
+  const [hasGyroscope, setHasGyroscope] = useState(false);
+  const [gyroscopePermission, setGyroscopePermission] = useState<PermissionState | null>(null);
+
+  // Track if we're using gyroscope for animation
+  const isUsingGyroscope = useRef(false);
+
   // Track if component is mounted
   const isMounted = useRef(false);
 
-  // Update screen size state
+  // Update screen size state and check for gyroscope
   useEffect(() => {
     setIsClient(true);
     isMounted.current = true;
@@ -65,9 +72,21 @@ export default function Home() {
       setIsMobile(width < 768); // Standard mobile breakpoint
     };
 
-    // Initial check
+    // Check if device has gyroscope
+    const checkGyroscope = () => {
+      if (
+        typeof window !== 'undefined' &&
+        window.DeviceOrientationEvent &&
+        typeof (DeviceOrientationEvent as any).requestPermission === 'function'
+      ) {
+        setHasGyroscope(true);
+      }
+    };
+
+    // Initial checks
     if (typeof window !== 'undefined') {
       handleResize();
+      checkGyroscope();
       window.addEventListener('resize', handleResize);
     }
 
@@ -79,8 +98,72 @@ export default function Home() {
     };
   }, []);
 
+  // Request gyroscope permission and set up event listeners
+  useEffect(() => {
+    if (!isMounted.current || !isClient || !isMobile || !hasGyroscope) return;
+
+    // Function to request permission for gyroscope
+    const requestGyroscopePermission = async () => {
+      try {
+        // Request permission
+        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+          const permission = await (DeviceOrientationEvent as any).requestPermission();
+          setGyroscopePermission(permission);
+
+          if (permission === 'granted') {
+            isUsingGyroscope.current = true;
+            // Add event listener for device orientation
+            window.addEventListener('deviceorientation', handleDeviceOrientation, {
+              passive: true,
+            });
+          }
+        } else {
+          // For devices that don't require permission
+          isUsingGyroscope.current = true;
+          window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
+        }
+      } catch (error) {
+        console.error('Error requesting gyroscope permission:', error);
+        isUsingGyroscope.current = false;
+      }
+    };
+
+    // Handle device orientation event
+    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+      if (!isMounted.current) return;
+
+      // Get orientation data
+      const beta = event.beta; // X-axis rotation (-180 to 180)
+      const gamma = event.gamma; // Y-axis rotation (-90 to 90)
+
+      if (beta === null || gamma === null) return;
+
+      // Convert orientation to normalized values (-0.5 to 0.5)
+      // Limit the range to create a more controlled effect
+      const x = Math.max(-0.5, Math.min(0.5, gamma / 45));
+      const y = Math.max(-0.5, Math.min(0.5, beta / 45));
+
+      // Update motion values
+      rawX.set(x * 0.7); // Reduce sensitivity
+      rawY.set(y * 0.7); // Reduce sensitivity
+    };
+
+    // Request permission when component mounts
+    requestGyroscopePermission();
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      }
+    };
+  }, [rawX, rawY, isClient, isMobile, hasGyroscope]);
+
+  // Set up mouse/touch events (used when gyroscope is not available)
   useEffect(() => {
     if (!isMounted.current || !isClient) return;
+
+    // Skip if using gyroscope
+    if (isMobile && isUsingGyroscope.current) return;
 
     let idleTimeout: NodeJS.Timeout | null = null;
     let driftInterval: NodeJS.Timeout | null = null;
@@ -134,8 +217,10 @@ export default function Home() {
       updateMousePosition(e.clientX, e.clientY);
     };
 
-    // Handle touch events for mobile
+    // Handle touch events for mobile (when gyroscope is not available)
     const handleTouchStart = (e: TouchEvent) => {
+      if (isMobile && isUsingGyroscope.current) return;
+
       setIsTouchActive(true);
       stopDrift(); // Stop any drift when touch starts
 
@@ -146,6 +231,8 @@ export default function Home() {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (isMobile && isUsingGyroscope.current) return;
+
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         updateMousePosition(touch.clientX, touch.clientY);
@@ -153,6 +240,8 @@ export default function Home() {
     };
 
     const handleTouchEnd = () => {
+      if (isMobile && isUsingGyroscope.current) return;
+
       setIsTouchActive(false);
       // Start idle drift after touch ends
       if (idleTimeout) clearTimeout(idleTimeout);
@@ -186,7 +275,7 @@ export default function Home() {
         window.removeEventListener('touchend', handleTouchEnd);
       }
     };
-  }, [rawX, rawY, springX, springY, isTouchActive, isClient]);
+  }, [rawX, rawY, springX, springY, isTouchActive, isClient, isMobile]);
 
   return (
     <div className='w-full min-h-screen'>
@@ -194,6 +283,43 @@ export default function Home() {
       <section className='relative h-screen w-full bg-black'>
         <MouseParticles />
         {isClient && <EyeAnimation mouseX={springX} mouseY={springY} />}
+
+        {/* Gyroscope permission button for iOS */}
+        {isMobile && hasGyroscope && gyroscopePermission !== 'granted' && (
+          <button
+            onClick={async () => {
+              if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+                const permission = await (DeviceOrientationEvent as any).requestPermission();
+                setGyroscopePermission(permission);
+
+                if (permission === 'granted') {
+                  isUsingGyroscope.current = true;
+                  window.addEventListener(
+                    'deviceorientation',
+                    (event) => {
+                      if (!isMounted.current) return;
+
+                      const beta = event.beta;
+                      const gamma = event.gamma;
+
+                      if (beta === null || gamma === null) return;
+
+                      const x = Math.max(-0.5, Math.min(0.5, gamma / 45));
+                      const y = Math.max(-0.5, Math.min(0.5, beta / 45));
+
+                      rawX.set(x * 0.7);
+                      rawY.set(y * 0.7);
+                    },
+                    { passive: true }
+                  );
+                }
+              }
+            }}
+            className='absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium'
+          >
+            Enable Motion Effects
+          </button>
+        )}
 
         {/* Scroll indicator */}
         <div className='absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce'>
