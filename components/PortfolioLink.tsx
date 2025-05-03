@@ -53,6 +53,10 @@ export default function PortfolioLink({
   const rotatePhase = useRef(Math.random() * Math.PI * 2); // Random phase for rotation
   const linkRef = useRef<HTMLAnchorElement>(null);
 
+  // Secondary oscillation phases for more complex movement
+  const secondaryPhaseX = useRef(Math.random() * Math.PI * 2);
+  const secondaryPhaseY = useRef(Math.random() * Math.PI * 2);
+
   // Influence radius for mouse proximity (larger than stars for slower falloff)
   const influenceRadius = 400;
 
@@ -70,10 +74,14 @@ export default function PortfolioLink({
     };
   }, []);
 
-  // Autonomous floating amplitude (how far it moves) - reduced on mobile
-  const floatAmplitudeX = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
-  const floatAmplitudeY = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
-  const rotateAmplitude = (isMobile ? 2 : 5) + Math.random() * (isMobile ? 3 : 5); // 2-5 degrees on mobile, 5-10 on desktop
+  // Autonomous floating amplitude (how far it moves) - INCREASED for more dramatic movement
+  const floatAmplitudeX = (isMobile ? 8 : 25) + Math.random() * (isMobile ? 7 : 15); // 8-15px on mobile, 25-40px on desktop
+  const floatAmplitudeY = (isMobile ? 8 : 25) + Math.random() * (isMobile ? 7 : 15); // 8-15px on mobile, 25-40px on desktop
+  const rotateAmplitude = (isMobile ? 4 : 8) + Math.random() * (isMobile ? 4 : 7); // 4-8 degrees on mobile, 8-15 on desktop
+
+  // Secondary oscillation amplitudes (smaller, faster movements)
+  const secondaryAmplitudeX = floatAmplitudeX * 0.3;
+  const secondaryAmplitudeY = floatAmplitudeY * 0.3;
 
   // Update transform and effects when mouse position changes
   const updateEffects = useCallback(() => {
@@ -97,10 +105,23 @@ export default function PortfolioLink({
     timeRef.current += 0.004;
     const currentTime = timeRef.current;
 
-    // Calculate autonomous floating movement
-    const newOffsetX = Math.sin(currentTime * 0.5 + floatPhaseX.current) * floatAmplitudeX;
-    const newOffsetY = Math.sin(currentTime * 0.4 + floatPhaseY.current) * floatAmplitudeY;
-    const newRotateZ = Math.sin(currentTime * 0.3 + rotatePhase.current) * rotateAmplitude;
+    // Calculate autonomous floating movement with primary and secondary oscillations
+    // Primary oscillation - slower, larger movement
+    const primaryX = Math.sin(currentTime * 0.4 + floatPhaseX.current) * floatAmplitudeX;
+    const primaryY = Math.sin(currentTime * 0.3 + floatPhaseY.current) * floatAmplitudeY;
+
+    // Secondary oscillation - faster, smaller movement for more natural floating
+    const secondaryX = Math.sin(currentTime * 0.7 + secondaryPhaseX.current) * secondaryAmplitudeX;
+    const secondaryY = Math.sin(currentTime * 0.6 + secondaryPhaseY.current) * secondaryAmplitudeY;
+
+    // Combine oscillations
+    const newOffsetX = primaryX + secondaryX;
+    const newOffsetY = primaryY + secondaryY;
+
+    // More complex rotation that combines multiple frequencies
+    const newRotateZ =
+      Math.sin(currentTime * 0.25 + rotatePhase.current) * rotateAmplitude +
+      Math.sin(currentTime * 0.5 + rotatePhase.current) * (rotateAmplitude * 0.3);
 
     setOffsetX(newOffsetX);
     setOffsetY(newOffsetY);
@@ -108,8 +129,8 @@ export default function PortfolioLink({
 
     // Calculate 3D transform based on mouse position (exaggerated)
     // Reduce movement on mobile
-    const mouseMultiplier = isMobile ? -15 : -30;
-    const rotateMultiplier = isMobile ? 8 : 15;
+    const mouseMultiplier = isMobile ? -20 : -40; // Increased from -15/-30
+    const rotateMultiplier = isMobile ? 10 : 20; // Increased from 8/15
 
     const x = mouseX.get() * mouseMultiplier * depth + newOffsetX;
     const y = mouseY.get() * mouseMultiplier * depth + newOffsetY;
@@ -134,7 +155,7 @@ export default function PortfolioLink({
     const maxOpacity = 1.0;
 
     // Reduce scale effect on mobile
-    const scaleEffect = isMobile ? 0.1 : 0.2;
+    const scaleEffect = isMobile ? 0.15 : 0.25; // Increased from 0.1/0.2
     setScale(baseScale + t * scaleEffect * throb);
     setOpacity(baseOpacity + t * (maxOpacity - baseOpacity) * throb);
   }, [
@@ -148,7 +169,7 @@ export default function PortfolioLink({
     influenceRadius,
   ]);
 
-  // 2. Optimize the animation loop with requestAnimationFrame
+  // Optimize the animation loop with requestAnimationFrame
   useEffect(() => {
     let animationFrameId: number;
 

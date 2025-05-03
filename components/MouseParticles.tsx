@@ -10,6 +10,9 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 // Try values between 0.1 (tiny stars) and 1.0 (large stars)
 const STAR_SIZE_FACTOR = 0.6;
 
+// Control how quickly stars appear
+const STAR_FADE_IN_SPEED = 0.05; // Higher value = faster fade in (was 0.01)
+
 function Particles() {
   const mesh = useRef<THREE.Points>(null);
   const { scene } = useThree();
@@ -26,6 +29,9 @@ function Particles() {
 
   // Store individual star throbbing phases
   const phaseRef = useRef<number[]>([]);
+
+  // Track fade-in progress
+  const fadeInProgressRef = useRef(0);
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [starTexture, setStarTexture] = useState<THREE.Texture | null>(null);
@@ -112,7 +118,9 @@ function Particles() {
       posArray[i * 3 + 0] = (Math.random() - 0.5) * 10;
       posArray[i * 3 + 1] = (Math.random() - 0.5) * 10;
       posArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
-      alphaArray[i] = baseOpacity;
+
+      // Start with very low opacity for fade-in effect
+      alphaArray[i] = 0.01;
 
       // Base size scaled by STAR_SIZE_FACTOR
       const baseSize = 0.1 * STAR_SIZE_FACTOR;
@@ -132,7 +140,7 @@ function Particles() {
       sizes: sizeArray,
       colors: colorArray,
     };
-  }, [starColorPalettes, STAR_SIZE_FACTOR, baseOpacity]);
+  }, [starColorPalettes]);
 
   const alphaRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
   const sizeRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
@@ -169,7 +177,7 @@ function Particles() {
     };
   }, []);
 
-  // 2. Optimize the useFrame function to reduce calculations
+  // 2. Optimize the useFrame function to reduce calculations and handle fade-in
   useFrame((state) => {
     if (!mesh.current || !alphaRef.current || !sizeRef.current) return;
 
@@ -188,6 +196,13 @@ function Particles() {
     const opacityRange = maxOpacity - baseOpacity;
     const proximityIncrease = 0.15 * STAR_SIZE_FACTOR;
 
+    // Handle fade-in effect - faster now
+    if (fadeInProgressRef.current < 1) {
+      fadeInProgressRef.current = Math.min(1, fadeInProgressRef.current + STAR_FADE_IN_SPEED);
+    }
+
+    const currentFadeIn = fadeInProgressRef.current;
+
     for (let i = 0; i < alphas.length; i++) {
       const x = positions[i * 3 + 0];
       const y = positions[i * 3 + 1];
@@ -204,8 +219,9 @@ function Particles() {
       const phase = phaseRef.current[i];
       const throb = t * Math.sin(currentTime * 3 + phase) * 0.3 + 0.7;
 
-      // Combine base opacity, proximity effect, and throbbing
-      alphaArray[i] = baseOpacity + t * opacityRange * throb;
+      // Combine base opacity, proximity effect, throbbing, and fade-in
+      const targetAlpha = baseOpacity + t * opacityRange * throb;
+      alphaArray[i] = targetAlpha * currentFadeIn;
 
       // Size increase on proximity scaled by STAR_SIZE_FACTOR
       sizeArray[i] = sizes[i] + t * proximityIncrease * throb;
