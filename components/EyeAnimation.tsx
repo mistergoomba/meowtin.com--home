@@ -51,6 +51,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
     if (!eyeRef.current || typeof window === 'undefined') return;
 
     const eye = eyeRef.current.getBoundingClientRect();
+    if (eye.width === 0 || eye.height === 0) return; // Prevents NaN offsets
     const eyeCenterX = eye.left + eye.width / 2;
     const eyeCenterY = eye.top + eye.height / 2;
 
@@ -155,16 +156,19 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
   // Update iris position when mouse moves
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || animationStage !== 2) return;
 
     const unsubscribeX = mouseX.onChange(updateIris);
     const unsubscribeY = mouseY.onChange(updateIris);
+
+    // Trigger once on open
+    setTimeout(() => updateIris(), 100);
 
     return () => {
       unsubscribeX();
       unsubscribeY();
     };
-  }, [isMounted, mouseX, mouseY]);
+  }, [isMounted, animationStage, mouseX, mouseY]);
 
   if (!isMounted) return null;
 
