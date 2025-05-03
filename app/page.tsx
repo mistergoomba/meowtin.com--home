@@ -73,6 +73,8 @@ export default function Home() {
 
     // Handle mouse movement for desktop
     const handleMouseMove = (e: MouseEvent) => {
+      if (typeof window === 'undefined') return;
+
       const x = e.clientX / window.innerWidth - 0.5;
       const y = e.clientY / window.innerHeight - 0.5;
 
@@ -87,6 +89,8 @@ export default function Home() {
 
     // Handle touch events for mobile
     const handleTouchStart = (e: TouchEvent) => {
+      if (typeof window === 'undefined') return;
+
       setIsTouchActive(true);
       stopDrift(); // Stop any drift when touch starts
 
@@ -100,6 +104,8 @@ export default function Home() {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (typeof window === 'undefined') return;
+
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         const x = touch.clientX / window.innerWidth - 0.5;
@@ -116,23 +122,27 @@ export default function Home() {
       idleTimeout = setTimeout(() => startDrift(), 5000);
     };
 
-    // Add event listeners
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchend', handleTouchEnd);
+    // Add event listeners only if window is available
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('touchstart', handleTouchStart);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleTouchEnd);
 
-    // Start with idle drift
-    idleTimeout = setTimeout(() => startDrift(), 5000);
+      // Start with idle drift
+      idleTimeout = setTimeout(() => startDrift(), 5000);
+    }
 
     // Cleanup event listeners and intervals
     return () => {
       if (idleTimeout) clearTimeout(idleTimeout);
       if (driftInterval) clearInterval(driftInterval);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('touchstart', handleTouchStart);
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', handleTouchEnd);
+      }
     };
   }, [rawX, rawY, isTouchActive]);
 

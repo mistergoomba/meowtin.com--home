@@ -9,6 +9,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
   const [blinkStage, setBlinkStage] = useState(0);
   const [irisOffset, setIrisOffset] = useState({ x: 0, y: 0 });
   const blinkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Get eyelid paths based on blink stage - with pointed ends
   const getEyelidPaths = () => {
@@ -47,7 +48,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
   // Update iris position based on mouse position
   const updateIris = () => {
-    if (!eyeRef.current) return;
+    if (!eyeRef.current || typeof window === 'undefined') return;
 
     const eye = eyeRef.current.getBoundingClientRect();
     const eyeCenterX = eye.left + eye.width / 2;
@@ -87,8 +88,15 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
     setIrisOffset({ x: offsetX, y: offsetY });
   };
 
+  // Set mounted state
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Start animation sequence
   useEffect(() => {
+    if (!isMounted) return;
+
     const timer1 = setTimeout(() => setAnimationStage(1), 600); // Show line
     const timer2 = setTimeout(() => setAnimationStage(2), 1500); // Open eye
 
@@ -96,11 +104,11 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, []);
+  }, [isMounted]);
 
   // Set up blinking
   useEffect(() => {
-    if (animationStage !== 2) return; // Only start blinking after eye is open
+    if (!isMounted || animationStage !== 2) return; // Only start blinking after eye is open
 
     // Function to handle a single blink cycle
     const doBlink = () => {
@@ -143,11 +151,22 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
         clearTimeout(blinkTimeoutRef.current);
       }
     };
-  }, [animationStage]);
+  }, [animationStage, isMounted]);
 
   // Update iris position when mouse moves
-  useMotionValueEvent(mouseX, 'change', updateIris);
-  useMotionValueEvent(mouseY, 'change', updateIris);
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const unsubscribeX = mouseX.onChange(updateIris);
+    const unsubscribeY = mouseY.onChange(updateIris);
+
+    return () => {
+      unsubscribeX();
+      unsubscribeY();
+    };
+  }, [isMounted, mouseX, mouseY]);
+
+  if (!isMounted) return null;
 
   return (
     <div className='absolute inset-0 flex items-center justify-center'>
