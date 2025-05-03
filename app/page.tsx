@@ -24,6 +24,32 @@ export default function Home() {
   // Track if touch is active
   const [isTouchActive, setIsTouchActive] = useState(false);
 
+  // Track screen size for responsive positioning
+  const [isMobile, setIsMobile] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  // Update screen size state
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      setWindowSize({ width, height });
+      setIsMobile(width < 768); // Standard mobile breakpoint
+    };
+
+    // Initial check
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     let idleTimeout: NodeJS.Timeout | null = null;
     let driftInterval: NodeJS.Timeout | null = null;
@@ -114,47 +140,51 @@ export default function Home() {
       <MouseParticles />
       <EyeAnimation mouseX={springX} mouseY={springY} />
 
-      {/* Okie Dokie Karaoke Logo - Upper Right */}
-      <div className='absolute top-10 right-60 z-10'>
+      {/* Okie Dokie Karaoke Logo - Responsive positioning */}
+      <div className={`absolute z-10 ${isMobile ? 'top-20 left-40' : 'top-60 right-60'}`}>
         <PortfolioLink
           href='https://kj.meowtin.com'
           position=''
           mouseX={rawX}
           mouseY={rawY}
-          depth={2.2}
+          depth={isMobile ? 1.5 : 2.2}
           imageUrl='/okie-dokie-karaoke-logo.png'
           imageAlt='Okie Dokie Karaoke'
-          imageSize={150}
+          imageSize={isMobile ? 100 : 150}
         />
       </div>
 
-      {/* Social Icons Cluster - Lower Left */}
-      <div className='absolute bottom-10 left-10 z-10'>
-        <div className='relative w-[250px] h-[250px]'>
+      {/* Social Icons - Responsive positioning and sizing */}
+      <div
+        className={`absolute z-10 ${
+          isMobile ? 'bottom-20 left-1/2 -translate-x-1/2' : 'bottom-[15%] left-[20%]'
+        }`}
+      >
+        <div className={`relative ${isMobile ? 'w-[280px] h-[200px]' : 'w-[500px] h-[400px]'}`}>
           {[
             {
               href: 'https://www.facebook.com/mistergoombaremix',
               Icon: FaFacebookF,
-              position: 'top-0 left-0',
-              depth: 1.5,
+              position: isMobile ? 'top-0 left-10' : 'top-20 left-20',
+              depth: isMobile ? 1.2 : 1.5,
             },
             {
               href: 'https://www.instagram.com/mistergoomba',
               Icon: FaInstagram,
-              position: 'top-10 left-20',
-              depth: 2,
+              position: isMobile ? 'top-0 right-10' : 'top-40 right-40',
+              depth: isMobile ? 1.3 : 2,
             },
             {
               href: 'https://www.tiktok.com/@mrgoomba',
               Icon: FaTiktok,
-              position: 'bottom-12 right-10',
-              depth: 1.2,
+              position: isMobile ? 'bottom-0 right-10' : 'bottom-40 right-20',
+              depth: isMobile ? 1.1 : 1.2,
             },
             {
               href: 'https://www.youtube.com/@mistergoomba',
               Icon: FaYoutube,
-              position: 'bottom-10 left-5',
-              depth: 1.8,
+              position: isMobile ? 'bottom-0 left-10' : 'bottom-20 left-40',
+              depth: isMobile ? 1.2 : 1.8,
             },
           ].map((link, i) => (
             <div key={i} className={`absolute ${link.position}`}>
