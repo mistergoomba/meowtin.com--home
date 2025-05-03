@@ -54,7 +54,7 @@ export default function PortfolioLink({
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   // Influence radius for mouse proximity (larger than stars for slower falloff)
-  const influenceRadius = 400;
+  const influenceRadius = 600;
 
   // Check if we're on mobile
   useEffect(() => {
@@ -71,9 +71,9 @@ export default function PortfolioLink({
   }, []);
 
   // Autonomous floating amplitude (how far it moves) - reduced on mobile
-  const floatAmplitudeX = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
-  const floatAmplitudeY = (isMobile ? 5 : 15) + Math.random() * (isMobile ? 5 : 10); // 5-10px on mobile, 15-25px on desktop
-  const rotateAmplitude = (isMobile ? 2 : 5) + Math.random() * (isMobile ? 3 : 5); // 2-5 degrees on mobile, 5-10 on desktop
+  const floatAmplitudeX = (isMobile ? 8 : 20) + Math.random() * (isMobile ? 8 : 15);
+  const floatAmplitudeY = (isMobile ? 8 : 20) + Math.random() * (isMobile ? 8 : 15);
+  const rotateAmplitude = (isMobile ? 3 : 8) + Math.random() * (isMobile ? 4 : 8);
 
   // Update transform and effects when mouse position changes
   useEffect(() => {
@@ -97,21 +97,21 @@ export default function PortfolioLink({
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       // Update time for animations
-      timeRef.current += 0.005;
+      timeRef.current += 0.008;
 
       // Calculate autonomous floating movement
-      const newOffsetX = Math.sin(timeRef.current * 0.5 + floatPhaseX.current) * floatAmplitudeX;
-      const newOffsetY = Math.sin(timeRef.current * 0.4 + floatPhaseY.current) * floatAmplitudeY;
-      const newRotateZ = Math.sin(timeRef.current * 0.3 + rotatePhase.current) * rotateAmplitude;
+      const newOffsetX = Math.sin(timeRef.current * 0.7 + floatPhaseX.current) * floatAmplitudeX;
+      const newOffsetY = Math.sin(timeRef.current * 0.6 + floatPhaseY.current) * floatAmplitudeY;
+      const newRotateZ = Math.sin(timeRef.current * 0.4 + rotatePhase.current) * rotateAmplitude;
 
       setOffsetX(newOffsetX);
       setOffsetY(newOffsetY);
       setRotateZ(newRotateZ);
 
-      // Calculate 3D transform based on mouse position (exaggerated)
+      // Calculate 3D transform based on mouse position (more exaggerated)
       // Reduce movement on mobile
-      const mouseMultiplier = isMobile ? -15 : -30;
-      const rotateMultiplier = isMobile ? 8 : 15;
+      const mouseMultiplier = isMobile ? -20 : -40;
+      const rotateMultiplier = isMobile ? 12 : 25;
 
       const x = mouseX.get() * mouseMultiplier * depth + newOffsetX;
       const y = mouseY.get() * mouseMultiplier * depth + newOffsetY;
@@ -128,16 +128,16 @@ export default function PortfolioLink({
         Math.min(1, 1 - (distance * distance) / (influenceRadius * influenceRadius))
       );
 
-      // Calculate throbbing effect - exaggerated
-      const throb = t * Math.sin(timeRef.current * 1.5 + phaseRef.current) * 0.3 + 0.7;
+      // Calculate throbbing effect - more dramatic
+      const throb = t * Math.sin(timeRef.current * 2 + phaseRef.current) * 0.4 + 0.8;
 
       // Update scale and opacity based on proximity and throbbing
       const baseScale = 1.0;
       const baseOpacity = 0.8;
       const maxOpacity = 1.0;
 
-      // Reduce scale effect on mobile
-      const scaleEffect = isMobile ? 0.1 : 0.2;
+      // Increased scale effect
+      const scaleEffect = isMobile ? 0.15 : 0.3;
       setScale(baseScale + t * scaleEffect * throb);
       setOpacity(baseOpacity + t * (maxOpacity - baseOpacity) * throb);
 
