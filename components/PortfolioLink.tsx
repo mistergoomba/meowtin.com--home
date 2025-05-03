@@ -1,7 +1,24 @@
+'use client';
+
+import type React from 'react';
+
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-const PortfolioLink = ({
+interface PortfolioLinkProps {
+  href: string;
+  position: string;
+  mouseX: any;
+  mouseY: any;
+  depth: number;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageSize?: number;
+  Icon?: React.ComponentType<any>;
+  label?: string;
+}
+
+export default function PortfolioLink({
   href,
   position,
   mouseX,
@@ -11,17 +28,8 @@ const PortfolioLink = ({
   imageAlt,
   imageSize = 200,
   Icon,
-}: {
-  href: string;
-  position: string;
-  mouseX: any;
-  mouseY: any;
-  depth: number;
-  imageUrl?: string;
-  imageAlt?: string;
-  imageSize?: number;
-  Icon?: any;
-}) => {
+  label,
+}: PortfolioLinkProps) {
   // State to track this element's 3D transform
   const [transform, setTransform] = useState('');
 
@@ -56,8 +64,8 @@ const PortfolioLink = ({
       target={href.startsWith('http') ? '_blank' : undefined}
       rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
       className={`absolute ${position} ${
-        !imageUrl && !Icon ? 'rounded-full border border-black px-4 py-2' : ''
-      } text-sm font-medium text-black opacity-0 transition-opacity duration-1000 hover:scale-105 animate-fade-in`}
+        !imageUrl && !Icon ? 'rounded-full border border-white px-4 py-2' : ''
+      } text-sm font-medium text-white opacity-0 transition-opacity duration-1000 hover:scale-105 animate-fade-in`}
       style={{
         animationDelay: `3s`,
         transform,
@@ -70,7 +78,7 @@ const PortfolioLink = ({
         <Icon className='w-12 h-12 text-white transition' />
       ) : imageUrl ? (
         <div
-          className={`relative overflow-hidden`}
+          className='relative overflow-hidden'
           style={{
             width: `${imageSize}px`,
             height: `${imageSize}px`,
@@ -87,10 +95,8 @@ const PortfolioLink = ({
           />
         </div>
       ) : (
-        ''
+        label || ''
       )}
     </a>
   );
-};
-
-export default PortfolioLink;
+}

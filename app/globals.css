@@ -107,14 +107,6 @@ body {
   }
 }
 
-html,
-body {
-  background-color: black;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
 /* 3D effect styles */
 .preserve-3d {
   transform-style: preserve-3d;
