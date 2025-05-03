@@ -11,6 +11,7 @@ import PortfolioLink from '@/components/PortfolioLink';
 // Use dynamic imports for components that need to be client-side only
 const EyeAnimation = dynamic(() => import('@/components/EyeAnimation'), { ssr: false });
 const MouseParticles = dynamic(() => import('@/components/MouseParticles'), { ssr: false });
+const HomePage = dynamic(() => import('@/components/HomePage'), { ssr: false });
 
 export default function Home() {
   // Raw motion values for tracking cursor/touch position
@@ -136,70 +137,96 @@ export default function Home() {
   }, [rawX, rawY, isTouchActive]);
 
   return (
-    <main className='relative h-screen w-full overflow-hidden bg-black'>
-      <MouseParticles />
-      <EyeAnimation mouseX={springX} mouseY={springY} />
+    <div className='w-full min-h-screen'>
+      {/* First section with eye animation */}
+      <section className='relative h-screen w-full bg-black'>
+        <MouseParticles />
+        <EyeAnimation mouseX={springX} mouseY={springY} />
 
-      {/* Okie Dokie Karaoke Logo - Responsive positioning */}
-      <div className={`absolute z-10 ${isMobile ? 'top-20 left-40' : 'top-60 right-60'}`}>
-        <PortfolioLink
-          href='https://kj.meowtin.com'
-          position=''
-          mouseX={rawX}
-          mouseY={rawY}
-          depth={isMobile ? 1.5 : 2.2}
-          imageUrl='/okie-dokie-karaoke-logo.png'
-          imageAlt='Okie Dokie Karaoke'
-          imageSize={isMobile ? 100 : 150}
-        />
-      </div>
-
-      {/* Social Icons - Responsive positioning and sizing */}
-      <div
-        className={`absolute z-10 ${
-          isMobile ? 'bottom-20 left-1/2 -translate-x-1/2' : 'bottom-[15%] left-[20%]'
-        }`}
-      >
-        <div className={`relative ${isMobile ? 'w-[280px] h-[200px]' : 'w-[500px] h-[400px]'}`}>
-          {[
-            {
-              href: 'https://www.facebook.com/mistergoombaremix',
-              Icon: FaFacebookF,
-              position: isMobile ? 'top-0 left-10' : 'top-20 left-20',
-              depth: isMobile ? 1.2 : 1.5,
-            },
-            {
-              href: 'https://www.instagram.com/mistergoomba',
-              Icon: FaInstagram,
-              position: isMobile ? 'top-0 right-10' : 'top-40 right-40',
-              depth: isMobile ? 1.3 : 2,
-            },
-            {
-              href: 'https://www.tiktok.com/@mrgoomba',
-              Icon: FaTiktok,
-              position: isMobile ? 'bottom-0 right-10' : 'bottom-40 right-20',
-              depth: isMobile ? 1.1 : 1.2,
-            },
-            {
-              href: 'https://www.youtube.com/@mistergoomba',
-              Icon: FaYoutube,
-              position: isMobile ? 'bottom-0 left-10' : 'bottom-20 left-40',
-              depth: isMobile ? 1.2 : 1.8,
-            },
-          ].map((link, i) => (
-            <div key={i} className={`absolute ${link.position}`}>
-              <PortfolioLink
-                href={link.href}
-                position=''
-                mouseX={rawX}
-                mouseY={rawY}
-                depth={link.depth}
-                Icon={link.Icon}
-              />
-            </div>
-          ))}
+        {/* Scroll indicator */}
+        <div className='absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce'>
+          <div className='flex flex-col items-center text-white opacity-70'>
+            <span className='mb-2 text-sm'>Scroll Down</span>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              className='h-6 w-6'
+            >
+              <path d='M12 5v14M5 12l7 7 7-7' />
+            </svg>
+          </div>
         </div>
-      </div>
-    </main>
+
+        {/* Okie Dokie Karaoke Logo - Responsive positioning */}
+        <div className={`absolute z-10 ${isMobile ? 'top-20 left-40' : 'top-60 right-60'}`}>
+          <PortfolioLink
+            href='https://kj.meowtin.com'
+            position=''
+            mouseX={rawX}
+            mouseY={rawY}
+            depth={isMobile ? 1.5 : 2.2}
+            imageUrl='/okie-dokie-karaoke-logo.png'
+            imageAlt='Okie Dokie Karaoke'
+            imageSize={isMobile ? 100 : 150}
+          />
+        </div>
+
+        {/* Social Icons - Responsive positioning and sizing */}
+        <div
+          className={`absolute z-10 ${
+            isMobile ? 'bottom-20 left-1/2 -translate-x-1/2' : 'bottom-[15%] left-[20%]'
+          }`}
+        >
+          <div className={`relative ${isMobile ? 'w-[280px] h-[200px]' : 'w-[500px] h-[400px]'}`}>
+            {[
+              {
+                href: 'https://www.facebook.com/mistergoombaremix',
+                Icon: FaFacebookF,
+                position: isMobile ? 'top-0 left-10' : 'top-20 left-20',
+                depth: isMobile ? 1.2 : 1.5,
+              },
+              {
+                href: 'https://www.instagram.com/mistergoomba',
+                Icon: FaInstagram,
+                position: isMobile ? 'top-0 right-10' : 'top-40 right-40',
+                depth: isMobile ? 1.3 : 2,
+              },
+              {
+                href: 'https://www.tiktok.com/@mrgoomba',
+                Icon: FaTiktok,
+                position: isMobile ? 'bottom-0 right-10' : 'bottom-40 right-20',
+                depth: isMobile ? 1.1 : 1.2,
+              },
+              {
+                href: 'https://www.youtube.com/@mistergoomba',
+                Icon: FaYoutube,
+                position: isMobile ? 'bottom-0 left-10' : 'bottom-20 left-40',
+                depth: isMobile ? 1.2 : 1.8,
+              },
+            ].map((link, i) => (
+              <div key={i} className={`absolute ${link.position}`}>
+                <PortfolioLink
+                  href={link.href}
+                  position=''
+                  mouseX={rawX}
+                  mouseY={rawY}
+                  depth={link.depth}
+                  Icon={link.Icon}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <HomePage />
+    </div>
   );
 }
