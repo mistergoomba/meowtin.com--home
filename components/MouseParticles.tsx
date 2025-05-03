@@ -8,7 +8,7 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 // Adjust this value to control the overall size of stars
 // Lower values = smaller stars, Higher values = larger stars
 // Try values between 0.1 (tiny stars) and 1.0 (large stars)
-const STAR_SIZE_FACTOR = 0.7;
+const STAR_SIZE_FACTOR = 0.6;
 
 function Particles() {
   const mesh = useRef<THREE.Points>(null);
