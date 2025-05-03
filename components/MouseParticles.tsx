@@ -17,8 +17,8 @@ function Particles() {
   // Increased influence radius for mouse
   const influenceRadius = 3.0;
 
-  // Reduced base opacity to make stars dimmer by default
-  const baseOpacity = 0.3;
+  // Increased base opacity for faster initial appearance
+  const baseOpacity = 0.6;
   const maxOpacity = 0.9;
 
   // Store time for throbbing effect
@@ -169,8 +169,8 @@ function Particles() {
   useFrame((state) => {
     if (!mesh.current || !alphaRef.current || !sizeRef.current) return;
 
-    // Update time for throbbing effect
-    timeRef.current += 0.01;
+    // Increased time update for faster throbbing
+    timeRef.current += 0.02;
 
     const positions = mesh.current.geometry.attributes.position.array as Float32Array;
     for (let i = 0; i < alphas.length; i++) {
@@ -187,15 +187,15 @@ function Particles() {
       // Smoother falloff with quadratic easing
       const t = Math.max(0, Math.min(1, 1 - (dist * dist) / (influenceRadius * influenceRadius)));
 
-      // Calculate throbbing effect - stronger when closer to mouse
-      const throb = t * Math.sin(timeRef.current * 3 + phaseRef.current[i]) * 0.3 + 0.7;
+      // Increased throbbing effect for more dynamic movement
+      const throb = t * Math.sin(timeRef.current * 4 + phaseRef.current[i]) * 0.4 + 0.8;
 
       // Combine base opacity, proximity effect, and throbbing
       const a = baseOpacity + t * (maxOpacity - baseOpacity) * throb;
 
       // Size increase on proximity scaled by STAR_SIZE_FACTOR
       const baseSize = sizes[i];
-      const proximityIncrease = 0.15 * STAR_SIZE_FACTOR;
+      const proximityIncrease = 0.2 * STAR_SIZE_FACTOR;
       const s = baseSize + t * proximityIncrease * throb;
 
       alphaRef.current.setX(i, a);
