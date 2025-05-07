@@ -1,285 +1,541 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import {
+  Code,
+  MicVocal,
+  ClipboardPenLine,
+  Smartphone,
+  Server,
+  Database,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  FileMusic,
+  TvMinimalPlay,
+} from 'lucide-react';
 
-import AnimatedSection from '@/components/AnimatedSection';
+const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
-function ArtPreview() {
-  const [previewImages, setPreviewImages] = useState<Array<{ key: string; img1: string }>>([]);
-
-  useEffect(() => {
-    async function fetchImages() {
-      try {
-        const res = await fetch('/art-index.json');
-        const allImages = await res.json();
-
-        const shuffled = allImages.sort(() => 0.5 - Math.random());
-        const selected = shuffled.slice(0, 3);
-        setPreviewImages(selected);
-      } catch (error) {
-        console.error('Failed to fetch art images:', error);
-        setPreviewImages([]);
-      }
-    }
-
-    fetchImages();
-  }, []);
-
-  return (
-    <section className='flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto w-full space-y-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-      <div className='text-center'>
-        <h2 className='text-3xl md:text-5xl font-bold text-gray-100'>
-          <a href='/art'>My Art, Enhanced</a>
-        </h2>
-      </div>
-
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-5xl justify-items-center'>
-        {previewImages.map(({ key, img1 }) => (
-          <img
-            key={key}
-            src={`/art/${img1}`}
-            alt='Art preview'
-            className='w-full max-w-[400px] object-cover rounded-2xl transition-transform duration-300 drop-shadow-lg'
-          />
-        ))}
-      </div>
-
-      <a
-        href='/art'
-        className='inline-block px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-full transition'
-      >
-        See All Images
-      </a>
-    </section>
-  );
-}
+// Sample project data
+const projects = [
+  {
+    id: 1,
+    title: 'Petition Platform',
+    icon: <ClipboardPenLine className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: [
+      '/projects/petition-1.png',
+      '/projects/petition-2.png',
+      '/projects/petition-3.png',
+    ],
+    technologies: ['JavaScript', 'Node.js', 'Redis', 'REST API', 'PHP', 'MySQL'],
+    description:
+      'Led the transformation of ThePetitionSite.com from a simple form-based system to a modern, scalable web application. Built a fully custom JavaScript frontend powered by a REST API, engineered backend resilience for viral-scale petition traffic, and developed embeddable petition widgets for widespread sharing across third-party sites. Delivered massive UX and performance improvements used by millions of global users.',
+    url: 'https://care2.com',
+  },
+  {
+    id: 2,
+    title: 'Custom Microphone Builder',
+    icon: <MicVocal className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: ['/projects/custom-mics-1.png'],
+    technologies: ['JavaScript', 'Shopify', 'Liquid', 'HTML', 'CSS'],
+    description:
+      'Built an interactive product configurator for Roswell Audio that allowed users to design custom microphones by selecting components and visual options. The original tool used native JavaScript and HTML5, enabling real-time visual feedback for audio gear customers. This works as a custom page in Shopify.',
+    url: 'https://register.roswellproaudio.com/cs/',
+  },
+  {
+    id: 3,
+    title: 'AI-Driven Casino Simulator',
+    icon: <Server className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: ['/projects/casino-simulator-1.png'],
+    technologies: ['React Native', 'Expo', 'NPC Behavior', 'JSON'],
+    description:
+      'Currently building a private casino simulator in React Native, designed for internal use by a simulation-focused client. Features include a custom JSON scripting engine to control NPC behavior, drag-and-drop tables, play vs edit modes, simulated betting logic, and dynamic UI animations. This project highlights my strengths in game logic design, state management, and building intuitive yet complex interfaces for mobile platforms.',
+  },
+  {
+    id: 4,
+    title: 'Chords Database and Lyrics Formatter',
+    icon: <FileMusic className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: ['/projects/chords-1.png', '/projects/chords-2.png'],
+    technologies: ['React Native', 'Expo', 'JSON', 'Android', 'IOS'],
+    description:
+      "I'm an avid ukulele player, so I wanted to build a tool to keep track of all the songs I know in order to go play them out in the woods or with friends. The application can display lyrics, randomize, and filter/search. I also built a formatting tool so I can paste in the lyrics and add the chords in the appropriate places. This was build in React Native so I can install it to my phone as an app for offline use.",
+  },
+  {
+    id: 5,
+    title: 'Various Music and Product Websites',
+    icon: <FileMusic className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: ['/projects/sites-1.png', '/projects/sites-2.png'],
+    technologies: ['React', 'Tailwind', 'Node.js', 'MongoDB', 'Express'],
+    description:
+      'Designed and developed a high-impact band website using React and Next.js for many project including most recently Short Fuse, a melodic death metal band from the San Francisco Bay Area. The site includes embedded YouTube music videos, logo integration, gothic styling, and responsive design that adapts across devices. Built to showcase music, branding, and updates in a bold, immersive format while maintaining performance and maintainability.',
+    url: 'https://shortfusemusic.com',
+  },
+  {
+    id: 6,
+    title: 'Custom Video Platform Features',
+    icon: <TvMinimalPlay className='w-5 h-5 text-[#00ffaa]' />,
+    screenshots: ['/projects/video-1.png'],
+    technologies: ['JavaScript', 'Node.js', 'MongoDB', 'Docker'],
+    description:
+      'Designed and developed a high-impact band website using React and Next.js for many project including most recently Short Fuse, a melodic death metal band from the San Francisco Bay Area. The site includes embedded YouTube music videos, logo integration, gothic styling, and responsive design that adapts across devices. Built to showcase music, branding, and updates in a bold, immersive format while maintaining performance and maintainability.',
+  },
+];
 
 export default function HomePage() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [animateHeader, setAnimateHeader] = useState(false);
+  const [animateCards, setAnimateCards] = useState([false, false, false, false]);
+  const [animateFooter, setAnimateFooter] = useState(false);
+  const [devOverlayActive, setDevOverlayActive] = useState(false);
+  const [devOverlayFadedIn, setDevOverlayFadedIn] = useState(false);
+  const [devOverlayExpanded, setDevOverlayExpanded] = useState(false);
+  const [artOverlayActive, setArtOverlayActive] = useState(false);
+  const [artOverlayFadedIn, setArtOverlayFadedIn] = useState(false);
+  const [artOverlayExpanded, setArtOverlayExpanded] = useState(false);
+  const [karaokeOverlayActive, setKaraokeOverlayActive] = useState(false);
+
+  // State for project detail view
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const containerRef = useRef(null);
+  const staticVideoRef = useRef<HTMLVideoElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsLoaded(true);
+    setTimeout(() => setAnimateHeader(true), 500);
+    setTimeout(() => setAnimateCards((prev) => [true, prev[1], prev[2], prev[3]]), 1200);
+    setTimeout(() => setAnimateCards((prev) => [prev[0], true, prev[2], prev[3]]), 1600);
+    setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], true, prev[3]]), 2000);
+    setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], prev[2], true]), 2400);
+    setTimeout(() => setAnimateFooter(true), 2800);
+
+    // Preload the static video
+    if (typeof window !== 'undefined') {
+      const preloadVideo = document.createElement('video');
+      preloadVideo.src = '/static.mp4';
+      preloadVideo.muted = true;
+      preloadVideo.preload = 'auto';
+      preloadVideo.load();
+    }
+  }, []);
+
+  // Handle karaoke card redirect
+  useEffect(() => {
+    if (karaokeOverlayActive) {
+      // Redirect after 1 second
+      const redirectTimer = setTimeout(() => {
+        window.location.href = 'https://kj.meowtin.com';
+      }, 1000);
+
+      return () => clearTimeout(redirectTimer);
+    }
+  }, [karaokeOverlayActive]);
+
+  // Handle image navigation
+  const nextImage = () => {
+    if (selectedProject !== null) {
+      const project = projects.find((p) => p.id === selectedProject);
+      if (project) {
+        setCurrentImageIndex((prev) => (prev + 1) % project.screenshots.length);
+      }
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProject !== null) {
+      const project = projects.find((p) => p.id === selectedProject);
+      if (project) {
+        setCurrentImageIndex((prev) => (prev === 0 ? project.screenshots.length - 1 : prev - 1));
+      }
+    }
+  };
+
   return (
-    <div className='w-full bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans space-y-12'>
-      {/* HEADER */}
-      <AnimatedSection delay={0.1}>
-        <header className='flex flex-col items-center justify-center py-8 space-y-8'>
-          <img
+    <div className='relative min-h-screen w-full overflow-hidden bg-black flex flex-col'>
+      {isLoaded && <TronGrid backgroundImageUrl='/background.png' />}
+
+      {/* Karaoke Static Video Overlay */}
+      {karaokeOverlayActive && (
+        <div
+          className='fixed inset-0 z-50 bg-black m-0 p-0 overflow-hidden'
+          style={{ width: '200vw', height: '200vh', top: '-50vh', left: '-50vw' }}
+        >
+          <video
+            ref={staticVideoRef}
+            className='absolute inset-0 w-full h-full object-fill'
+            style={{ width: '200vw', height: '200vh' }}
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source src='/static.mp4' type='video/mp4' />
+          </video>
+        </div>
+      )}
+
+      <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow'>
+        <div
+          className={`mb-4 flex justify-center transition-all duration-1000 ease-out transform ${
+            animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
+          <Image
             src='/logo.png'
             alt='Meowtin Logo'
-            className='w-96 h-auto object-contain drop-shadow-lg max-w-xs md:max-w-none'
+            width={200}
+            height={50}
+            className='drop-shadow-lg max-w-xs md:max-w-md'
           />
-        </header>
-      </AnimatedSection>
+        </div>
 
-      {/* ABOUT ME */}
-      <AnimatedSection delay={0.1}>
-        <section className='flex flex-col md:flex-row items-center justify-center py-0 md:py-8 px-4 text-left max-w-6xl mx-auto'>
-          <img
-            src='/me.png'
-            alt='Meowtin'
-            className='w-72 h-[28rem] object-cover rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl'
-          />
-          <div>
-            <h1 className='text-4xl md:text-6xl font-bold mb-6'>Welcome to Meowtin&#39;s Domain</h1>
-            <p className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'>
-              Welcome to Meowtin&#39;s Domain, the home page and personal portfolio of Martin
-              Boynton. Who is Meowtin besides someone who refers to himself in the third person?
-              Well, he is a creative professional with a passion for performance, music, and visual
-              storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music producer,
-              video producer, web site and mobile app builder, and music venue owner. Aside from his
-              professional accomplishments, Meowtin prides himself as well travelled, a lover of
-              people and life, yoga and meditation enthusiast, pro wrestling connoisseur, video game
-              devotee, and all around good guy.
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* KARAOKE */}
-      <AnimatedSection delay={0.1}>
-        <section className='flex flex-col md:flex-row items-start justify-between py-16 px-4 max-w-7xl mx-auto w-full space-y-6 md:space-y-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-          <div className='flex flex-col items-center flex-grow'>
-            <img
-              src='/okie-dokie-logo.png'
-              alt='Okie Dokie Karaoke Logo'
-              className='w-[700px] max-w-full mb-6 drop-shadow-lg'
-            />
-            <p className='text-3xl md:text-5xl text-gray-300 font-semibold text-center'>
-              Every Thursday at the DIVE BAR
-            </p>
-          </div>
-          <div className='flex justify-center w-full md:w-auto md:ml-8'>
-            <video
-              src='/okie-dokie-reel.mp4'
-              autoPlay
-              muted
-              loop
-              playsInline
-              className='w-80 h-[42rem] object-cover rounded-2xl shadow-xl'
-            />
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* DJ */}
-      <AnimatedSection delay={0.1}>
-        <section className='flex flex-col-reverse md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-          <div className='flex justify-center w-full md:w-1/2'>
-            <img
-              src='/dj-flyer.png'
-              alt='DJ Flyer'
-              className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
-            />
-          </div>
-          <div className='flex flex-col items-center text-center w-full md:w-1/2'>
-            <img
-              src='/logo.png'
-              alt='Meowtin DJ Logo'
-              className='w-[500px] max-w-full mb-8 drop-shadow-lg'
-            />
-            <p className='text-2xl md:text-4xl font-semibold text-gray-200'>DJ Styles:</p>
-            <p className='text-xl md:text-2xl text-gray-300 mt-4 max-w-xl'>
-              Dubstep, Trap, Chillstep, Dark Electro, EBSM, and Industrial
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* MUSIC */}
-      <AnimatedSection delay={0.1}>
-        <section className='flex flex-col md:flex-row items-end justify-between py-10 px-4 max-w-7xl mx-auto w-full space-y-12 md:space-y-0 md:space-x-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-          <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
-            <a href='https://shortfusemusic.com' target='_blank' rel='noopener noreferrer'>
-              <img
-                src='/short-fuse-logo.png'
-                alt='Short Fuse Logo'
-                className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
-              />
-            </a>
-            <iframe
-              width='100%'
-              height='315'
-              src='https://www.youtube.com/embed/videoseries?list=PLnegzC5lUH_c55bne_g0ui2KIjizTfkQj'
-              title='Short Fuse Playlist'
-              frameBorder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-              allowFullScreen
-              className='rounded-xl shadow-lg'
-            ></iframe>
-          </div>
-
-          <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
-            <a href='https://fartxbubble.com/' target='_blank' rel='noopener noreferrer'>
-              <img
-                src='/fart-bubble-logo.png'
-                alt='Fart Bubble Logo'
-                className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
-              />
-            </a>
-            <iframe
-              width='100%'
-              height='315'
-              src='https://www.youtube.com/embed/videoseries?list=PLKKmm8SuBRnMununJdexGWuz19NW48MPU'
-              title='Fart Bubble Playlist'
-              frameBorder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-              allowFullScreen
-              className='rounded-xl shadow-lg'
-            ></iframe>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* ART */}
-      <AnimatedSection delay={0.1}>
-        <ArtPreview />
-      </AnimatedSection>
-
-      {/* DEVELOPMENT */}
-      <AnimatedSection delay={0.1}>
-        <section className='flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto w-full space-y-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-          <h2 className='text-3xl md:text-5xl font-bold text-center text-gray-100'>
-            Past and Present Development Projects
-          </h2>
-
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-5xl'>
-            <a href='https://kink.com' target='_blank' rel='noopener noreferrer'>
-              <img
-                src='/kink-logo.png'
-                alt='Kink.com'
-                className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-              />
-            </a>
-            <a href='https://care2.com' target='_blank' rel='noopener noreferrer'>
-              <img
-                src='/care2-logo.png'
-                alt='Care2.com'
-                className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-              />
-            </a>
-            <a href='https://yahoo.com' target='_blank' rel='noopener noreferrer'>
-              <img
-                src='/yahoo-logo.png'
-                alt='Yahoo.com'
-                className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-              />
-            </a>
-          </div>
-
-          <ul className='text-gray-300 text-lg space-y-2 text-center'>
-            <li>
-              <a
-                href='https://shortfusemusic.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:underline'
+        <div
+          ref={containerRef}
+          className='flex-grow relative grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1200px] w-full mx-auto'
+        >
+          {/* Overlay Card for Developer */}
+          {devOverlayActive && (
+            <div
+              className={`absolute bg-black text-white p-6 transition-all ease-in-out border-gray-700 border-2 ${
+                devOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
+              } ${
+                devOverlayExpanded
+                  ? 'duration-1000 w-full h-full top-0 left-0 overflow-y-scroll'
+                  : 'w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 left-0'
+              }`}
+              style={{ zIndex: 30 }}
+            >
+              <div
+                className='absolute top-3 right-4 text-2xl cursor-pointer'
+                onClick={() => {
+                  setSelectedProject(null);
+                  setDevOverlayActive(false);
+                }}
               >
-                Short Fuse official band website
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://sinwavevegas.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:underline'
-              >
-                Sinwave Live Music Venue official site
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://uke.meowtin.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:underline'
-              >
-                Ukulele tabs site
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://fartxbubble.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:underline'
-              >
-                Fart Bubble official band website
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://warboyguitars.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:underline'
-              >
-                WARBOY Guitars official site
-              </a>
-            </li>
-          </ul>
-        </section>
-      </AnimatedSection>
+                ×
+              </div>
 
-      {/* FOOTER */}
-      <footer className='text-center text-sm text-gray-500 py-6'>© 2025 MEOWTIN</footer>
+              {devOverlayExpanded && selectedProject === null && (
+                <div className='mt-4'>
+                  <h2 className='text-3xl font-bold mb-6 text-center'>My Projects</h2>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                    {projects.map((project) => (
+                      <div
+                        key={project.id}
+                        className='bg-black/30 p-4 rounded-lg cursor-pointer hover:bg-black/50 transition-colors'
+                        onClick={() => {
+                          setSelectedProject(project.id);
+                          setCurrentImageIndex(0);
+                        }}
+                      >
+                        <div className='flex items-center mb-3'>
+                          <div className='mr-2'>{project.icon}</div>
+                          <h3 className='text-xl font-semibold'>{project.title}</h3>
+                        </div>
+                        <div className='aspect-video bg-gray-800 mb-3 overflow-hidden rounded'>
+                          <Image
+                            src={
+                              project.screenshots[0] ||
+                              '/placeholder.svg?height=200&width=400&query=project screenshot'
+                            }
+                            alt={project.title}
+                            width={400}
+                            height={225}
+                            className='w-full h-full object-cover'
+                          />
+                        </div>
+                        <div className='flex flex-wrap gap-2'>
+                          {project.technologies.map((tech, index) => (
+                            <span key={index} className='text-[#00ffaa] text-sm'>
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Project Detail View */}
+              {devOverlayExpanded && selectedProject !== null && (
+                <div className='absolute inset-0 bg-black p-6 z-40'>
+                  {projects
+                    .filter((p) => p.id === selectedProject)
+                    .map((project) => (
+                      <div key={project.id} className='h-full flex flex-col'>
+                        <div className='flex justify-between items-center mb-4'>
+                          <div className='flex items-center'>
+                            <div className='mr-2'>{project.icon}</div>
+                            <h2 className='text-2xl font-bold'>{project.title}</h2>
+                          </div>
+                          <div className='flex items-center'>
+                            {project.url && (
+                              <a
+                                href={project.url}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='mr-4 hover:text-[#00ffaa] transition-colors'
+                              >
+                                <ExternalLink className='w-5 h-5' />
+                              </a>
+                            )}
+                            <div
+                              className='absolute top-3 right-4 text-2xl cursor-pointer'
+                              onClick={() => setSelectedProject(null)}
+                            >
+                              ×
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Screenshot Gallery */}
+                        <div className='relative aspect-video bg-gray-800 mb-4 rounded overflow-hidden'>
+                          <Image
+                            src={
+                              project.screenshots[currentImageIndex] ||
+                              '/placeholder.svg?height=400&width=800&query=project screenshot'
+                            }
+                            alt={`${project.title} screenshot ${currentImageIndex + 1}`}
+                            width={800}
+                            height={450}
+                            className='w-full h-full object-cover'
+                          />
+
+                          {project.screenshots.length > 1 && (
+                            <>
+                              {/* Navigation Arrows */}
+                              <button
+                                className='absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  prevImage();
+                                }}
+                              >
+                                <ChevronLeft className='w-5 h-5 text-white' />
+                              </button>
+                              <button
+                                className='absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  nextImage();
+                                }}
+                              >
+                                <ChevronRight className='w-5 h-5 text-white' />
+                              </button>
+
+                              {/* Image Counter */}
+                              <div className='absolute bottom-2 right-2 bg-black/50 px-2 py-1 rounded text-sm'>
+                                {currentImageIndex + 1} / {project.screenshots.length}
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Description */}
+                        <div className='mb-4'>
+                          <h3 className='text-lg font-semibold mb-2'>About</h3>
+                          <p className='text-gray-300'>{project.description}</p>
+                        </div>
+
+                        {/* Technologies */}
+                        <div>
+                          <h3 className='text-lg font-semibold mb-2'>Technologies</h3>
+                          <div className='flex flex-wrap gap-2'>
+                            {project.technologies.map((tech, index) => (
+                              <span
+                                key={index}
+                                className='bg-[#00ffaa]/10 text-[#00ffaa] px-3 py-1 rounded-full text-sm'
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* DEVELOPER Card */}
+          <div
+            onClick={() => {
+              // First, position the overlay over the developer card but keep it invisible
+              setDevOverlayActive(true);
+              setDevOverlayExpanded(false);
+              setDevOverlayFadedIn(false);
+
+              // After a short delay, fade it in
+              setTimeout(() => {
+                setDevOverlayFadedIn(true);
+
+                // After fade-in completes, expand it
+                setTimeout(() => setDevOverlayExpanded(true), 300);
+              }, 50);
+            }}
+            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+              flex flex-col transform transition-all duration-1000 ease-out
+              hover:shadow-[0_0_25px_rgba(0,255,170,0.3)] hover:scale-[1.02] hover:z-10
+              perspective-[1000px] hover:rotate-y-2 hover:rotate-x-2 cursor-pointer
+              ${animateCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          >
+            <div className='p-6 h-full flex flex-col'>
+              <h2 className='text-3xl font-bold text-white mb-6 text-center'>DEVELOPER</h2>
+              <div className='grid grid-cols-4 gap-6 flex-grow'>
+                <div className='flex flex-col items-center justify-center'>
+                  <Code className='w-12 h-12 text-[#00ffaa] mb-2' />
+                  <span className='text-white text-sm'>React</span>
+                </div>
+                <div className='flex flex-col items-center justify-center'>
+                  <Smartphone className='w-12 h-12 text-[#00ffaa] mb-2' />
+                  <span className='text-white text-sm'>React Native</span>
+                </div>
+                <div className='flex flex-col items-center justify-center'>
+                  <Server className='w-12 h-12 text-[#00ffaa] mb-2' />
+                  <span className='text-white text-sm'>Node.js</span>
+                </div>
+                <div className='flex flex-col items-center justify-center'>
+                  <Database className='w-12 h-12 text-[#00ffaa] mb-2' />
+                  <span className='text-white text-sm'>Full Stack</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Overlay for Art Card */}
+          {artOverlayActive && (
+            <div
+              className={`absolute overflow-hidden transition-all ease-in-out ${
+                artOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
+              } ${
+                artOverlayExpanded
+                  ? 'duration-1500 w-[200vw] h-[200vh] top-[-50vh] left-[-50vw]'
+                  : 'w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 right-0 md:right-0 md:top-0'
+              }`}
+              style={{ zIndex: 30 }}
+            >
+              <div className='absolute inset-0 w-full h-full'>
+                <Image
+                  src='/art/02 learn to swim-1.png'
+                  alt='Art'
+                  layout='fill'
+                  objectFit='cover'
+                  objectPosition='top'
+                  className='opacity-90'
+                />
+              </div>
+              <div className='absolute inset-0 bg-black/50'></div>
+            </div>
+          )}
+
+          {/* ART Card */}
+          <div
+            onClick={() => {
+              // First, position the overlay over the art card but keep it invisible
+              setArtOverlayActive(true);
+              setArtOverlayExpanded(false);
+              setArtOverlayFadedIn(false);
+
+              // After a short delay, fade it in
+              setTimeout(() => {
+                setArtOverlayFadedIn(true);
+
+                // After fade-in completes, expand it
+                setTimeout(() => {
+                  setArtOverlayExpanded(true);
+
+                  // Start navigation to art page during expansion
+                  // Wait a bit so the expansion is visible before page changes
+                  setTimeout(() => {
+                    router.push('/art');
+                  }, 500);
+                }, 300);
+              }, 50);
+            }}
+            id='artCard'
+            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+              flex flex-col transform transition-all duration-1000 ease-out
+              hover:shadow-[0_0_25px_rgba(0,170,255,0.3)] hover:scale-[1.02] hover:z-10
+              perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-2
+              relative overflow-hidden cursor-pointer
+              ${animateCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          >
+            <div className='absolute inset-0 w-full h-full'>
+              <Image
+                src='/art/02 learn to swim-1.png'
+                alt='Art'
+                layout='fill'
+                objectFit='cover'
+                objectPosition='top'
+                className='opacity-90'
+              />
+            </div>
+            <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent'>
+              <h2 className='text-3xl font-bold text-white mb-2 mt-auto'>ART</h2>
+            </div>
+          </div>
+
+          {/* KARAOKE Card (Bottom Left) */}
+          <div
+            onClick={() => {
+              // Immediately show the static video overlay
+              setKaraokeOverlayActive(true);
+            }}
+            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+            flex flex-col transform transition-all duration-1000 ease-out
+            hover:shadow-[0_0_25px_rgba(255,100,255,0.3)] hover:scale-[1.02] hover:z-10
+            perspective-[1000px] hover:rotate-y-2 hover:rotate-x-[-2deg]
+            relative overflow-hidden cursor-pointer
+            ${animateCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          >
+            <div className='absolute inset-0 w-full h-full flex items-center justify-center'>
+              <video autoPlay muted loop playsInline className='w-full h-full object-cover'>
+                <source src='/reel.mp4' type='video/mp4' />
+              </video>
+            </div>
+            <div className='relative z-10 flex items-center justify-center h-full p-6'>
+              <Image
+                src='/okie-dokie-logo.png'
+                alt='Okie Dokie Karaoke'
+                width={300}
+                height={150}
+                className='drop-shadow-lg max-w-[80%]'
+              />
+            </div>
+          </div>
+
+          {/* MUSIC Card (Bottom Right) - Blank for now */}
+          <div
+            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+            flex flex-col transform transition-all duration-1000 ease-out
+            hover:shadow-[0_0_25px_rgba(255,200,0,0.3)] hover:scale-[1.02] hover:z-10
+            perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-[-2deg] cursor-pointer
+            ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          >
+            <div className='p-6 flex flex-col h-full'>
+              <h2 className='text-3xl font-bold text-white mb-2'>MUSIC</h2>
+              <p className='text-gray-300'>Coming soon...</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          className={`text-center text-gray-500 py-4 transition-all cursor-pointer duration-1000 ease-out transform ${
+            animateFooter ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
+          © 2025 MEOWTIN
+        </div>
+      </div>
     </div>
   );
 }

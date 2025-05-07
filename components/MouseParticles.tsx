@@ -4,18 +4,18 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useMemo, useRef, useState, useEffect } from 'react';
 
-// ===== STAR SIZE CONTROL =====
-// Adjust this value to control the overall size of stars
-// Lower values = smaller stars, Higher values = larger stars
-// Try values between 0.1 (tiny stars) and 1.0 (large stars)
-const STAR_SIZE_FACTOR = 0.6;
-
-// Control how quickly stars appear
-const STAR_FADE_IN_SPEED = 0.05; // Higher value = faster fade in (was 0.01)
-
-function Particles() {
+function Particles({ isMobile }: { isMobile: boolean }) {
   const mesh = useRef<THREE.Points>(null);
   const { scene } = useThree();
+
+  // STAR SIZE CONTROL Higher values = larger stars
+  const STAR_SIZE_FACTOR = 0.6;
+
+  // Control how quickly stars appear Higher value = faster fade in (was 0.01)
+  const STAR_FADE_IN_SPEED = 0.2;
+
+  // Increase star count for mobile devices
+  const STAR_COUNT = isMobile ? 200 : 100;
 
   // Increased influence radius for mouse
   const influenceRadius = 3.0;
@@ -103,18 +103,17 @@ function Particles() {
 
   // 1. Memoize the positions, alphas, sizes, and colors arrays
   const { positions, alphas, sizes, colors } = useMemo(() => {
-    const count = 100;
-    const posArray = new Float32Array(count * 3);
-    const alphaArray = new Float32Array(count);
-    const sizeArray = new Float32Array(count);
-    const colorArray = new Float32Array(count * 3);
+    const posArray = new Float32Array(STAR_COUNT * 3);
+    const alphaArray = new Float32Array(STAR_COUNT);
+    const sizeArray = new Float32Array(STAR_COUNT);
+    const colorArray = new Float32Array(STAR_COUNT * 3);
 
     // Initialize random phases for each star
-    phaseRef.current = Array(count)
+    phaseRef.current = Array(STAR_COUNT)
       .fill(0)
       .map(() => Math.random() * Math.PI * 2);
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < STAR_COUNT; i++) {
       posArray[i * 3 + 0] = (Math.random() - 0.5) * 10;
       posArray[i * 3 + 1] = (Math.random() - 0.5) * 10;
       posArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
@@ -123,8 +122,10 @@ function Particles() {
       alphaArray[i] = 0.01;
 
       // Base size scaled by STAR_SIZE_FACTOR
-      const baseSize = 0.1 * STAR_SIZE_FACTOR;
-      const randomVariation = 0.05 * STAR_SIZE_FACTOR;
+      // Make stars slightly smaller on mobile to prevent overcrowding
+      const sizeFactor = isMobile ? STAR_SIZE_FACTOR * 0.8 : STAR_SIZE_FACTOR;
+      const baseSize = 0.1 * sizeFactor;
+      const randomVariation = 0.05 * sizeFactor;
       sizeArray[i] = baseSize + Math.random() * randomVariation;
 
       // Assign a random color from our palette
@@ -140,7 +141,7 @@ function Particles() {
       sizes: sizeArray,
       colors: colorArray,
     };
-  }, [starColorPalettes]);
+  }, [starColorPalettes, isMobile]);
 
   const alphaRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
   const sizeRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
@@ -320,7 +321,7 @@ function Particles() {
   );
 }
 
-export default function MouseParticles() {
+export default function MouseParticles({ isMobile }: { isMobile: boolean }) {
   return (
     <Canvas
       className='absolute inset-0 z-0'
@@ -330,7 +331,7 @@ export default function MouseParticles() {
         gl.setClearColor(new THREE.Color('black'));
       }}
     >
-      <Particles />
+      <Particles isMobile={isMobile} />
     </Canvas>
   );
 }
