@@ -5,7 +5,7 @@ import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 export default function MiniHeader() {
   return (
     <header className='flex items-center justify-between px-4 py-2 bg-transparent h-auto'>
-      <a href='/' className='flex items-center'>
+      <a href='/home/' className='flex items-center'>
         <img
           src='/logo.png'
           alt='Meowtin Logo'

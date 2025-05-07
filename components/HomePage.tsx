@@ -186,13 +186,15 @@ export default function HomePage() {
             animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <Image
-            src='/logo.png'
-            alt='Meowtin Logo'
-            width={200}
-            height={50}
-            className='drop-shadow-lg max-w-xs md:max-w-md'
-          />
+          <a href='/'>
+            <Image
+              src='/logo.png'
+              alt='Meowtin Logo'
+              width={200}
+              height={50}
+              className='drop-shadow-lg max-w-xs md:max-w-md'
+            />
+          </a>
         </div>
 
         <div
@@ -529,7 +531,7 @@ export default function HomePage() {
 
         {/* Footer */}
         <div
-          className={`text-center text-gray-500 py-4 transition-all cursor-pointer duration-1000 ease-out transform ${
+          className={`text-center text-gray-500 py-4 transition-all duration-1000 ease-out transform ${
             animateFooter ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
