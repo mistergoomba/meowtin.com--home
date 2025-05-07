@@ -13,11 +13,13 @@ const CONFIG = {
   // Line lifespan in milliseconds
   LINE_LIFESPAN: 3000,
 
-  // Primary color
-  PRIMARY_COLOR: new THREE.Color(0x00aaff),
-
-  // Secondary color for variation
-  SECONDARY_COLOR: new THREE.Color(0x00ffaa),
+  // colors to choose from
+  COLORS: [
+    new THREE.Color(0x00aaff),
+    new THREE.Color(0x00ffaa),
+    new THREE.Color(0xff64ff),
+    new THREE.Color(0xffc800),
+  ],
 
   // Bloom intensity
   BLOOM_INTENSITY: 1.8,
@@ -303,7 +305,7 @@ function Scene({ backgroundImageUrl }: { backgroundImageUrl: string }) {
       points: [initialPoint],
       direction,
       speed: CONFIG.LINE_SPEED * (0.8 + Math.random() * 0.4), // Slight speed variation
-      color: Math.random() > 0.5 ? CONFIG.PRIMARY_COLOR : CONFIG.SECONDARY_COLOR,
+      color: CONFIG.COLORS[Math.floor(Math.random() * CONFIG.COLORS.length)],
       startTime: Date.now(),
       lastTurnTime: Date.now(),
       lastTurnPosition: new THREE.Vector2(startPosition.x, startPosition.y),

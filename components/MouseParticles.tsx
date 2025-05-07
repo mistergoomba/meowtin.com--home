@@ -15,7 +15,7 @@ function Particles({ isMobile }: { isMobile: boolean }) {
   const STAR_FADE_IN_SPEED = 0.2;
 
   // Increase star count for mobile devices
-  const STAR_COUNT = isMobile ? 200 : 100;
+  const STAR_COUNT = 200;
 
   // Increased influence radius for mouse
   const influenceRadius = 3.0;

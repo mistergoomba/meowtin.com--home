@@ -15,8 +15,9 @@ import {
   ChevronLeft,
   ChevronRight,
   FileMusic,
-  TvMinimalPlay,
+  MonitorPlayIcon as TvMinimalPlay,
 } from 'lucide-react';
+import ElectricityBorder from './ElectricityBorder';
 
 const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
@@ -97,6 +98,9 @@ export default function HomePage() {
   const [artOverlayFadedIn, setArtOverlayFadedIn] = useState(false);
   const [artOverlayExpanded, setArtOverlayExpanded] = useState(false);
   const [karaokeOverlayActive, setKaraokeOverlayActive] = useState(false);
+
+  // State for tracking hovered cards
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   // State for project detail view
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
@@ -208,7 +212,7 @@ export default function HomePage() {
                 devOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
               } ${
                 devOverlayExpanded
-                  ? 'duration-1000 w-full h-full top-0 left-0 overflow-y-scroll'
+                  ? 'duration-1000 w-full h-full top-0 left-0 overflow-y-auto'
                   : 'w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 left-0'
               }`}
               style={{ zIndex: 30 }}
@@ -244,7 +248,10 @@ export default function HomePage() {
                           <Image
                             src={
                               project.screenshots[0] ||
-                              '/placeholder.svg?height=200&width=400&query=project screenshot'
+                              '/placeholder.svg?height=200&width=400&query=project screenshot' ||
+                              '/placeholder.svg' ||
+                              '/placeholder.svg' ||
+                              '/placeholder.svg'
                             }
                             alt={project.title}
                             width={400}
@@ -267,7 +274,7 @@ export default function HomePage() {
 
               {/* Project Detail View */}
               {devOverlayExpanded && selectedProject !== null && (
-                <div className='absolute inset-0 bg-black p-6 z-40'>
+                <div className='absolute inset-0 bg-black p-6 z-40 overflow-y-auto'>
                   {projects
                     .filter((p) => p.id === selectedProject)
                     .map((project) => (
@@ -289,7 +296,7 @@ export default function HomePage() {
                               </a>
                             )}
                             <div
-                              className='absolute top-3 right-4 text-2xl cursor-pointer'
+                              className='cursor-pointer text-2xl'
                               onClick={() => setSelectedProject(null)}
                             >
                               ×
@@ -302,7 +309,10 @@ export default function HomePage() {
                           <Image
                             src={
                               project.screenshots[currentImageIndex] ||
-                              '/placeholder.svg?height=400&width=800&query=project screenshot'
+                              '/placeholder.svg?height=400&width=800&query=project screenshot' ||
+                              '/placeholder.svg' ||
+                              '/placeholder.svg' ||
+                              '/placeholder.svg'
                             }
                             alt={`${project.title} screenshot ${currentImageIndex + 1}`}
                             width={800}
@@ -369,6 +379,8 @@ export default function HomePage() {
 
           {/* DEVELOPER Card */}
           <div
+            onMouseEnter={() => setHoveredCard(0)}
+            onMouseLeave={() => setHoveredCard(null)}
             onClick={() => {
               // First, position the overlay over the developer card but keep it invisible
               setDevOverlayActive(true);
@@ -383,13 +395,18 @@ export default function HomePage() {
                 setTimeout(() => setDevOverlayExpanded(true), 300);
               }, 50);
             }}
-            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-              flex flex-col transform transition-all duration-1000 ease-out
-              hover:shadow-[0_0_25px_rgba(0,255,170,0.3)] hover:scale-[1.02] hover:z-10
-              perspective-[1000px] hover:rotate-y-2 hover:rotate-x-2 cursor-pointer
-              ${animateCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+    flex flex-col transform transition-all duration-1000 ease-out
+    hover:shadow-[0_0_25px_rgba(0,255,170,0.3)] hover:scale-[1.02] hover:z-10
+    perspective-[1000px] hover:rotate-y-2 hover:rotate-x-2 cursor-pointer
+    ${animateCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
-            <div className='p-6 h-full flex flex-col'>
+            {/* The ElectricityBorder component with very high z-index */}
+            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
+              <ElectricityBorder cardId={0} isHovered={hoveredCard === 0} borderColor='#00ffaa' />
+            </div>
+
+            <div className='p-6 h-full flex flex-col relative z-10'>
               <h2 className='text-3xl font-bold text-white mb-6 text-center'>DEVELOPER</h2>
               <div className='grid grid-cols-4 gap-6 flex-grow'>
                 <div className='flex flex-col items-center justify-center'>
@@ -440,6 +457,8 @@ export default function HomePage() {
 
           {/* ART Card */}
           <div
+            onMouseEnter={() => setHoveredCard(1)}
+            onMouseLeave={() => setHoveredCard(null)}
             onClick={() => {
               // First, position the overlay over the art card but keep it invisible
               setArtOverlayActive(true);
@@ -463,13 +482,16 @@ export default function HomePage() {
               }, 50);
             }}
             id='artCard'
-            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
               flex flex-col transform transition-all duration-1000 ease-out
               hover:shadow-[0_0_25px_rgba(0,170,255,0.3)] hover:scale-[1.02] hover:z-10
               perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-2
               relative overflow-hidden cursor-pointer
               ${animateCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
+            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
+              <ElectricityBorder cardId={1} isHovered={hoveredCard === 1} borderColor='#00aaff' />
+            </div>
             <div className='absolute inset-0 w-full h-full'>
               <Image
                 src='/art/02 learn to swim-1.png'
@@ -487,17 +509,22 @@ export default function HomePage() {
 
           {/* KARAOKE Card (Bottom Left) */}
           <div
+            onMouseEnter={() => setHoveredCard(2)}
+            onMouseLeave={() => setHoveredCard(null)}
             onClick={() => {
               // Immediately show the static video overlay
               setKaraokeOverlayActive(true);
             }}
-            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
             flex flex-col transform transition-all duration-1000 ease-out
             hover:shadow-[0_0_25px_rgba(255,100,255,0.3)] hover:scale-[1.02] hover:z-10
             perspective-[1000px] hover:rotate-y-2 hover:rotate-x-[-2deg]
             relative overflow-hidden cursor-pointer
             ${animateCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
+            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
+              <ElectricityBorder cardId={2} isHovered={hoveredCard === 2} borderColor='#ff64ff' />
+            </div>
             <div className='absolute inset-0 w-full h-full flex items-center justify-center'>
               <video autoPlay muted loop playsInline className='w-full h-full object-cover'>
                 <source src='/reel.mp4' type='video/mp4' />
@@ -516,12 +543,17 @@ export default function HomePage() {
 
           {/* MUSIC Card (Bottom Right) - Blank for now */}
           <div
-            className={`bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
+            onMouseEnter={() => setHoveredCard(3)}
+            onMouseLeave={() => setHoveredCard(null)}
+            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
             flex flex-col transform transition-all duration-1000 ease-out
             hover:shadow-[0_0_25px_rgba(255,200,0,0.3)] hover:scale-[1.02] hover:z-10
             perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-[-2deg] cursor-pointer
             ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
+            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
+              <ElectricityBorder cardId={3} isHovered={hoveredCard === 3} borderColor='#ffc800' />
+            </div>
             <div className='p-6 flex flex-col h-full'>
               <h2 className='text-3xl font-bold text-white mb-2'>MUSIC</h2>
               <p className='text-gray-300'>Coming soon...</p>
