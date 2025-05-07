@@ -417,7 +417,7 @@ export default function HomePage() {
                 artOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
               } ${
                 artOverlayExpanded
-                  ? 'duration-1500 w-[200vw] h-[200vh] top-[-50vh] left-[-50vw]'
+                  ? 'duration-[3s] w-[1000vw] h-[1000vh] top-[-500vh] right-[-500vh]'
                   : 'w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 right-0 md:right-0 md:top-0'
               }`}
               style={{ zIndex: 30 }}
@@ -456,7 +456,7 @@ export default function HomePage() {
                   // Wait a bit so the expansion is visible before page changes
                   setTimeout(() => {
                     router.push('/art');
-                  }, 500);
+                  }, 1000);
                 }, 300);
               }, 50);
             }}
