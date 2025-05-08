@@ -91,22 +91,6 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
   // Get eyelid paths based on blink stage - with pointed ends
   const getEyelidPaths = () => {
-    // Top eyelid paths for different blink stages - with pointed ends
-    const topPaths = [
-      'M15,40 Q100,0 185,40', // Fully open - pointed at both ends
-      'M15,45 Q100,20 185,45', // Half closed - pointed at both ends
-      'M15,50 Q100,50 185,50', // Fully closed - pointed at both ends
-      'M15,45 Q100,20 185,45', // Half open - pointed at both ends
-    ];
-
-    // Bottom eyelid paths for different blink stages - with pointed ends
-    const bottomPaths = [
-      'M15,60 Q100,100 185,60', // Fully open - pointed at both ends
-      'M15,55 Q100,80 185,55', // Half closed - pointed at both ends
-      'M15,50 Q100,50 185,50', // Fully closed - pointed at both ends
-      'M15,55 Q100,80 185,55', // Half open - pointed at both ends
-    ];
-
     // Define the clip path for the eye opening - with pointed ends
     const clipPaths = [
       'M15,40 Q100,0 185,40 L185,60 Q100,100 15,60 Z', // Fully open
@@ -115,11 +99,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
       'M15,45 Q100,20 185,45 L185,55 Q100,80 15,55 Z', // Half open
     ];
 
-    return {
-      topPath: topPaths[blinkStage],
-      bottomPath: bottomPaths[blinkStage],
-      clipPath: clipPaths[blinkStage],
-    };
+    return clipPaths[blinkStage];
   };
 
   const eyelidPaths = getEyelidPaths();
@@ -752,7 +732,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             {/* Define the clip path for the eye opening */}
             <defs>
               <clipPath id='eyeClip'>
-                <path d={eyelidPaths.clipPath} />
+                <path d={eyelidPaths} />
               </clipPath>
 
               {/* Filter for laser glow effect */}
@@ -764,7 +744,10 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
 
             {useCircularEye ? (
               <>
-                <circle cx='100' cy='100' r='80' fill='white' />
+                <svg width='200' height='200'>
+                  <image href='/eye.png' width='200' height='200' />
+                </svg>
+
                 <g style={{ transform: `translate(0px, 50px)` }}>
                   <circle cx='100' cy='50' r='25' fill='#5b8fb9' stroke='none' />
                   <circle cx='100' cy='50' r='20' fill='black' stroke='none' />
@@ -774,7 +757,22 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             ) : (
               <>
                 {/* White sclera (background of the eye) */}
-                <path d={eyelidPaths.clipPath} fill='white' />
+                <svg width='200' height='200'>
+                  <defs>
+                    <clipPath id='eyelidClip'>
+                      <path d={eyelidPaths} />
+                    </clipPath>
+                  </defs>
+
+                  <image
+                    href='/eye.png'
+                    width='200'
+                    height='200'
+                    y='-10'
+                    clipPath='url(#eyelidClip)'
+                    preserveAspectRatio='xMidYMid slice'
+                  />
+                </svg>
 
                 {/* Iris group - clipped by the eye opening */}
                 <g clipPath='url(#eyeClip)'>
@@ -789,12 +787,6 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
                     <circle cx='110' cy='40' r='5' fill='white' stroke='none' opacity='0.7' />
                   </g>
                 </g>
-
-                {/* Eye outline (top lid) - drawn on top */}
-                <path d={eyelidPaths.topPath} stroke='white' strokeWidth='3' fill='none' />
-
-                {/* Eye outline (bottom lid) - drawn on bottom */}
-                <path d={eyelidPaths.bottomPath} stroke='white' strokeWidth='3' fill='none' />
               </>
             )}
           </svg>

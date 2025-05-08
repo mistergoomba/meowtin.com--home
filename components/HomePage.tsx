@@ -18,6 +18,7 @@ import {
   MonitorPlayIcon as TvMinimalPlay,
 } from 'lucide-react';
 import ElectricityBorder from './ElectricityBorder';
+import MiniEye from './MiniEye';
 
 const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
@@ -186,19 +187,24 @@ export default function HomePage() {
 
       <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow'>
         <div
-          className={`mb-4 flex justify-center transition-all duration-1000 ease-out transform ${
+          className={`relative mb-4 w-full max-w-[1200px] mx-auto transition-all duration-1000 ease-out transform ${
             animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <a href='/'>
-            <Image
-              src='/logo.png'
-              alt='Meowtin Logo'
-              width={200}
-              height={50}
-              className='drop-shadow-lg max-w-xs md:max-w-md'
-            />
-          </a>
+          <div className='relative w-full flex flex-col md:flex-row justify-center items-start'>
+            <a href='/'>
+              <Image
+                src='/logo.png'
+                alt='Meowtin Logo'
+                width={200}
+                height={50}
+                className='drop-shadow-lg max-w-xs md:max-w-md'
+              />
+            </a>
+            <div className='absolute top-0 right-0'>
+              <MiniEye />
+            </div>
+          </div>
         </div>
 
         <div
@@ -486,7 +492,7 @@ export default function HomePage() {
               flex flex-col transform transition-all duration-1000 ease-out
               hover:shadow-[0_0_25px_rgba(0,170,255,0.3)] hover:scale-[1.02] hover:z-10
               perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-2
-              relative overflow-hidden cursor-pointer
+              overflow-hidden cursor-pointer
               ${animateCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
@@ -519,7 +525,7 @@ export default function HomePage() {
             flex flex-col transform transition-all duration-1000 ease-out
             hover:shadow-[0_0_25px_rgba(255,100,255,0.3)] hover:scale-[1.02] hover:z-10
             perspective-[1000px] hover:rotate-y-2 hover:rotate-x-[-2deg]
-            relative overflow-hidden cursor-pointer
+            overflow-hidden cursor-pointer
             ${animateCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 100 }}>
