@@ -31,7 +31,6 @@ export default function ElectricityBorder({
         const shouldActivate = Math.random() < 0.3; // 30% chance to activate
 
         if (shouldActivate) {
-          console.log(`Card ${cardId}: Activating electricity`);
           setIsActive(true);
 
           // Random starting position
