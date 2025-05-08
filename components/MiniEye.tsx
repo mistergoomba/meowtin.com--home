@@ -1,3 +1,5 @@
+'use client';
+
 import { useSpring } from 'framer-motion';
 import { useMotionValue } from 'framer-motion';
 import { useRouter, usePathname } from 'next/navigation';
@@ -22,10 +24,17 @@ const HOVER_CONFIG = {
 };
 
 export default function MiniEye() {
+  const [isMobile, setIsMobile] = useState(false);
   const [irisOffset, setIrisOffset] = useState({ x: 0, y: 0 });
   const [blinkStage, setBlinkStage] = useState(0);
   const pupilSizeRef = useRef(HOVER_CONFIG.NORMAL_PUPIL_SIZE);
   const [pupilSize, _setPupilSize] = useState(HOVER_CONFIG.NORMAL_PUPIL_SIZE);
+
+  // Track if touch is active
+  const [isTouchActive, setIsTouchActive] = useState(false);
+
+  // Track screen size for responsive positioning
+  const [isClient, setIsClient] = useState(false);
 
   // Hover effect states
   const [isEyeHovered, setIsEyeHovered] = useState(false);
@@ -59,6 +68,9 @@ export default function MiniEye() {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  // Track if component is mounted
+  const isMounted = useRef(false);
 
   // Get eyelid paths based on blink stage - with pointed ends
   const getEyelidPaths = () => {
@@ -283,17 +295,6 @@ export default function MiniEye() {
     };
   }, []);
 
-  // Track if touch is active
-  const [isTouchActive, setIsTouchActive] = useState(false);
-
-  // Track screen size for responsive positioning
-  const [isMobile, setIsMobile] = useState(false);
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [isClient, setIsClient] = useState(false);
-
-  // Track if component is mounted
-  const isMounted = useRef(false);
-
   // Update screen size state
   useEffect(() => {
     setIsClient(true);
@@ -303,8 +304,6 @@ export default function MiniEye() {
       if (!isMounted.current) return;
 
       const width = window.innerWidth;
-      const height = window.innerHeight;
-      setWindowSize({ width, height });
       setIsMobile(width < 768); // Standard mobile breakpoint
     };
 
@@ -380,9 +379,6 @@ export default function MiniEye() {
 
     // Handle touch events for mobile
     const handleTouchStart = (e: TouchEvent) => {
-      // Always prevent default on touch to prevent scrolling
-      e.preventDefault();
-
       setIsTouchActive(true);
       stopDrift(); // Stop any drift when touch starts
 
@@ -393,9 +389,6 @@ export default function MiniEye() {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Always prevent default on touch to prevent scrolling
-      e.preventDefault();
-
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         updateMousePosition(touch.clientX, touch.clientY);
@@ -403,9 +396,6 @@ export default function MiniEye() {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      // Always prevent default on touch to prevent scrolling
-      e.preventDefault();
-
       setIsTouchActive(false);
       // Start idle drift after touch ends
       if (idleTimeout) clearTimeout(idleTimeout);
@@ -415,9 +405,9 @@ export default function MiniEye() {
     // Add event listeners only if window is available
     if (typeof window !== 'undefined') {
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
-      window.addEventListener('touchstart', handleTouchStart, { passive: false }); // passive: false to allow preventDefault
-      window.addEventListener('touchmove', handleTouchMove, { passive: false }); // passive: false to allow preventDefault
-      window.addEventListener('touchend', handleTouchEnd, { passive: false }); // passive: false to allow preventDefault
+      window.addEventListener('touchstart', handleTouchStart, { passive: true });
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+      window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
       // Start with idle drift
       idleTimeout = setTimeout(() => startDrift(), 5000);
@@ -560,6 +550,11 @@ export default function MiniEye() {
 
   // Calculate the pupil radius based on current pupilSize (percentage of iris)
   const pupilRadius = 25 * (pupilSize / 100);
+
+  // Don't render on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div
