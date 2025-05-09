@@ -100,6 +100,7 @@ export default function HomePage() {
   const [artOverlayExpanded, setArtOverlayExpanded] = useState(false);
   const [karaokeOverlayActive, setKaraokeOverlayActive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [musicOverlayActive, setMusicOverlayActive] = useState(false);
 
   // State for tracking hovered cards
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -180,6 +181,13 @@ export default function HomePage() {
     }
   };
 
+  const handleMusicCardClick = () => {
+    setMusicOverlayActive(true);
+    setTimeout(() => {
+      window.location.href = 'https://grave.meowtin.com';
+    }, 1000); // Delay to allow fade animation
+  };
+
   // Handle card clicks
   const handleDevCardClick = () => {
     // First, position the overlay over the developer card but keep it invisible
@@ -248,6 +256,13 @@ export default function HomePage() {
             <source src='/static.mp4' type='video/mp4' />
           </video>
         </div>
+      )}
+
+      {musicOverlayActive && (
+        <div
+          className='fixed inset-0 bg-black z-50 opacity-0 animate-fadeIn'
+          style={{ animationDuration: '1s', animationFillMode: 'forwards' }}
+        />
       )}
 
       <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow h-full'>
@@ -618,19 +633,28 @@ export default function HomePage() {
           <div
             onMouseEnter={() => !isMobile && setHoveredCard(3)}
             onMouseLeave={() => !isMobile && setHoveredCard(null)}
+            onClick={handleMusicCardClick}
             className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-              flex flex-col transform transition-all duration-1000 ease-out
-              hover:shadow-[0_0_25px_rgba(255,200,0,0.3)] hover:scale-[1.02] hover:z-10
-              perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-[-2deg] cursor-pointer
-              md:h-auto md:flex-1 md:aspect-auto aspect-square
-              ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+    flex flex-col transform transition-all duration-1000 ease-out
+    hover:shadow-[0_0_25px_rgba(255,200,0,0.3)] hover:scale-[1.02] hover:z-10
+    perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-[-2deg] cursor-pointer
+    md:h-auto md:flex-1 md:aspect-auto aspect-square
+    ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
               <ElectricityBorder cardId={3} isHovered={hoveredCard === 3} borderColor='#ffc800' />
             </div>
-            <div className='p-6 flex flex-col h-full'>
-              <h2 className='text-3xl font-bold text-white mb-2'>MUSIC</h2>
-              <p className='text-gray-300'>Coming soon...</p>
+            <div className='absolute inset-0 w-full h-full'>
+              <Image
+                src='/music-card.png'
+                alt='Music'
+                layout='fill'
+                objectFit='cover'
+                className='opacity-90'
+              />
+            </div>
+            <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent justify-end'>
+              <h2 className='text-3xl font-bold text-white text-center w-full mb-2'>MUSIC</h2>
             </div>
           </div>
         </div>
@@ -644,6 +668,20 @@ export default function HomePage() {
           © 2025 MEOWTIN
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .animate-fadeIn {
+          animation-name: fadeIn;
+        }
+      `}</style>
     </div>
   );
 }
