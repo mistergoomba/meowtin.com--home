@@ -74,9 +74,10 @@ export default function ProjectNavIndicator() {
     <motion.div
       ref={ref}
       style={{ opacity }}
-      className='fixed top-4 left-0 right-0 z-30 flex justify-center'
+      className='fixed top-4 left-0 right-0 z-30 flex flex-col items-center'
     >
-      <div className='flex gap-3'>
+      {/* Dots row */}
+      <div className='flex gap-3 mb-2'>
         {projects.map((project, index) => (
           <motion.div
             key={index}
@@ -88,6 +89,21 @@ export default function ProjectNavIndicator() {
           />
         ))}
       </div>
+
+      {/* Active project title */}
+      {activeProjectIndex >= 0 && activeProjectIndex < projects.length && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          key={`title-${activeProjectIndex}`}
+          className='text-white text-sm font-medium'
+        >
+          {projects[activeProjectIndex].navTitle ||
+            projects[activeProjectIndex].title.split('\n')[0]}
+        </motion.div>
+      )}
     </motion.div>
   );
 }
