@@ -6,95 +6,20 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   Code,
-  MicVocal,
-  ClipboardPenLine,
   Smartphone,
   Server,
   Database,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-  FileMusic,
-  MonitorPlayIcon as TvMinimalPlay,
 } from 'lucide-react';
 import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
 
 const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
-// Sample project data
-const projects = [
-  {
-    id: 1,
-    title: 'Petition Platform',
-    icon: <ClipboardPenLine className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: [
-      '/projects/petition-1.png',
-      '/projects/petition-2.png',
-      '/projects/petition-3.png',
-    ],
-    technologies: ['JavaScript', 'Node.js', 'Redis', 'REST API', 'PHP', 'MySQL'],
-    description:
-      'Led the transformation of ThePetitionSite.com from a simple form-based system to a modern, scalable web application. Built a fully custom JavaScript frontend powered by a REST API, engineered backend resilience for viral-scale petition traffic, and developed embeddable petition widgets for widespread sharing across third-party sites. Delivered massive UX and performance improvements used by millions of global users.',
-    url: 'https://care2.com',
-  },
-  {
-    id: 2,
-    title: 'Custom Microphone Builder',
-    icon: <MicVocal className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: ['/projects/custom-mics-1.png'],
-    technologies: ['JavaScript', 'Shopify', 'Liquid', 'HTML', 'CSS'],
-    description:
-      'Built an interactive product configurator for Roswell Audio that allowed users to design custom microphones by selecting components and visual options. The original tool used native JavaScript and HTML5, enabling real-time visual feedback for audio gear customers. This works as a custom page in Shopify.',
-    url: 'https://register.roswellproaudio.com/cs/',
-  },
-  {
-    id: 3,
-    title: 'AI-Driven Casino Simulator',
-    icon: <Server className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: ['/projects/casino-simulator-1.png'],
-    technologies: ['React Native', 'Expo', 'NPC Behavior', 'JSON'],
-    description:
-      'Currently building a private casino simulator in React Native, designed for internal use by a simulation-focused client. Features include a custom JSON scripting engine to control NPC behavior, drag-and-drop tables, play vs edit modes, simulated betting logic, and dynamic UI animations. This project highlights my strengths in game logic design, state management, and building intuitive yet complex interfaces for mobile platforms.',
-  },
-  {
-    id: 4,
-    title: 'Chords Database & Lyrics Formatter',
-    icon: <FileMusic className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: ['/projects/chords-1.png', '/projects/chords-2.png'],
-    technologies: ['React Native', 'Expo', 'JSON', 'Android', 'IOS'],
-    description:
-      "I'm an avid ukulele player, so I wanted to build a tool to keep track of all the songs I know in order to go play them out in the woods or with friends. The application can display lyrics, randomize, and filter/search. I also built a formatting tool so I can paste in the lyrics and add the chords in the appropriate places. This was build in React Native so I can install it to my phone as an app for offline use.",
-  },
-  {
-    id: 5,
-    title: 'Various Music & Product Websites',
-    icon: <FileMusic className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: ['/projects/sites-1.png', '/projects/sites-2.png'],
-    technologies: ['React', 'Tailwind', 'Node.js', 'MongoDB', 'Express'],
-    description:
-      'Designed and developed a high-impact band website using React and Next.js for many project including most recently Short Fuse, a melodic death metal band from the San Francisco Bay Area. The site includes embedded YouTube music videos, logo integration, gothic styling, and responsive design that adapts across devices. Built to showcase music, branding, and updates in a bold, immersive format while maintaining performance and maintainability.',
-    url: 'https://shortfusemusic.com',
-  },
-  {
-    id: 6,
-    title: 'Custom Video Platform Features',
-    icon: <TvMinimalPlay className='w-5 h-5 text-[#00ffaa]' />,
-    screenshots: ['/projects/video-1.png'],
-    technologies: ['JavaScript', 'Node.js', 'MongoDB', 'Docker'],
-    description:
-      'Designed and developed a high-impact band website using React and Next.js for many project including most recently Short Fuse, a melodic death metal band from the San Francisco Bay Area. The site includes embedded YouTube music videos, logo integration, gothic styling, and responsive design that adapts across devices. Built to showcase music, branding, and updates in a bold, immersive format while maintaining performance and maintainability.',
-  },
-];
-
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [animateHeader, setAnimateHeader] = useState(false);
   const [animateCards, setAnimateCards] = useState([false, false, false, false]);
   const [animateFooter, setAnimateFooter] = useState(false);
-  const [devOverlayActive, setDevOverlayActive] = useState(false);
-  const [devOverlayFadedIn, setDevOverlayFadedIn] = useState(false);
-  const [devOverlayExpanded, setDevOverlayExpanded] = useState(false);
   const [artOverlayActive, setArtOverlayActive] = useState(false);
   const [artOverlayFadedIn, setArtOverlayFadedIn] = useState(false);
   const [artOverlayExpanded, setArtOverlayExpanded] = useState(false);
@@ -105,17 +30,10 @@ export default function HomePage() {
   // State for tracking hovered cards
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-  // State for project detail view
-  const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const containerRef = useRef<HTMLDivElement>(null);
   const devCardRef = useRef<HTMLDivElement>(null);
   const staticVideoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
-
-  // Add a ref for the developer overlay container
-  const devOverlayRef = useRef<HTMLDivElement>(null);
 
   // Check if we're on mobile
   useEffect(() => {
@@ -162,25 +80,6 @@ export default function HomePage() {
     }
   }, [karaokeOverlayActive]);
 
-  // Handle image navigation
-  const nextImage = () => {
-    if (selectedProject !== null) {
-      const project = projects.find((p) => p.id === selectedProject);
-      if (project) {
-        setCurrentImageIndex((prev) => (prev + 1) % project.screenshots.length);
-      }
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedProject !== null) {
-      const project = projects.find((p) => p.id === selectedProject);
-      if (project) {
-        setCurrentImageIndex((prev) => (prev === 0 ? project.screenshots.length - 1 : prev - 1));
-      }
-    }
-  };
-
   const handleMusicCardClick = () => {
     setMusicOverlayActive(true);
     setTimeout(() => {
@@ -190,21 +89,16 @@ export default function HomePage() {
 
   // Handle card clicks
   const handleDevCardClick = () => {
-    // First, position the overlay over the developer card but keep it invisible
-    setDevOverlayExpanded(false);
-    setDevOverlayFadedIn(false);
-
-    // After a short delay, fade it in
+    const container = containerRef.current;
+    if (!container) return;
+  
+    container.classList.add('melting');
+  
     setTimeout(() => {
-      setDevOverlayFadedIn(true);
-
-      // After fade-in completes, expand it
-      setTimeout(() => {
-        setDevOverlayActive(true);
-        setDevOverlayExpanded(true);
-      }, 300);
-    }, 50);
+      router.push('/dev');
+    }, 1500); // Wait for melt animation
   };
+  
 
   const handleArtCardClick = () => {
     // First, position the overlay over the art card but keep it invisible
@@ -289,207 +183,6 @@ export default function HomePage() {
           ref={containerRef}
           className='flex-grow relative grid grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-2 gap-6 max-w-[1200px] w-full mx-auto h-full'
         >
-          {/* Overlay Card for Developer */}
-          {devOverlayActive && (
-            <div
-              ref={devOverlayRef}
-              className={`bg-black text-white p-6 transition-all ease-in-out border-gray-700 border-2 ${
-                devOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
-              } ${
-                devOverlayExpanded
-                  ? 'duration-1000 w-full md:absolute md:h-full md:top-0 md:left-0 md:overflow-y-auto'
-                  : isMobile
-                  ? 'absolute w-full h-full top-0 left-0'
-                  : 'absolute w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 left-0'
-              } ${isMobile && devOverlayExpanded ? 'relative' : 'absolute'}`}
-              style={{
-                zIndex: 30,
-                overflowY: isMobile && devOverlayExpanded ? 'visible' : 'auto',
-                minHeight: isMobile && devOverlayExpanded ? '100%' : 'auto',
-                transition:
-                  'opacity 0.3s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out',
-              }}
-            >
-              <div
-                className='absolute top-3 right-4 text-2xl cursor-pointer'
-                onClick={() => {
-                  setSelectedProject(null);
-                  setDevOverlayActive(false);
-                }}
-              >
-                ×
-              </div>
-
-              {devOverlayExpanded && selectedProject === null && (
-                <div className='mt-4'>
-                  <h2 className='text-3xl font-bold mb-6 text-center'>My Projects</h2>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    {projects.map((project) => (
-                      <div
-                        key={project.id}
-                        className='bg-black/30 p-4 rounded-lg cursor-pointer hover:bg-black/50 transition-colors'
-                        onClick={() => {
-                          setSelectedProject(project.id);
-                          setCurrentImageIndex(0);
-
-                          // Scroll to top of window on mobile
-                          if (isMobile) {
-                            window.scrollTo({
-                              top: 0,
-                              behavior: 'smooth',
-                            });
-                          }
-                        }}
-                      >
-                        <div className='flex items-center mb-3'>
-                          <div className='mr-2'>{project.icon}</div>
-                          <h3 className='text-xl font-semibold'>{project.title}</h3>
-                        </div>
-                        <div className='aspect-video bg-gray-800 mb-3 overflow-hidden rounded'>
-                          <Image
-                            src={
-                              project.screenshots[0] ||
-                              '/placeholder.svg?height=200&width=400&query=project screenshot' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg'
-                            }
-                            alt={project.title}
-                            width={400}
-                            height={225}
-                            className='w-full h-full object-cover'
-                          />
-                        </div>
-                        <div className='flex flex-wrap gap-2'>
-                          {project.technologies.map((tech, index) => (
-                            <span key={index} className='text-[#00ffaa] text-sm'>
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Project Detail View */}
-              {devOverlayExpanded && selectedProject !== null && (
-                <div
-                  className={`${
-                    isMobile ? 'relative' : 'absolute inset-0'
-                  } bg-black p-0 md:p-6 z-40 ${isMobile ? '' : 'overflow-y-auto'}`}
-                >
-                  {projects
-                    .filter((p) => p.id === selectedProject)
-                    .map((project) => (
-                      <div key={project.id} className='h-full flex flex-col'>
-                        <div className='flex justify-between items-center mb-4'>
-                          <div className='flex items-center'>
-                            <div className='mr-2'>{project.icon}</div>
-                            <h2 className='text-2xl font-bold'>{project.title}</h2>
-                          </div>
-                          <div className='flex items-center'>
-                            {project.url && (
-                              <a
-                                href={project.url}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                className='mr-4 hover:text-[#00ffaa] transition-colors'
-                              >
-                                <ExternalLink className='w-5 h-5' />
-                              </a>
-                            )}
-                            <div
-                              className='cursor-pointer text-2xl absolute top-[-12px] right-[-8px]'
-                              onClick={() => setSelectedProject(null)}
-                            >
-                              ×
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Screenshot Gallery */}
-                        <div className='relative aspect-video bg-gray-800 mb-4 rounded overflow-hidden'>
-                          <Image
-                            src={
-                              project.screenshots[currentImageIndex] ||
-                              '/placeholder.svg?height=400&width=800&query=project screenshot' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg' ||
-                              '/placeholder.svg'
-                            }
-                            alt={`${project.title} screenshot ${currentImageIndex + 1}`}
-                            width={800}
-                            height={450}
-                            className='w-full h-full object-cover'
-                          />
-
-                          {project.screenshots.length > 1 && (
-                            <>
-                              {/* Navigation Arrows */}
-                              <button
-                                className='absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors'
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  prevImage();
-                                }}
-                              >
-                                <ChevronLeft className='w-5 h-5 text-white' />
-                              </button>
-                              <button
-                                className='absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors'
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  nextImage();
-                                }}
-                              >
-                                <ChevronRight className='w-5 h-5 text-white' />
-                              </button>
-
-                              {/* Image Counter */}
-                              <div className='absolute bottom-2 right-2 bg-black/50 px-2 py-1 rounded text-sm'>
-                                {currentImageIndex + 1} / {project.screenshots.length}
-                              </div>
-                            </>
-                          )}
-                        </div>
-
-                        {/* Description */}
-                        <div className='mb-4'>
-                          <h3 className='text-lg font-semibold mb-2'>About</h3>
-                          <p className='text-gray-300'>{project.description}</p>
-                        </div>
-
-                        {/* Technologies */}
-                        <div>
-                          <h3 className='text-lg font-semibold mb-2'>Technologies</h3>
-                          <div className='flex flex-wrap gap-2'>
-                            {project.technologies.map((tech, index) => (
-                              <span
-                                key={index}
-                                className='bg-[#00ffaa]/10 text-[#00ffaa] px-3 py-1 rounded-full text-sm'
-                              >
-                                {tech}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* DEVELOPER Card */}
           <div
             ref={devCardRef}
@@ -501,7 +194,6 @@ export default function HomePage() {
     hover:shadow-[0_0_25px_rgba(0,255,170,0.3)] hover:scale-[1.02] hover:z-10
     perspective-[1000px] hover:rotate-y-2 hover:rotate-x-2 cursor-pointer
     md:h-auto md:flex-1 md:aspect-auto aspect-square
-    ${devOverlayActive ? 'hidden md:block' : ''} 
     ${animateCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             {/* The ElectricityBorder component with very high z-index */}
@@ -680,6 +372,24 @@ export default function HomePage() {
         }
         .animate-fadeIn {
           animation-name: fadeIn;
+        }
+
+        @keyframes meltDown {
+          0% {
+            transform: scaleY(1) skewY(0deg);
+            opacity: 1;
+          }
+          50% {
+            transform: scaleY(1.2) skewY(5deg);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scaleY(5) skewY(30deg);
+            opacity: 0;
+          }
+        }
+        .melting {
+          animation: meltDown 1.5s ease forwards;
         }
       `}</style>
     </div>
