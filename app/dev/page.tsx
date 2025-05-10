@@ -11,6 +11,7 @@ import ProjectScreenshot from './components/ProjectScreenshot';
 import ProjectDescription from './components/ProjectDescription';
 import Section from './components/Section';
 import DebugOverlay from './components/DebugOverlay';
+import ProjectNavIndicator from './components/ProjectNavIndicator';
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 import { projects } from './config/projects';
@@ -213,6 +214,9 @@ export default function DevPage() {
     <main ref={scrollRef} className='relative'>
       {/* Debug Overlay */}
       <DebugOverlay />
+
+      {/* Project Nav Indicator */}
+      <ProjectNavIndicator />
 
       {/* Fixed Backgrounds */}
       <motion.div
