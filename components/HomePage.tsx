@@ -5,8 +5,10 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Code, Smartphone, Server, Database, Gamepad2 } from 'lucide-react';
+
 import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
+import SocialIcons from './SocialIcons';
 
 const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
@@ -155,20 +157,35 @@ export default function HomePage() {
 
       <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow h-full'>
         <div
-          className={`mb-4 flex justify-center transition-all duration-1000 ease-out transform max-w-[1200px] w-full mx-auto relative ${
+          className={`mb-4 grid grid-cols-3 items-start w-full max-w-[1200px] mx-auto relative transition-all duration-1000 ease-out transform ${
             animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <a href='/'>
-            <Image
-              src='/logo.png'
-              alt='Meowtin Logo'
-              width={200}
-              height={50}
-              className='drop-shadow-lg max-w-xs md:max-w-md'
-            />
-          </a>
-          <div className='absolute top-0 right-0'>
+          {/* Left: Social Media Icons */}
+          <div className='flex items-start justify-start'>
+            <SocialIcons className='hidden md:flex space-x-4' />
+          </div>
+
+          {/* Center: Logo */}
+          <div className='flex flex-col items-center justify-center'>
+            <a href='/'>
+              <Image
+                src='/logo.png'
+                alt='Meowtin Logo'
+                width={200}
+                height={50}
+                className='drop-shadow-lg max-w-xs md:max-w-md'
+              />
+            </a>
+
+            {/* Mobile: Social Icons Below Logo */}
+            <div className='mt-4 md:hidden'>
+              <SocialIcons className='flex justify-center space-x-4' />
+            </div>
+          </div>
+
+          {/* Right: MiniEye */}
+          <div className='flex justify-end'>
             <MiniEye />
           </div>
         </div>
