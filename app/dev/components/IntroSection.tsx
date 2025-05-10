@@ -1,9 +1,8 @@
 'use client';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { timing } from '../config/timing';
-
+import { Code, Smartphone, Server, Database, Gamepad2 } from 'lucide-react';
 export default function IntroSection() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -35,31 +34,27 @@ export default function IntroSection() {
           <a href='/'>
             <img src='/logo.png' alt='Meowtin Logo' className='w-[50vw] max-w-[600px] mb-6' />
           </a>
-          <div className='flex justify-center gap-6 flex-wrap mb-10'>
-            <a
-              href='https://www.facebook.com/mistergoombaremix'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaFacebookF className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.instagram.com/mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaInstagram className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
-            <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
-              <FaTiktok className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.youtube.com/@mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaYoutube className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
+          <div className='grid grid-cols-5 gap-6'>
+            <div className='flex flex-col items-center justify-center'>
+              <Code className='w-12 h-12 text-[#b38bfc] mb-2' />
+              <span className='text-white text-sm'>React</span>
+            </div>
+            <div className='flex flex-col items-center justify-center'>
+              <Smartphone className='w-12 h-12 text-[#b38bfc] mb-2' />
+              <span className='text-white text-sm'>React Native</span>
+            </div>
+            <div className='flex flex-col items-center justify-center'>
+              <Server className='w-12 h-12 text-[#b38bfc] mb-2' />
+              <span className='text-white text-sm'>Node.js</span>
+            </div>
+            <div className='flex flex-col items-center justify-center'>
+              <Database className='w-12 h-12 text-[#b38bfc] mb-2' />
+              <span className='text-white text-sm'>Full Stack</span>
+            </div>
+            <div className='flex flex-col items-center justify-center'>
+              <Gamepad2 className='w-12 h-12 text-[#b38bfc] mb-2' />
+              <span className='text-white text-sm'>Game Dev</span>
+            </div>
           </div>
         </motion.div>
       </div>

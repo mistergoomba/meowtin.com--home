@@ -267,8 +267,11 @@ export default function DevPage() {
 
       {/* Intro section that appears at the end - using inline implementation instead of component */}
       <motion.div
-        className='fixed inset-0 z-20 flex flex-col justify-center items-center'
-        style={{ opacity: endProgress }}
+        className='fixed inset-0 flex flex-col justify-center items-center pointer-events-auto'
+        style={{
+          opacity: endProgress,
+          zIndex: useTransform(endProgress, [0, 1], [0, 30]), // lift to top when visible
+        }}
       >
         <motion.div className='flex flex-col items-center'>
           <a href='/'>

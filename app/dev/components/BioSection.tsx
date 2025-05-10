@@ -94,7 +94,7 @@ export default function BioSection() {
               }}
               className='text-3xl md:text-[2.8rem] font-bold mb-6'
             >
-              Welcome to Meowtin&#39;s Domain
+              Martin Boynton - Creative Developer
             </motion.h1>
             <motion.p
               style={{
@@ -103,12 +103,18 @@ export default function BioSection() {
               }}
               className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'
             >
-              I'm Martin—a creative, experienced full-stack developer with over 25 years in the game
-              and a deep focus on JavaScript, React, React Native, and Node.js. I specialize in
-              building artistic, immersive, and technically sound websites and apps that stand out
-              visually and functionally. Whether you need a modern site with a custom design, a
-              scalable backend, a mobile app, or just someone to step in and untangle your messy
-              JavaScript repo I'm your guy.
+              I'm Meowtin — a creative, experienced full-stack developer with over 25 years in the
+              game, specializing in JavaScript, React, React Native, and Node.js. I build artistic,
+              immersive, and technically sound websites and apps that stand out both visually and
+              functionally. Whether you need a modern custom-designed site, a scalable backend, a
+              mobile app, or someone to untangle your messy JavaScript repo — I'm your guy.
+              <br />
+              <br />
+              Beyond the code, I'm a multidisciplinary creative with a passion for performance,
+              music, and visual storytelling. I'm an internationally touring musician, karaoke host,
+              emcee, DJ, music producer, video editor, and former music venue owner. I'm also a
+              world traveler, yoga and meditation enthusiast, pro wrestling connoisseur, video game
+              devotee, and all-around good guy.
             </motion.p>
           </div>
         </div>

@@ -4,12 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  Code,
-  Smartphone,
-  Server,
-  Database,
-} from 'lucide-react';
+import { Code, Smartphone, Server, Database, Gamepad2 } from 'lucide-react';
 import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
 
@@ -91,14 +86,13 @@ export default function HomePage() {
   const handleDevCardClick = () => {
     const container = containerRef.current;
     if (!container) return;
-  
+
     container.classList.add('melting');
-  
+
     setTimeout(() => {
       router.push('/dev');
     }, 1500); // Wait for melt animation
   };
-  
 
   const handleArtCardClick = () => {
     // First, position the overlay over the art card but keep it invisible
@@ -203,7 +197,7 @@ export default function HomePage() {
 
             <div className='p-6 h-full flex flex-col relative z-10'>
               <h2 className='text-3xl font-bold text-white mb-6 text-center'>DEVELOPER</h2>
-              <div className='grid grid-cols-4 gap-6 flex-grow'>
+              <div className='grid grid-cols-5 gap-6 flex-grow'>
                 <div className='flex flex-col items-center justify-center'>
                   <Code className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>React</span>
@@ -219,6 +213,10 @@ export default function HomePage() {
                 <div className='flex flex-col items-center justify-center'>
                   <Database className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>Full Stack</span>
+                </div>
+                <div className='flex flex-col items-center justify-center'>
+                  <Gamepad2 className='w-12 h-12 text-[#00ffaa] mb-2' />
+                  <span className='text-white text-sm'>Game Dev</span>
                 </div>
               </div>
             </div>

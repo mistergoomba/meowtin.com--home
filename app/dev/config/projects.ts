@@ -31,7 +31,7 @@ export const projects = [
   
   The original tool used native JavaScript and HTML5, enabling real-time visual feedback for audio gear customers. This works as a custom page in Shopify.`,
       technologies: ["JavaScript", "Shopify", "HTML5", "CSS3"],
-      screenshots: ["/projects/custom-mics-1.png", "/projects/custom-mics-2.png", "/projects/custom-mics-3.png"],
+      screenshots: ["/projects/custom-mics-1.png"],
       cursors: [
         {
           start: { x: "-90px", y: "40px" },

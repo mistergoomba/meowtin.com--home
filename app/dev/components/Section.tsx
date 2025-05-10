@@ -1,5 +1,3 @@
-'use client';
-
 import { motion, useTransform, type MotionValue } from 'framer-motion';
 import type { ReactNode } from 'react';
 
@@ -18,21 +16,21 @@ export default function Section({
   progressParams,
   isIntroSection = false,
 }: SectionProps) {
-  // Create transform values for this specific section
-  // For the intro section, start with opacity 1
   const introOpacity = useTransform(
     scrollYProgress,
     [0, visibilityParams[2], visibilityParams[3]],
     [1, 1, 0]
   );
   const sectionOpacity = useTransform(scrollYProgress, visibilityParams, [0, 1, 1, 0]);
-
   const opacity = isIntroSection ? introOpacity : sectionOpacity;
 
   const progress = useTransform(scrollYProgress, progressParams, [0, 1], { clamp: true });
 
+  // Add z-index boost when the section is most visible (progress ≈ 0.5)
+  const zIndex = useTransform(progress, [0, 0.5, 1], [0, 10, 0]);
+
   return (
-    <motion.div style={{ opacity }} className='h-screen relative'>
+    <motion.div style={{ opacity, zIndex }} className='h-screen relative pointer-events-auto'>
       {typeof children === 'function' ? children(progress) : children}
     </motion.div>
   );
