@@ -5,34 +5,6 @@ import { useEffect, useState } from 'react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
-/*export const metadata = {
-  title: "Who Is Meowtin? - Meowtin's Domain",
-  description: 'A collection of works by Meowtin, a software engineer and artist',
-  openGraph: {
-    title: "Who Is Meowtin? - Meowtin's Domain",
-    description: 'A collection of works by Meowtin, a software engineer and artist',
-    url: 'https://meowtin.com/bio',
-    siteName: "Meowtin's Domain",
-    images: [
-      {
-        url: 'https://meowtin.com/share-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Who Is Meowtin?',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "Who Is Meowtin? - Meowtin's Domain",
-    description: 'A collection of works by Meowtin, a software engineer and artist',
-    images: ['https://meowtin.com/share-image.png'],
-  },
-};
-*/
-
 function ArtPreview() {
   const [previewImages, setPreviewImages] = useState<Array<{ key: string; img1: string }>>([]);
 
