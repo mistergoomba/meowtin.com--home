@@ -13,6 +13,7 @@ import Section from './components/Section';
 import DebugOverlay from './components/DebugOverlay';
 import ProjectNavIndicator from './components/ProjectNavIndicator';
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 import { projects } from './config/projects';
 import { timing } from './config/timing';
@@ -29,6 +30,7 @@ type SectionType = {
 
 export default function DevPage() {
   const scrollRef = useRef(null);
+  const isMobile = useIsMobile();
 
   // Track scroll progress
   const { scrollYProgress } = useScroll({
@@ -277,9 +279,13 @@ export default function DevPage() {
           zIndex: useTransform(endProgress, [0, 1], [0, 30]), // lift to top when visible
         }}
       >
-        <motion.div className='flex flex-col items-center'>
+        <motion.div className='flex flex-col items-center px-4'>
           <a href='/'>
-            <img src='/logo.png' alt='Meowtin Logo' className='w-[50vw] max-w-[600px] mb-6' />
+            <img
+              src='/logo.png'
+              alt='Meowtin Logo'
+              className={`${isMobile ? 'w-[90vw]' : 'w-[50vw]'} max-w-[600px] mb-6`}
+            />
           </a>
           <div className='flex justify-center gap-6 flex-wrap mb-10'>
             <a

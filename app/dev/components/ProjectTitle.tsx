@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, type MotionValue, useTransform } from 'framer-motion';
 import { timing } from '../config/timing';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type ProjectTitleProps = {
   title: string;
@@ -11,6 +12,7 @@ type ProjectTitleProps = {
 
 export default function ProjectTitle({ title, sectionProgress }: ProjectTitleProps) {
   const ref = useRef(null);
+  const isMobile = useIsMobile();
 
   // Title animations
   // Fade in during the first part of the animation
@@ -37,6 +39,9 @@ export default function ProjectTitle({ title, sectionProgress }: ProjectTitlePro
     [0.5, 1, 1, 1.5]
   );
 
+  // Adjust font size for mobile
+  const titleFontSize = isMobile ? 'text-4xl' : 'text-6xl';
+
   return (
     <div ref={ref} className='fixed inset-0 flex items-center justify-center'>
       <motion.div
@@ -47,7 +52,9 @@ export default function ProjectTitle({ title, sectionProgress }: ProjectTitlePro
         }}
       >
         {/* Simple title with consistent styling */}
-        <h1 className='text-6xl font-bold text-center text-white whitespace-pre-line'>{title}</h1>
+        <h1 className={`${titleFontSize} font-bold text-center text-white whitespace-pre-line`}>
+          {title}
+        </h1>
       </motion.div>
     </div>
   );

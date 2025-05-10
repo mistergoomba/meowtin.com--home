@@ -4,11 +4,13 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useMemo, useState, useEffect } from 'react';
 import { projects } from '../config/projects';
 import { timing } from '../config/timing';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function ProjectNavIndicator() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const isMobile = useIsMobile();
 
   // Timing boundaries (fully configurable for fade speed)
   const fadeInStart = timing.projectNav.fadeInStart;
@@ -21,15 +23,6 @@ export default function ProjectNavIndicator() {
     [fadeInStart, fadeInEnd, fadeOutStart, fadeOutEnd],
     [0, 1, 1, 0]
   );
-
-  // Calculate section structure for determining active project
-  const totalSections = useMemo(() => {
-    let total = 3; // intro, bio, wordcloud
-    projects.forEach((p) => {
-      total += 1 + p.screenshots.length + 1; // title + screenshots + description
-    });
-    return total;
-  }, []);
 
   // Calculate the scroll percentage ranges for each project
   const projectRanges = useMemo(() => {
@@ -81,26 +74,20 @@ export default function ProjectNavIndicator() {
     <motion.div
       ref={ref}
       style={{ opacity }}
-      className='fixed top-1/2 left-4 -translate-y-1/2 z-30 flex flex-col gap-4'
+      className='fixed top-4 left-0 right-0 z-30 flex justify-center'
     >
-      {projects.map((project, index) => (
-        <motion.div key={index} className='flex items-center gap-2'>
+      <div className='flex gap-3'>
+        {projects.map((project, index) => (
           <motion.div
+            key={index}
             className='w-3 h-3 rounded-full transition-colors duration-300'
             style={{
               backgroundColor: activeProjectIndex === index ? '#b38bfc' : '#555',
             }}
+            title={project.navTitle || project.title.split('\n')[0]}
           />
-          <motion.span
-            className='text-sm transition-colors duration-300'
-            style={{
-              color: activeProjectIndex === index ? '#fff' : '#aaa',
-            }}
-          >
-            {project.navTitle || project.title.split('\n')[0]}
-          </motion.span>
-        </motion.div>
-      ))}
+        ))}
+      </div>
     </motion.div>
   );
 }

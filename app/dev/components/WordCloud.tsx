@@ -3,11 +3,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { timing } from '../config/timing';
-import { wordPositions } from '../config/wordPositions';
+import { wordPositions, mobileWordPositions } from '../config/wordPositions';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function WordCloud() {
   const ref = useRef(null);
   const [currentScrollY, setCurrentScrollY] = useState(0);
+  const isMobile = useIsMobile();
+
+  // Use the appropriate word positions based on device
+  const currentWordPositions = isMobile ? mobileWordPositions : wordPositions;
 
   // Track global scroll progress for entry and exit
   const { scrollYProgress: globalProgress } = useScroll();
@@ -57,7 +62,7 @@ export default function WordCloud() {
     // Animation timing parameters
     const startScroll = timing.wordCloud.wordsAnimStart;
     const endScroll = timing.wordCloud.wordsAnimEnd;
-    const wordScrollRangePerWord = (endScroll - startScroll) / wordPositions.length;
+    const wordScrollRangePerWord = (endScroll - startScroll) / currentWordPositions.length;
 
     // Calculate the scroll range for this specific word
     const wordStartScroll = startScroll + index * wordScrollRangePerWord;
@@ -105,7 +110,7 @@ export default function WordCloud() {
         className='fixed top-0 left-0 w-full h-screen flex items-center justify-center'
       >
         <div className='word-cloud-container'>
-          {wordPositions.map((word, index) => {
+          {currentWordPositions.map((word, index) => {
             const { scale, opacity } = getWordAnimation(index);
 
             // Add a subtle glow effect for green text
@@ -114,6 +119,9 @@ export default function WordCloud() {
                 ? '0 0 15px rgba(0, 255, 170, 0.8)'
                 : '0 0 10px rgba(0, 255, 170, 0.5)';
 
+            // Adjust font size for mobile
+            const fontSize = isMobile ? `${word.size * 0.7}rem` : `${word.size}rem`;
+
             return (
               <motion.div
                 key={`${word.text}-${index}`}
@@ -121,7 +129,7 @@ export default function WordCloud() {
                   position: 'absolute',
                   left: `calc(50% + ${word.x}px)`,
                   top: `calc(50% + ${word.y}px)`,
-                  fontSize: `${word.size}rem`,
+                  fontSize,
                   color: getColor(word.size),
                   textShadow,
                   fontWeight: word.size === 2.5 ? 'bold' : 'normal',

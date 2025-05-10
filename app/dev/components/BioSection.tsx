@@ -3,9 +3,11 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { timing } from '../config/timing';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function BioSection() {
   const ref = useRef(null);
+  const isMobile = useIsMobile();
 
   // Track global scroll progress for entry animations
   const { scrollYProgress: globalProgress } = useScroll();
@@ -30,11 +32,11 @@ export default function BioSection() {
     [1, 0.6]
   );
 
-  // Entry animations with delays
+  // Entry animations with delays - adjusted for mobile
   const imageY = useTransform(
     sectionVisibility,
     [timing.bio.imageAnimStart, timing.bio.imageAnimEnd],
-    [300, 0]
+    [isMobile ? 150 : 300, 0]
   );
 
   const imageOpacity = useTransform(
@@ -46,7 +48,7 @@ export default function BioSection() {
   const headingY = useTransform(
     sectionVisibility,
     [timing.bio.headingAnimStart, timing.bio.headingAnimEnd],
-    [300, 0]
+    [isMobile ? 150 : 300, 0]
   );
 
   const headingOpacity = useTransform(
@@ -58,7 +60,7 @@ export default function BioSection() {
   const bioTextY = useTransform(
     sectionVisibility,
     [timing.bio.textAnimStart, timing.bio.textAnimEnd],
-    [300, 0]
+    [isMobile ? 150 : 300, 0]
   );
 
   const bioTextOpacity = useTransform(
@@ -76,7 +78,11 @@ export default function BioSection() {
         }}
         className='fixed top-0 left-0 w-full h-screen flex items-center justify-center'
       >
-        <div className='flex flex-col md:flex-row items-start justify-center max-w-6xl mx-auto px-4'>
+        <div
+          className={`flex flex-col ${
+            isMobile ? 'px-6' : 'md:flex-row'
+          } items-start justify-center max-w-6xl mx-auto`}
+        >
           <motion.img
             style={{
               y: imageY,
@@ -84,15 +90,17 @@ export default function BioSection() {
             }}
             src='/me.png'
             alt='Meowtin'
-            className='w-72 h-auto object-cover rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl'
+            className={`w-60 md:w-72 h-auto object-cover rounded-2xl mb-6 md:mb-0 ${
+              isMobile ? '' : 'md:mr-12'
+            } shadow-xl mx-auto md:mx-0`}
           />
-          <div className='pt-0'>
+          <div className={`pt-0 ${isMobile ? 'text-center' : 'text-left'}`}>
             <motion.h1
               style={{
                 y: headingY,
                 opacity: headingOpacity,
               }}
-              className='text-3xl md:text-[2.8rem] font-bold mb-6'
+              className='text-2xl md:text-[2.8rem] font-bold mb-4 md:mb-6'
             >
               Martin Boynton - Creative Developer
             </motion.h1>
@@ -101,7 +109,7 @@ export default function BioSection() {
                 y: bioTextY,
                 opacity: bioTextOpacity,
               }}
-              className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'
+              className='text-base md:text-xl text-gray-300 leading-relaxed max-w-2xl'
             >
               I'm Meowtin — a creative, experienced full-stack developer with over 25 years in the
               game, specializing in JavaScript, React, React Native, and Node.js. I build artistic,
