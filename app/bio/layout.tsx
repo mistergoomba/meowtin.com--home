@@ -8,7 +8,7 @@ export const metadata = {
     siteName: "Meowtin's Domain",
     images: [
       {
-        url: 'https://meowtin.com/share-image.png',
+        url: 'https://meowtin.com/share-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Who Is Meowtin?',
@@ -21,7 +21,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Who Is Meowtin? - Meowtin's Domain",
     description: 'A collection of works by Meowtin, a software engineer and artist',
-    images: ['https://meowtin.com/share-image.png'],
+    images: ['https://meowtin.com/share-image.jpg'],
   },
 };
 
