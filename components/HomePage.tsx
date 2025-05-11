@@ -17,34 +17,9 @@ export default function HomePage() {
   const [animateHeader, setAnimateHeader] = useState(false);
   const [animateCards, setAnimateCards] = useState([false, false, false, false]);
   const [animateFooter, setAnimateFooter] = useState(false);
-  const [artOverlayActive, setArtOverlayActive] = useState(false);
-  const [artOverlayFadedIn, setArtOverlayFadedIn] = useState(false);
-  const [artOverlayExpanded, setArtOverlayExpanded] = useState(false);
-  const [karaokeOverlayActive, setKaraokeOverlayActive] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [musicOverlayActive, setMusicOverlayActive] = useState(false);
-
-  // State for tracking hovered cards
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const devCardRef = useRef<HTMLDivElement>(null);
-  const staticVideoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -65,95 +40,26 @@ export default function HomePage() {
     }
   }, []);
 
-  // Handle karaoke card redirect
-  useEffect(() => {
-    if (karaokeOverlayActive) {
-      // Redirect after 1 second
-      const redirectTimer = setTimeout(() => {
-        window.location.href = 'https://kj.meowtin.com';
-      }, 1000);
-
-      return () => clearTimeout(redirectTimer);
-    }
-  }, [karaokeOverlayActive]);
-
-  const handleMusicCardClick = () => {
-    setMusicOverlayActive(true);
-    setTimeout(() => {
-      window.location.href = 'https://grave.meowtin.com';
-    }, 1000); // Delay to allow fade animation
-  };
-
   // Handle card clicks
   const handleDevCardClick = () => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.classList.add('melting');
-
-    setTimeout(() => {
-      router.push('/dev');
-    }, 1500); // Wait for melt animation
+    router.push('/dev');
   };
 
   const handleArtCardClick = () => {
-    // First, position the overlay over the art card but keep it invisible
-    setArtOverlayActive(true);
-    setArtOverlayExpanded(false);
-    setArtOverlayFadedIn(false);
-
-    // After a short delay, fade it in
-    setTimeout(() => {
-      setArtOverlayFadedIn(true);
-
-      // After fade-in completes, expand it
-      setTimeout(() => {
-        setArtOverlayExpanded(true);
-
-        // Start navigation to art page during expansion
-        // Wait a bit so the expansion is visible before page changes
-        setTimeout(() => {
-          router.push('/art');
-        }, 1000);
-      }, 300);
-    }, 50);
+    router.push('/art');
   };
 
   const handleKaraokeCardClick = () => {
-    // Immediately show the static video overlay
-    setKaraokeOverlayActive(true);
+    window.location.href = 'https://kj.meowtin.com';
+  };
+
+  const handleMusicCardClick = () => {
+    window.location.href = 'https://grave.meowtin.com';
   };
 
   return (
     <div className='relative min-h-screen w-full overflow-hidden bg-black flex flex-col'>
       {isLoaded && <TronGrid backgroundImageUrl='/background.png' />}
-
-      {/* Karaoke Static Video Overlay */}
-      {karaokeOverlayActive && (
-        <div
-          className='fixed inset-0 z-50 bg-black m-0 p-0 overflow-hidden'
-          style={{ width: '200vw', height: '200vh', top: '-50vh', left: '-50vw' }}
-        >
-          <video
-            ref={staticVideoRef}
-            className='absolute inset-0 w-full h-full object-fill'
-            style={{ width: '200vw', height: '200vh' }}
-            autoPlay
-            loop
-            muted
-            playsInline
-          >
-            <source src='/static.mp4' type='video/mp4' />
-          </video>
-        </div>
-      )}
-
-      {musicOverlayActive && (
-        <div
-          className='fixed inset-0 bg-black z-50 opacity-0 animate-fadeIn'
-          style={{ animationDuration: '1s', animationFillMode: 'forwards' }}
-        />
-      )}
 
       <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow h-full'>
         <div
@@ -196,9 +102,6 @@ export default function HomePage() {
         >
           {/* DEVELOPER Card */}
           <div
-            ref={devCardRef}
-            onMouseEnter={() => !isMobile && setHoveredCard(0)}
-            onMouseLeave={() => !isMobile && setHoveredCard(null)}
             onClick={handleDevCardClick}
             className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
     flex flex-col transform transition-all duration-1000 ease-out
@@ -209,7 +112,7 @@ export default function HomePage() {
           >
             {/* The ElectricityBorder component with very high z-index */}
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={0} isHovered={hoveredCard === 0} borderColor='#00ffaa' />
+              <ElectricityBorder cardId={0} borderColor='#00ffaa' />
             </div>
 
             <div className='p-6 h-full flex flex-col relative z-10'>
@@ -239,42 +142,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Overlay for Art Card */}
-          {artOverlayActive && (
-            <div
-              className={`absolute overflow-hidden transition-all ease-in-out ${
-                artOverlayFadedIn ? 'opacity-100 duration-300' : 'opacity-0 duration-300'
-              } ${
-                artOverlayExpanded
-                  ? 'duration-[3s] w-[1000vw] h-[1000vh] top-[-500vh] right-[-500vh]'
-                  : isMobile
-                  ? 'w-full h-full top-0 left-0'
-                  : 'w-[calc(50%-0.75rem)] h-[calc(50%-0.75rem)] top-0 right-0 md:right-0 md:top-0'
-              }`}
-              style={{
-                zIndex: 30,
-                transition:
-                  'opacity 0.3s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out',
-              }}
-            >
-              <div className='absolute inset-0 w-full h-full'>
-                <Image
-                  src='/art/02 learn to swim-1.png'
-                  alt='Art'
-                  layout='fill'
-                  objectFit='cover'
-                  objectPosition='top'
-                  className='opacity-90'
-                />
-              </div>
-              <div className='absolute inset-0 bg-black/50'></div>
-            </div>
-          )}
-
           {/* ART Card */}
           <div
-            onMouseEnter={() => !isMobile && setHoveredCard(1)}
-            onMouseLeave={() => !isMobile && setHoveredCard(null)}
             onClick={handleArtCardClick}
             id='artCard'
             className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
@@ -283,11 +152,10 @@ export default function HomePage() {
     perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-2
     overflow-hidden cursor-pointer
     md:h-auto md:flex-1 md:aspect-auto aspect-square
-    ${artOverlayActive ? 'hidden md:block' : ''}
     ${animateCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={1} isHovered={hoveredCard === 1} borderColor='#00aaff' />
+              <ElectricityBorder cardId={1} borderColor='#00aaff' />
             </div>
             <div className='absolute inset-0 w-full h-full'>
               <Image
@@ -306,8 +174,6 @@ export default function HomePage() {
 
           {/* KARAOKE Card (Bottom Left) */}
           <div
-            onMouseEnter={() => !isMobile && setHoveredCard(2)}
-            onMouseLeave={() => !isMobile && setHoveredCard(null)}
             onClick={handleKaraokeCardClick}
             className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
               flex flex-col transform transition-all duration-1000 ease-out
@@ -318,7 +184,7 @@ export default function HomePage() {
               ${animateCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={2} isHovered={hoveredCard === 2} borderColor='#ff64ff' />
+              <ElectricityBorder cardId={2} borderColor='#ff64ff' />
             </div>
             <div className='absolute inset-0 w-full h-full flex items-center justify-center'>
               <video autoPlay muted loop playsInline className='w-full h-full object-cover'>
@@ -338,8 +204,6 @@ export default function HomePage() {
 
           {/* MUSIC Card (Bottom Right) - Blank for now */}
           <div
-            onMouseEnter={() => !isMobile && setHoveredCard(3)}
-            onMouseLeave={() => !isMobile && setHoveredCard(null)}
             onClick={handleMusicCardClick}
             className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
     flex flex-col transform transition-all duration-1000 ease-out
@@ -349,7 +213,7 @@ export default function HomePage() {
     ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={3} isHovered={hoveredCard === 3} borderColor='#ffc800' />
+              <ElectricityBorder cardId={3} borderColor='#ffc800' />
             </div>
             <div className='absolute inset-0 w-full h-full'>
               <Image
