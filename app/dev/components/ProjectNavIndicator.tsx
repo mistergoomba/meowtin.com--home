@@ -6,7 +6,11 @@ import { projects } from '../config/projects';
 import { timing } from '../config/timing';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-export default function ProjectNavIndicator() {
+export default function ProjectNavIndicator({
+  projectScrollRanges,
+}: {
+  projectScrollRanges: { start: number; end: number }[];
+}) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
@@ -25,22 +29,7 @@ export default function ProjectNavIndicator() {
   );
 
   // Calculate the scroll percentage ranges for each project
-  const projectRanges = useMemo(() => {
-    const ranges = [];
-    const startPosition = timing.projects.startAt;
-    const remainingScrollSpace = 1 - startPosition;
-
-    // Calculate how much scroll space each project should take
-    const projectScrollSpace = remainingScrollSpace / projects.length;
-
-    for (let i = 0; i < projects.length; i++) {
-      const projectStart = startPosition + i * projectScrollSpace;
-      const projectEnd = startPosition + (i + 1) * projectScrollSpace;
-      ranges.push({ start: projectStart, end: projectEnd });
-    }
-
-    return ranges;
-  }, []);
+  const projectRanges = projectScrollRanges;
 
   // Update active project index based on current scroll position
   useEffect(() => {

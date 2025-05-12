@@ -180,6 +180,21 @@ export default function DevPage() {
     return ranges;
   }, [sections.length]);
 
+  const projectScrollRanges = useMemo(() => {
+    const ranges: { start: number; end: number }[] = [];
+    let sectionIndex = 3; // skip intro, bio, wordcloud
+
+    projects.forEach((project) => {
+      const sectionCount = 1 + project.screenshots.length + 1;
+      const start = sectionRanges[sectionIndex].start;
+      const end = sectionRanges[sectionIndex + sectionCount - 1].end;
+      ranges.push({ start, end });
+      sectionIndex += sectionCount;
+    });
+
+    return ranges;
+  }, [sectionRanges]);
+
   // Pre-calculate visibility and progress parameters
   const sectionParams = useMemo(() => {
     return sections.map((section, index) => {
@@ -218,7 +233,7 @@ export default function DevPage() {
       <DebugOverlay />
 
       {/* Project Nav Indicator */}
-      <ProjectNavIndicator />
+      <ProjectNavIndicator projectScrollRanges={projectScrollRanges} />
 
       {/* Fixed Backgrounds */}
       <motion.div

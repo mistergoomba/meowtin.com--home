@@ -9,6 +9,7 @@ import { Code, Smartphone, Server, Database, Gamepad2 } from 'lucide-react';
 import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
 import SocialIcons from './SocialIcons';
+import HomePageCard from './HomePageCard';
 
 const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 
@@ -41,13 +42,6 @@ export default function HomePage() {
   }, []);
 
   // Handle card clicks
-  const handleDevCardClick = () => {
-    router.push('/dev');
-  };
-
-  const handleArtCardClick = () => {
-    router.push('/art');
-  };
 
   const handleKaraokeCardClick = () => {
     window.location.href = 'https://kj.meowtin.com';
@@ -101,62 +95,44 @@ export default function HomePage() {
           className='flex-grow relative grid grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-2 gap-6 max-w-[1200px] w-full mx-auto h-full'
         >
           {/* DEVELOPER Card */}
-          <div
-            onClick={handleDevCardClick}
-            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-    flex flex-col transform transition-all duration-1000 ease-out
-    hover:shadow-[0_0_25px_rgba(0,255,170,0.3)] hover:scale-[1.02] hover:z-10
-    perspective-[1000px] hover:rotate-y-2 hover:rotate-x-2 cursor-pointer
-    md:h-auto md:flex-1 md:aspect-auto aspect-square
-    ${animateCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          <HomePageCard
+            onClick={() => router.push('/dev')}
+            hoverShadowColor='0,255,170,0.3'
+            animateCards={animateCards}
+            cardId={0}
+            laserColor='#00ffaa'
           >
-            {/* The ElectricityBorder component with very high z-index */}
-            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={0} borderColor='#00ffaa' />
-            </div>
-
             <div className='p-6 h-full flex flex-col relative z-10'>
               <h2 className='text-3xl font-bold text-white mb-6 text-center'>DEVELOPER</h2>
-              <div className='grid grid-cols-5 gap-6 flex-grow'>
-                <div className='flex flex-col items-center justify-center'>
+              <div className='grid grid-cols-4 gap-6 flex-grow'>
+                <div className='flex flex-col items-center justify-center text-center'>
                   <Code className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>React</span>
                 </div>
-                <div className='flex flex-col items-center justify-center'>
+                <div className='flex flex-col items-center justify-center text-center'>
                   <Smartphone className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>React Native</span>
                 </div>
-                <div className='flex flex-col items-center justify-center'>
-                  <Server className='w-12 h-12 text-[#00ffaa] mb-2' />
-                  <span className='text-white text-sm'>Node.js</span>
-                </div>
-                <div className='flex flex-col items-center justify-center'>
+                <div className='flex flex-col items-center justify-center text-center'>
                   <Database className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>Full Stack</span>
                 </div>
-                <div className='flex flex-col items-center justify-center'>
+                <div className='flex flex-col items-center justify-center text-center'>
                   <Gamepad2 className='w-12 h-12 text-[#00ffaa] mb-2' />
                   <span className='text-white text-sm'>Game Dev</span>
                 </div>
               </div>
             </div>
-          </div>
+          </HomePageCard>
 
           {/* ART Card */}
-          <div
-            onClick={handleArtCardClick}
-            id='artCard'
-            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-    flex flex-col transform transition-all duration-1000 ease-out
-    hover:shadow-[0_0_25px_rgba(0,170,255,0.3)] hover:scale-[1.02] hover:z-10
-    perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-2
-    overflow-hidden cursor-pointer
-    md:h-auto md:flex-1 md:aspect-auto aspect-square
-    ${animateCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          <HomePageCard
+            onClick={() => router.push('/art')}
+            hoverShadowColor='0,170,255,0.3'
+            animateCards={animateCards}
+            cardId={1}
+            laserColor='#00aaff'
           >
-            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={1} borderColor='#00aaff' />
-            </div>
             <div className='absolute inset-0 w-full h-full'>
               <Image
                 src='/art/02 learn to swim-1.png'
@@ -170,7 +146,7 @@ export default function HomePage() {
             <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent'>
               <h2 className='text-3xl font-bold text-white mb-2 mt-auto'>ART</h2>
             </div>
-          </div>
+          </HomePageCard>
 
           {/* KARAOKE Card (Bottom Left) */}
           <div
