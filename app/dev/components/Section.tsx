@@ -26,7 +26,7 @@ export default function Section({
 
   const progress = useTransform(scrollYProgress, progressParams, [0, 1], { clamp: true });
 
-  // Add z-index boost when the section is most visible (progress ≈ 0.5)
+  // Boost z-index for the intro section to ensure interactivity
   const zIndex = useTransform(progress, [0, 0.5, 1], isIntroSection ? [20, 30, 20] : [0, 10, 0]);
 
   return (

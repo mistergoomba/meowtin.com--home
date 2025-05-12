@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Meowtin's Domain",
   description:
     "Welcome to Meowtin's Domain, the home page and personal portfolio of Martin Boynton...",
-  themeColor: '#000000',
   openGraph: {
     title: "Meowtin's Domain",
     description:
@@ -31,6 +30,10 @@ export const metadata: Metadata = {
       "Welcome to Meowtin's Domain, the home page and personal portfolio of Martin Boynton...",
     images: ['https://meowtin.com/share-image.jpg'],
   },
+};
+
+export const viewport = {
+  themeColor: '#000000',
 };
 
 export default function RootLayout({
