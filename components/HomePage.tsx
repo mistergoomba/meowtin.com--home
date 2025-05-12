@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Code, Smartphone, Server, Database, Gamepad2 } from 'lucide-react';
+import { Code, Smartphone, Database, Gamepad2 } from 'lucide-react';
 
 import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
@@ -40,16 +40,6 @@ export default function HomePage() {
       preloadVideo.load();
     }
   }, []);
-
-  // Handle card clicks
-
-  const handleKaraokeCardClick = () => {
-    window.location.href = 'https://kj.meowtin.com';
-  };
-
-  const handleMusicCardClick = () => {
-    window.location.href = 'https://grave.meowtin.com';
-  };
 
   return (
     <div className='relative min-h-screen w-full overflow-hidden bg-black flex flex-col'>
@@ -149,15 +139,12 @@ export default function HomePage() {
           </HomePageCard>
 
           {/* KARAOKE Card (Bottom Left) */}
-          <div
-            onClick={handleKaraokeCardClick}
-            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-              flex flex-col transform transition-all duration-1000 ease-out
-              hover:shadow-[0_0_25px_rgba(255,100,255,0.3)] hover:scale-[1.02] hover:z-10
-              perspective-[1000px] hover:rotate-y-2 hover:rotate-x-[-2deg]
-              overflow-hidden cursor-pointer
-              md:h-auto md:flex-1 md:aspect-auto aspect-square
-              ${animateCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          <HomePageCard
+            onClick={() => (window.location.href = 'https://kj.meowtin.com')}
+            hoverShadowColor='255,100,255,0.3'
+            animateCards={animateCards}
+            cardId={2}
+            laserColor='#ff64ff'
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
               <ElectricityBorder cardId={2} borderColor='#ff64ff' />
@@ -176,17 +163,15 @@ export default function HomePage() {
                 className='drop-shadow-lg max-w-[80%]'
               />
             </div>
-          </div>
+          </HomePageCard>
 
           {/* MUSIC Card (Bottom Right) - Blank for now */}
-          <div
-            onClick={handleMusicCardClick}
-            className={`relative bg-black/80 border border-gray-700 backdrop-blur-sm shadow-lg 
-    flex flex-col transform transition-all duration-1000 ease-out
-    hover:shadow-[0_0_25px_rgba(255,200,0,0.3)] hover:scale-[1.02] hover:z-10
-    perspective-[1000px] hover:rotate-y-[-2deg] hover:rotate-x-[-2deg] cursor-pointer
-    md:h-auto md:flex-1 md:aspect-auto aspect-square
-    ${animateCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+          <HomePageCard
+            onClick={() => (window.location.href = 'https://grave.meowtin.com')}
+            hoverShadowColor='255,200,0,0.3'
+            animateCards={animateCards}
+            cardId={3}
+            laserColor='#ffc800'
           >
             <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
               <ElectricityBorder cardId={3} borderColor='#ffc800' />
@@ -203,7 +188,7 @@ export default function HomePage() {
             <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent justify-end'>
               <h2 className='text-3xl font-bold text-white text-center w-full mb-2'>MUSIC</h2>
             </div>
-          </div>
+          </HomePageCard>
         </div>
 
         {/* Footer */}
@@ -215,38 +200,6 @@ export default function HomePage() {
           © 2025 MEOWTIN
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        .animate-fadeIn {
-          animation-name: fadeIn;
-        }
-
-        @keyframes meltDown {
-          0% {
-            transform: scaleY(1) skewY(0deg);
-            opacity: 1;
-          }
-          50% {
-            transform: scaleY(1.2) skewY(5deg);
-            opacity: 0.8;
-          }
-          100% {
-            transform: scaleY(5) skewY(30deg);
-            opacity: 0;
-          }
-        }
-        .melting {
-          animation: meltDown 1.5s ease forwards;
-        }
-      `}</style>
     </div>
   );
 }
