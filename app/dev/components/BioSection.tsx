@@ -12,10 +12,10 @@ export default function BioSection() {
   // Track global scroll progress for entry animations
   const { scrollYProgress: globalProgress } = useScroll();
 
-  // Calculate when this section should start appearing (when intro is almost done)
+  // Calculate when this section should start appearing (sooner than before)
   const sectionVisibility = useTransform(
     globalProgress,
-    [timing.bio.fadeInStart, timing.bio.fadeInEnd],
+    [timing.bio.fadeInStart - 0.05, timing.bio.fadeInEnd - 0.05],
     [0, 1]
   );
 
@@ -47,25 +47,37 @@ export default function BioSection() {
 
   const headingY = useTransform(
     sectionVisibility,
-    [timing.bio.headingAnimStart, timing.bio.headingAnimEnd],
+    [
+      isMobile ? timing.bio.headingAnimStart : timing.bio.headingAnimStart,
+      isMobile ? timing.bio.headingAnimStart + 0.05 : timing.bio.headingAnimEnd,
+    ],
     [isMobile ? 150 : 300, 0]
   );
 
   const headingOpacity = useTransform(
     sectionVisibility,
-    [timing.bio.headingAnimStart, timing.bio.headingAnimEnd],
+    [
+      isMobile ? timing.bio.headingAnimStart : timing.bio.headingAnimStart,
+      isMobile ? timing.bio.headingAnimStart + 0.05 : timing.bio.headingAnimEnd,
+    ],
     [0, 1]
   );
 
   const bioTextY = useTransform(
     sectionVisibility,
-    [timing.bio.textAnimStart, timing.bio.textAnimEnd],
+    [
+      isMobile ? timing.bio.textAnimStart : timing.bio.textAnimStart,
+      isMobile ? timing.bio.textAnimStart + 0.05 : timing.bio.textAnimEnd,
+    ],
     [isMobile ? 150 : 300, 0]
   );
 
   const bioTextOpacity = useTransform(
     sectionVisibility,
-    [timing.bio.textAnimStart, timing.bio.textAnimEnd],
+    [
+      isMobile ? timing.bio.textAnimStart : timing.bio.textAnimStart,
+      isMobile ? timing.bio.textAnimStart + 0.05 : timing.bio.textAnimEnd,
+    ],
     [0, 1]
   );
 
@@ -76,7 +88,9 @@ export default function BioSection() {
           scale: sectionScale,
           opacity: sectionOpacity,
         }}
-        className='fixed top-0 left-0 w-full h-screen flex items-center justify-center'
+        className={`${
+          isMobile ? 'relative' : 'fixed'
+        } top-0 left-0 w-full h-screen flex items-center justify-center`}
       >
         <div
           className={`flex flex-col ${
