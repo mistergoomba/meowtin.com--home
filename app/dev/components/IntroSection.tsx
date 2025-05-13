@@ -28,7 +28,7 @@ export default function IntroSection() {
 
   return (
     <section ref={ref} className='h-screen w-full'>
-      <div className='fixed top-0 left-0 w-full h-screen flex flex-col justify-center items-center z-10'>
+      <div className='fixed top-0 left-0 w-full h-screen flex flex-col justify-center items-center'>
         <motion.div
           style={{ scale, opacity }}
           className='flex flex-col items-center w-full px-4'

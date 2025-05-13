@@ -58,9 +58,9 @@ export const timing = {
     // For each project
     title: {
       fillStart: 0,
-      fillEnd: 0.6, // Fill completes earlier to allow time for falling animation
-      unfillStart: 0.9, // Start the falling animation later
-      unfillEnd: 1.2, // Complete the title exit
+      fillEnd: 0.3, // Fill completes earlier to allow time for falling animation
+      unfillStart: 1.2, // Start the falling animation later
+      unfillEnd: 1.5, // Complete the title exit
     },
 
     screenshot: {
