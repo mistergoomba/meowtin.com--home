@@ -1,6 +1,19 @@
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
-export default function SocialIcons({ className = '' }: { className?: string }) {
+export default function SocialIcons({
+  className = '',
+  size = 'small',
+}: {
+  className?: string;
+  size?: 'small' | 'big';
+}) {
+  const sm = `${
+    size === 'small' ? 'w-6 h-6' : 'w-12 h-12'
+  } text-gray-400 hover:text-white transition`;
+  const big = `${
+    size === 'small' ? 'w-7 h-7' : 'w-14 h-14'
+  } text-gray-400 hover:text-white transition`;
+
   return (
     <div className={className}>
       <a
@@ -8,16 +21,16 @@ export default function SocialIcons({ className = '' }: { className?: string }) 
         target='_blank'
         rel='noopener noreferrer'
       >
-        <FaFacebookF className='w-6 h-6 text-gray-400 hover:text-white transition' />
+        <FaFacebookF className={sm} />
       </a>
       <a href='https://www.instagram.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
-        <FaInstagram className='w-7 h-7 text-gray-400 hover:text-white transition' />
+        <FaInstagram className={big} />
       </a>
       <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
-        <FaTiktok className='w-6 h-6 text-gray-400 hover:text-white transition' />
+        <FaTiktok className={sm} />
       </a>
       <a href='https://www.youtube.com/@mistergoomba' target='_blank' rel='noopener noreferrer'>
-        <FaYoutube className='w-7 h-7 text-gray-400 hover:text-white transition' />
+        <FaYoutube className={big} />
       </a>
     </div>
   );

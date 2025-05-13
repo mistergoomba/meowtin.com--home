@@ -12,9 +12,9 @@ import ProjectDescription from './components/ProjectDescription';
 import Section from './components/Section';
 import DebugOverlay from './components/DebugOverlay';
 import ProjectNavIndicator from './components/ProjectNavIndicator';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import SocialIcons from '@/components/SocialIcons';
 import { projects } from './config/projects';
 import { timing } from './config/timing';
 
@@ -302,32 +302,7 @@ export default function DevPage() {
               className={`${isMobile ? 'w-[90vw]' : 'w-[50vw]'} max-w-[600px] mb-6`}
             />
           </a>
-          <div className='flex justify-center gap-6 flex-wrap mb-10'>
-            <a
-              href='https://www.facebook.com/mistergoombaremix'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaFacebookF className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.instagram.com/mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaInstagram className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
-            <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
-              <FaTiktok className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.youtube.com/@mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaYoutube className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
-          </div>
+          <SocialIcons size='big' className='flex justify-center gap-6 flex-wrap mb-10' />
         </motion.div>
       </motion.div>
 

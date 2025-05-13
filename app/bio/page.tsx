@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import AnimatedSection from '@/components/AnimatedSection';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import SocialIcons from '@/components/SocialIcons';
 
 function ArtPreview() {
   const [previewImages, setPreviewImages] = useState<Array<{ key: string; img1: string }>>([]);
@@ -70,32 +70,7 @@ export default function BioPage() {
               />
             </a>
 
-            <div className='flex space-x-6 mt-4'>
-              <a
-                href='https://www.facebook.com/mistergoombaremix'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <FaFacebookF className='w-12 h-12 text-gray-400 hover:text-white transition' />
-              </a>
-              <a
-                href='https://www.instagram.com/mistergoomba'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <FaInstagram className='w-14 h-14 text-gray-400 hover:text-white transition' />
-              </a>
-              <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
-                <FaTiktok className='w-12 h-12 text-gray-400 hover:text-white transition' />
-              </a>
-              <a
-                href='https://www.youtube.com/@mistergoomba'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <FaYoutube className='w-14 h-14 text-gray-400 hover:text-white transition' />
-              </a>
-            </div>
+            <SocialIcons size='big' className='flex space-x-6 mt-4' />
           </header>
         </AnimatedSection>
 

@@ -87,7 +87,7 @@ export default function HomePage() {
           {/* DEVELOPER Card */}
           <HomePageCard
             onClick={() => router.push('/dev')}
-            hoverShadowColor='0,255,170,0.3'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(0,255,170,0.3)]'
             animateCards={animateCards}
             cardId={0}
             laserColor='#00ffaa'
@@ -118,7 +118,7 @@ export default function HomePage() {
           {/* ART Card */}
           <HomePageCard
             onClick={() => router.push('/art')}
-            hoverShadowColor='0,170,255,0.3'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(0,170,255,0.3)]'
             animateCards={animateCards}
             cardId={1}
             laserColor='#00aaff'
@@ -141,7 +141,7 @@ export default function HomePage() {
           {/* KARAOKE Card (Bottom Left) */}
           <HomePageCard
             onClick={() => (window.location.href = 'https://kj.meowtin.com')}
-            hoverShadowColor='255,100,255,0.3'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,100,255,0.3)]'
             animateCards={animateCards}
             cardId={2}
             laserColor='#ff64ff'
@@ -168,7 +168,7 @@ export default function HomePage() {
           {/* MUSIC Card (Bottom Right) - Blank for now */}
           <HomePageCard
             onClick={() => (window.location.href = 'https://grave.meowtin.com')}
-            hoverShadowColor='255,200,0,0.3'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,200,0,0.3)]'
             animateCards={animateCards}
             cardId={3}
             laserColor='#ffc800'
