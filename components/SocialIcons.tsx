@@ -1,4 +1,4 @@
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import { FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaSoundcloud } from 'react-icons/fa';
 
 export default function SocialIcons({
   className = '',
@@ -16,15 +16,14 @@ export default function SocialIcons({
 
   return (
     <div className={className}>
-      <a
-        href='https://www.facebook.com/mistergoombaremix'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        <FaFacebookF className={sm} />
-      </a>
       <a href='https://www.instagram.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
         <FaInstagram className={big} />
+      </a>
+      <a href='https://www.linkedin.com/in/mistergoomba/' target='_blank' rel='noopener noreferrer'>
+        <FaLinkedin className={sm} />
+      </a>
+      <a href='https://soundcloud.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
+        <FaSoundcloud className={big} />
       </a>
       <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
         <FaTiktok className={sm} />
