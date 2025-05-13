@@ -14,6 +14,7 @@ import ProjectDescription from './components/ProjectDescription';
 import Section from './components/Section';
 import DebugOverlay from './components/DebugOverlay';
 import ProjectNavIndicator from './components/ProjectNavIndicator';
+import IntroEndSection from './components/IntroEndSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 import SocialIcons from '@/components/SocialIcons';
@@ -220,6 +221,7 @@ export default function DevPage() {
         {sections.map((section, index) => {
           const params = sectionParams[index];
           const isIntroSection = section.type === 'intro';
+          const isOutroSection = section.type === 'intro-end';
           return (
             <Section
               key={section.id}
@@ -227,6 +229,7 @@ export default function DevPage() {
               visibilityParams={params.visibility}
               progressParams={params.progress}
               isIntroSection={isIntroSection}
+              isOutroSection={isOutroSection}
             >
               {(progress) => {
                 switch (section.type) {
@@ -254,21 +257,7 @@ export default function DevPage() {
                       <ProjectDescription project={section.project} sectionProgress={progress} />
                     ) : null;
                   case 'intro-end':
-                    return (
-                      <motion.div className='flex flex-col items-center px-4'>
-                        <a href='/'>
-                          <img
-                            src='/logo.png'
-                            alt='Meowtin Logo'
-                            className={`${isMobile ? 'w-[90vw]' : 'w-[50vw]'} max-w-[600px] mb-6`}
-                          />
-                        </a>
-                        <SocialIcons
-                          size='big'
-                          className='flex justify-center gap-6 flex-wrap mb-10'
-                        />
-                      </motion.div>
-                    );
+                    return <IntroEndSection />;
                   default:
                     return null;
                 }
