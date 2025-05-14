@@ -141,14 +141,11 @@ export default function HomePage() {
           {/* KARAOKE Card (Bottom Left) */}
           <HomePageCard
             onClick={() => (window.location.href = 'https://kj.meowtin.com')}
-            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,100,255,0.3)]'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,200,0,0.3)]'
             animateCards={animateCards}
             cardId={2}
-            laserColor='#ff64ff'
+            laserColor='#ffc800'
           >
-            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={2} borderColor='#ff64ff' />
-            </div>
             <div className='absolute inset-0 w-full h-full flex items-center justify-center'>
               <video autoPlay muted loop playsInline className='w-full h-full object-cover'>
                 <source src='/reel.mp4' type='video/mp4' />
@@ -168,14 +165,11 @@ export default function HomePage() {
           {/* MUSIC Card (Bottom Right) - Blank for now */}
           <HomePageCard
             onClick={() => (window.location.href = 'https://grave.meowtin.com')}
-            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,200,0,0.3)]'
+            hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,100,255,0.3)]'
             animateCards={animateCards}
             cardId={3}
-            laserColor='#ffc800'
+            laserColor='#ff64ff'
           >
-            <div className='absolute inset-0 overflow-visible' style={{ zIndex: 20 }}>
-              <ElectricityBorder cardId={3} borderColor='#ffc800' />
-            </div>
             <div className='absolute inset-0 w-full h-full'>
               <Image
                 src='/music-card.png'
