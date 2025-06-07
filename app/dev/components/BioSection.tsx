@@ -4,6 +4,12 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { timing } from '../config/timing';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Shadows_Into_Light } from 'next/font/google';
+
+const shadowsIntoLight = Shadows_Into_Light({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 export default function BioSection() {
   const ref = useRef(null);
@@ -110,11 +116,10 @@ export default function BioSection() {
           />
           <div className={`pt-0 ${isMobile ? 'text-center' : 'text-left'}`}>
             <motion.h1
-              style={{
-                y: headingY,
-                opacity: headingOpacity,
-              }}
-              className='text-2xl md:text-[2.8rem] font-bold mb-4 md:mb-6'
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className='text-4xl md:text-5xl mb-4 font-handwritten'
             >
               Martin Boynton - Creative Developer
             </motion.h1>

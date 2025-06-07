@@ -6,8 +6,8 @@ export const timing = {
   background: {
     gradientFadeStart: 0,
     gradientFadeEnd: 0.3,
-    gridAppearStart: 0.15, // Start showing grid earlier
-    gridAppearEnd: 0.25, // Complete grid transition earlier
+    gridAppearStart: 0.1, // Start showing grid earlier
+    gridAppearEnd: 0.2, // Complete grid transition earlier
   },
 
   // Intro section
@@ -25,8 +25,8 @@ export const timing = {
   bio: {
     fadeInStart: 0.0005,
     fadeInEnd: 0.15,
-    fadeOutStart: 0.12,
-    fadeOutEnd: 0.17,
+    fadeOutStart: 0.06,
+    fadeOutEnd: 0.09,
 
     // Sequential animations within bio
     imageAnimStart: 0,
@@ -39,14 +39,14 @@ export const timing = {
 
   // Word cloud section
   wordCloud: {
-    fadeInStart: 0.15, // Start fading in when bio is fading out
-    fadeInEnd: 0.16, // Fully visible shortly after
-    fadeOutStart: 0.35, // Start fading out
-    fadeOutEnd: 0.4, // Completely gone
+    fadeInStart: 0.1, // Start fading in when bio is fading out
+    fadeInEnd: 0.11, // Fully visible shortly after
+    fadeOutStart: 0.3, // Start fading out
+    fadeOutEnd: 0.35, // Completely gone
 
     // Word animations
-    wordsAnimStart: 0.2, // Start word animations slightly after section begins to appear
-    wordsAnimEnd: 0.26, // Complete word animations before section starts to fade
+    wordsAnimStart: 0.15, // Start word animations slightly after section begins to appear
+    wordsAnimEnd: 0.2, // Complete word animations before section starts to fade
     wordsFadeOutStart: 0.3,
     wordsFadeOutEnd: 0.35,
   },
