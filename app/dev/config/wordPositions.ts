@@ -19,7 +19,7 @@ export const wordPositions = [
   // Tertiary words
   { text: 'Agile', size: 1.4, x: -250, y: 0, z: -20 },
   { text: 'REST APIs', size: 1.4, x: 180, y: 220, z: -30 },
-  { text: 'JSON', size: 1.4, x: -180, y: 180, z: -40 },
+  { text: 'Framer Motion', size: 1.4, x: -180, y: 180, z: -40 },
   { text: 'Responsive Design', size: 1.4, x: 120, y: 0, z: -50 },
   { text: 'UX/UI Collaboration', size: 1.4, x: -80, y: -220, z: -60 },
   { text: 'Redis', size: 1.4, x: 40, y: -260, z: -20 },

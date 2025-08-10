@@ -1,3 +1,5 @@
+// FILE UPDATED: Scroll timing recalibrated for longer project titles & screenshots
+
 'use client';
 
 import { useScroll, useTransform, motion } from 'framer-motion';
@@ -12,14 +14,15 @@ import ProjectDescription from './components/ProjectDescription';
 import Section from './components/Section';
 import DebugOverlay from './components/DebugOverlay';
 import ProjectNavIndicator from './components/ProjectNavIndicator';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import IntroEndSection from './components/IntroEndSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import SocialIcons from '@/components/SocialIcons';
 import { projects } from './config/projects';
 import { timing } from './config/timing';
 
 type SectionType = {
-  type: 'intro' | 'bio' | 'wordcloud' | 'title' | 'screenshot' | 'description';
+  type: 'intro' | 'bio' | 'wordcloud' | 'title' | 'screenshot' | 'description' | 'intro-end';
   id: string;
   project?: (typeof projects)[0];
   projectIndex?: number;
@@ -31,77 +34,35 @@ type SectionType = {
 export default function DevPage() {
   const scrollRef = useRef(null);
   const isMobile = useIsMobile();
+  const { scrollYProgress } = useScroll({ target: scrollRef, offset: ['start start', 'end end'] });
 
-  // Track scroll progress
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ['start start', 'end end'],
-  });
-
-  // Track when we're at the end of all projects to show intro again and hide chevron
-  // Now using the configurable timing values
   const endProgress = useTransform(
     scrollYProgress,
     [timing.intro.endFadeInStart, timing.intro.endFadeInEnd],
     [0, 1]
   );
 
-  // Background transitions
-  // At the beginning, show the gradient background
-  // At the middle, show the grid background
-  // At the end, show the gradient background again
-  const backgroundOpacity = useTransform([scrollYProgress, endProgress], (values: number[]) => {
-    const [progress, end] = values;
-    // At the beginning (0-0.3)
-    if (progress < timing.background.gradientFadeEnd) {
+  const backgroundOpacity = useTransform([scrollYProgress, endProgress], (values) => {
+    const [progress, end] = values as [number, number];
+    if (progress < timing.background.gradientFadeEnd)
       return 1 - progress / timing.background.gradientFadeEnd;
-    }
-    // At the end (when endProgress > 0)
-    if (end > 0) {
-      return end;
-    }
-    // Middle
+    if (end > 0) return end;
     return 0;
   });
 
-  const gridBackgroundOpacity = useTransform([scrollYProgress, endProgress], (values: number[]) => {
-    const [progress, end] = values;
-    // At the beginning
-    if (progress < timing.background.gridAppearStart) {
-      return 0;
-    }
-    // Fade in
+  const gridBackgroundOpacity = useTransform([scrollYProgress, endProgress], (values) => {
+    const [progress, end] = values as [number, number];
+    if (progress < timing.background.gridAppearStart) return 0;
     if (progress < timing.background.gridAppearEnd) {
       return (
         (progress - timing.background.gridAppearStart) /
         (timing.background.gridAppearEnd - timing.background.gridAppearStart)
       );
     }
-    // Fade out at the end
-    if (end > 0) {
-      return 1 - end;
-    }
-    // Middle - fully visible
+    if (end > 0) return 1 - end;
     return 1;
   });
 
-  // Calculate total sections
-  const totalSections = useMemo(() => {
-    // Start with the base sections: IntroSection, BioSection, WordCloud
-    let total = 3;
-
-    // For each project, add:
-    // 1 section for title + 1 section per screenshot + 1 section for description
-    projects.forEach((project) => {
-      total += 1 + project.screenshots.length + 1;
-    });
-
-    return total;
-  }, []);
-
-  const totalHeight = `${totalSections * 100}vh`;
-
-  // Create an array of all sections for easier mapping
   const sections = useMemo(() => {
     const sectionsArray: SectionType[] = [
       { type: 'intro', id: 'intro' },
@@ -110,15 +71,12 @@ export default function DevPage() {
     ];
 
     projects.forEach((project, projectIndex) => {
-      // Add title section
       sectionsArray.push({
         type: 'title',
         project,
         projectIndex,
         id: `project-${projectIndex}-title`,
       });
-
-      // Add screenshot sections
       project.screenshots.forEach((screenshot, screenshotIndex) => {
         sectionsArray.push({
           type: 'screenshot',
@@ -130,8 +88,6 @@ export default function DevPage() {
           id: `project-${projectIndex}-screenshot-${screenshotIndex}`,
         });
       });
-
-      // Add description section
       sectionsArray.push({
         type: 'description',
         project,
@@ -140,70 +96,63 @@ export default function DevPage() {
       });
     });
 
+    sectionsArray.push({ type: 'intro-end', id: 'intro-end' });
     return sectionsArray;
   }, []);
 
-  // Calculate section ranges with adjusted timing for Bio section
+  const totalHeight = `${sections.length * 100}vh`;
+
   const sectionRanges = useMemo(() => {
-    const ranges = [];
+    const ranges = [
+      { start: 0, end: timing.intro.fadeOutEnd },
+      { start: timing.bio.fadeInStart, end: timing.bio.fadeOutEnd },
+      { start: timing.wordCloud.fadeInStart, end: timing.wordCloud.fadeOutEnd },
+    ];
 
-    // Intro section
-    ranges.push({
-      start: 0,
-      end: timing.intro.fadeOutEnd,
+    const start = timing.projects.startAt;
+    const end = 1.0;
+    const weights = projects.map((p) => 1.5 + 1.5 * p.screenshots.length + 1.2);
+    const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+    let acc = start;
+    projects.forEach((project, index) => {
+      const weight = weights[index];
+      const span = (weight / totalWeight) * (end - start);
+      const partCount = 1 + project.screenshots.length + 1;
+      const partSpan = span / partCount;
+
+      ranges.push({ start: acc, end: acc + partSpan });
+      acc += partSpan;
+      project.screenshots.forEach(() => {
+        ranges.push({ start: acc, end: acc + partSpan });
+        acc += partSpan;
+      });
+      ranges.push({ start: acc, end: acc + partSpan });
+      acc += partSpan;
     });
 
-    // Bio section (overlapping with intro and word cloud)
-    ranges.push({
-      start: timing.bio.fadeInStart,
-      end: timing.bio.fadeOutEnd,
-    });
-
-    // Word cloud
-    ranges.push({
-      start: timing.wordCloud.fadeInStart,
-      end: timing.wordCloud.fadeOutEnd,
-    });
-
-    // Project sections take up the remaining scroll after word cloud
-    const projectSectionsCount = sections.length - 3;
-    const projectSectionsStart = timing.projects.startAt;
-
-    for (let i = 0; i < projectSectionsCount; i++) {
-      const sectionStart =
-        projectSectionsStart + (i / projectSectionsCount) * (1 - projectSectionsStart);
-      const sectionEnd =
-        projectSectionsStart + ((i + 1) / projectSectionsCount) * (1 - projectSectionsStart);
-      ranges.push({ start: sectionStart, end: sectionEnd });
-    }
-
+    ranges.push({ start: timing.intro.endFadeInStart, end: timing.intro.endFadeInEnd });
     return ranges;
   }, [sections.length]);
 
   const projectScrollRanges = useMemo(() => {
     const ranges: { start: number; end: number }[] = [];
-    let sectionIndex = 3; // skip intro, bio, wordcloud
-
-    projects.forEach((project) => {
-      const sectionCount = 1 + project.screenshots.length + 1;
-      const start = sectionRanges[sectionIndex].start;
-      const end = sectionRanges[sectionIndex + sectionCount - 1].end;
-      ranges.push({ start, end });
-      sectionIndex += sectionCount;
+    let index = 3;
+    projects.forEach((p) => {
+      const count = 1 + p.screenshots.length + 1;
+      ranges.push({ start: sectionRanges[index].start, end: sectionRanges[index + count - 1].end });
+      index += count;
     });
-
     return ranges;
   }, [sectionRanges]);
 
-  // Pre-calculate visibility and progress parameters
   const sectionParams = useMemo(() => {
-    return sections.map((section, index) => {
+    return sections.map((_, index) => {
       const { start, end } = sectionRanges[index];
       const fadeInStart = start;
       const fadeInEnd = start + (end - start) * 0.2;
       const fadeOutStart = end - (end - start) * 0.2;
       const fadeOutEnd = end;
-
       return {
         visibility: [fadeInStart, fadeInEnd, fadeOutStart, fadeOutEnd] as [
           number,
@@ -216,26 +165,19 @@ export default function DevPage() {
     });
   }, [sections, sectionRanges]);
 
-  // Chevron visibility - visible throughout except at the very end
-  // Using the same timing values as the end intro fade in
   const chevronOpacity = useTransform(
     scrollYProgress,
     [
       timing.intro.endFadeInStart,
-      timing.intro.endFadeInStart + (timing.intro.endFadeInEnd - timing.intro.endFadeInStart) / 2,
+      timing.intro.endFadeInStart + 0.5 * (timing.intro.endFadeInEnd - timing.intro.endFadeInStart),
     ],
     [1, 0]
   );
 
   return (
     <main ref={scrollRef} className='relative'>
-      {/* Debug Overlay */}
       <DebugOverlay />
-
-      {/* Project Nav Indicator */}
       <ProjectNavIndicator projectScrollRanges={projectScrollRanges} />
-
-      {/* Fixed Backgrounds */}
       <motion.div
         style={{ opacity: backgroundOpacity }}
         className='fixed inset-0 z-0 bg-gradient-to-b from-[#0c0018] to-[#18032d]'
@@ -249,25 +191,15 @@ export default function DevPage() {
         }}
         className='fixed inset-0 z-0'
       />
-
-      {/* Floating Chevron - visible throughout except at the end */}
       <motion.div
         className='fixed bottom-0 left-0 right-0 z-50 flex justify-center'
         style={{ opacity: chevronOpacity }}
       >
         <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.4, 0.9, 0.4],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: 'easeInOut',
-          }}
-          className='pb-[5px]' // Position the point 5px from bottom
+          animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.9, 0.4], y: [0, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className='pb-[5px]'
         >
-          {/* Custom wider-angled chevron */}
           <svg
             width='24'
             height='14'
@@ -285,58 +217,11 @@ export default function DevPage() {
           </svg>
         </motion.div>
       </motion.div>
-
-      {/* Intro section that appears at the end - using inline implementation instead of component */}
-      <motion.div
-        className='fixed inset-0 flex flex-col justify-center items-center pointer-events-auto'
-        style={{
-          opacity: endProgress,
-          zIndex: useTransform(endProgress, [0, 1], [0, 30]), // lift to top when visible
-        }}
-      >
-        <motion.div className='flex flex-col items-center px-4'>
-          <a href='/'>
-            <img
-              src='/logo.png'
-              alt='Meowtin Logo'
-              className={`${isMobile ? 'w-[90vw]' : 'w-[50vw]'} max-w-[600px] mb-6`}
-            />
-          </a>
-          <div className='flex justify-center gap-6 flex-wrap mb-10'>
-            <a
-              href='https://www.facebook.com/mistergoombaremix'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaFacebookF className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.instagram.com/mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaInstagram className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
-            <a href='https://www.tiktok.com/@mrgoomba' target='_blank' rel='noopener noreferrer'>
-              <FaTiktok className='w-12 h-12 text-gray-400 hover:text-white transition' />
-            </a>
-            <a
-              href='https://www.youtube.com/@mistergoomba'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <FaYoutube className='w-14 h-14 text-gray-400 hover:text-white transition' />
-            </a>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Scrollable Content - Linear sequence of all sections */}
       <div style={{ height: totalHeight }}>
         {sections.map((section, index) => {
           const params = sectionParams[index];
           const isIntroSection = section.type === 'intro';
-
+          const isOutroSection = section.type === 'intro-end';
           return (
             <Section
               key={section.id}
@@ -344,6 +229,7 @@ export default function DevPage() {
               visibilityParams={params.visibility}
               progressParams={params.progress}
               isIntroSection={isIntroSection}
+              isOutroSection={isOutroSection}
             >
               {(progress) => {
                 switch (section.type) {
@@ -370,6 +256,8 @@ export default function DevPage() {
                     return section.project ? (
                       <ProjectDescription project={section.project} sectionProgress={progress} />
                     ) : null;
+                  case 'intro-end':
+                    return <IntroEndSection />;
                   default:
                     return null;
                 }

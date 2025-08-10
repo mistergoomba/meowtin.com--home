@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, type MotionValue, useTransform } from 'framer-motion';
 import Cursor from './Cursor';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useScreenCategory } from '@/hooks/useScreenCategory'; // <- new import
 
 type ProjectScreenshotProps = {
   screenshot: string;
@@ -23,15 +23,22 @@ export default function ProjectScreenshot({
   sectionProgress,
 }: ProjectScreenshotProps) {
   const ref = useRef(null);
-  const isMobile = useIsMobile();
+  const screenCategory = useScreenCategory();
 
   // Define cursor timing points
   const cursorAppearAt = 0.4;
   const cursorMoveUntil = 0.8;
   const cursorFadeOutAt = 0.9;
 
-  // Screenshot animations - limit max scale on mobile
-  const maxScale = isMobile ? 1.0 : 1.5;
+  // Tailwind-style screen breakpoints for scaling
+  const maxScale = {
+    xs: 1.0,
+    sm: 1.1,
+    md: 1.3,
+    lg: 1.6,
+    xl: 1.8,
+    '2xl': 2.0,
+  }[screenCategory];
 
   // Grow from 0.2 to maxScale in the first 40% of the section
   const screenshotScale = useTransform(
@@ -40,22 +47,20 @@ export default function ProjectScreenshot({
     [0.2, maxScale, maxScale, 0.5]
   );
 
-  // Screenshot opacity - full opacity until cursor fade out
   const screenshotOpacity = useTransform(
     sectionProgress,
     [0, cursorFadeOutAt, cursorFadeOutAt + 0.05],
     [1, 1, 0]
   );
 
-  // Calculate dimensions to ensure screenshots don't exceed screen size
-  const width = isMobile ? '90vw' : '500px';
-  const height = isMobile ? 'auto' : '300px';
-  const marginLeft = isMobile ? '-45vw' : '-250px';
-  const marginTop = isMobile ? '-25vw' : '-150px';
+  const isSmallScreen = screenCategory === 'xs' || screenCategory === 'sm';
+  const width = isSmallScreen ? '90vw' : '500px';
+  const height = isSmallScreen ? 'auto' : '300px';
+  const marginLeft = isSmallScreen ? '-45vw' : '-250px';
+  const marginTop = isSmallScreen ? '-25vw' : '-150px';
 
   return (
     <div ref={ref} className='fixed top-0 left-0 w-full h-screen flex items-center justify-center'>
-      {/* Screenshot with Growth Animation */}
       <motion.div
         style={{
           scale: screenshotScale,
@@ -78,7 +83,6 @@ export default function ProjectScreenshot({
         />
       </motion.div>
 
-      {/* Cursor - Using our new component */}
       <Cursor
         sectionProgress={sectionProgress}
         cursor={cursor}
