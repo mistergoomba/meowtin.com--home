@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { useRouter } from 'next/navigation';
 import { Code, Smartphone, Database, Gamepad2 } from 'lucide-react';
 
-import ElectricityBorder from './ElectricityBorder';
 import MiniEye from './MiniEye';
 import SocialIcons from './SocialIcons';
 import HomePageCard from './HomePageCard';
@@ -45,25 +44,25 @@ export default function HomePage() {
     <div className='relative min-h-screen w-full overflow-hidden bg-black flex flex-col'>
       {isLoaded && <TronGrid backgroundImageUrl='/background.png' />}
 
-      <div className='relative z-10 flex flex-col w-full px-4 pt-6 pb-0 flex-grow h-full'>
+      <div className='relative z-10 flex flex-col w-full px-4 py-0 flex-grow h-full'>
         <div
-          className={`mb-4 grid grid-cols-3 items-start w-full max-w-[1200px] mx-auto relative transition-all duration-1000 ease-out transform ${
+          className={`mb-1 grid grid-cols-3 items-start w-full max-w-[1200px] mx-auto relative transition-all duration-1000 ease-out transform ${
             animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
           {/* Left: Social Media Icons */}
-          <div className='flex items-start justify-start'>
+          <div className='flex items-start justify-start pt-6'>
             <SocialIcons className='hidden md:flex space-x-4' />
           </div>
 
           {/* Center: Logo */}
-          <div className='flex flex-col items-center justify-center'>
+          <div className='flex flex-col items-center justify-center pt-2'>
             <a href='/'>
               <Image
                 src='/logo.png'
                 alt='Meowtin Logo'
                 width={200}
-                height={50}
+                height={120}
                 className='drop-shadow-lg max-w-xs md:max-w-md'
               />
             </a>
@@ -164,7 +163,7 @@ export default function HomePage() {
 
           {/* MUSIC Card (Bottom Right) - Blank for now */}
           <HomePageCard
-            onClick={() => (window.location.href = 'https://grave.meowtin.com')}
+            onClick={() => router.push('/music')}
             hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,100,255,0.3)]'
             animateCards={animateCards}
             cardId={3}
@@ -180,7 +179,9 @@ export default function HomePage() {
               />
             </div>
             <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent justify-end'>
-              <h2 className='text-3xl font-bold text-white text-center w-full mb-2'>MUSIC</h2>
+              <h2 className='text-3xl font-bold text-white text-center w-full mb-2'>
+                MUSICIAN / KARAOKE HOST
+              </h2>
             </div>
           </HomePageCard>
         </div>

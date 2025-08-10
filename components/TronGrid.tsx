@@ -411,14 +411,13 @@ function Scene({ backgroundImageUrl }: { backgroundImageUrl: string }) {
         positions[baseIdx + 5] = p2.z;
 
         // Set colors with fade effect
-        const alpha = (1 - i / (line.points.length - 1)) * CONFIG.LINE_OPACITY; // Fade out older segments
-
-        colors[baseIdx] = line.color.r;
-        colors[baseIdx + 1] = line.color.g;
-        colors[baseIdx + 2] = line.color.b;
-        colors[baseIdx + 3] = line.color.r;
-        colors[baseIdx + 4] = line.color.g;
-        colors[baseIdx + 5] = line.color.b;
+        const fade = (1 - i / (line.points.length - 1)) * CONFIG.LINE_OPACITY;
+        colors[baseIdx] = line.color.r * fade;
+        colors[baseIdx + 1] = line.color.g * fade;
+        colors[baseIdx + 2] = line.color.b * fade;
+        colors[baseIdx + 3] = line.color.r * fade;
+        colors[baseIdx + 4] = line.color.g * fade;
+        colors[baseIdx + 5] = line.color.b * fade;
       }
     });
 
