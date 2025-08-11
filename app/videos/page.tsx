@@ -12,73 +12,71 @@ const videos: Vid[] = [
     id: 'DgExa19NJFI',
     title: 'Short Fuse - Toxic Graveyard',
     blurb:
-      'Shot in the depths of the Short Fuse studio, stitched together with razor-sharp edits in Adobe Premiere to match the track’s menacing pulse.',
+      'Shot at the old Short Fuse studio in Redwood City, this is a horror-themed video for the track from the 2018 album Our Darkest Future.',
   },
   {
     id: 'Hs3LX3FaM9E',
     title: 'None More Negative - RUINS Creepy Green Light',
     blurb:
-      'A gloomy trek through the NMN studio and Cypress Hill Cemetery in Colma, CA — equal parts tribute, parody, and pure Type O Negative worship.',
+      'A video from my former Type O Negative tribute band, None More Negative, shot at Cypress Lawn Cemetery in Colma.',
   },
   {
     id: 'JQPAnbyp9V4',
     title: 'Short Fuse - Haunted',
     blurb:
-      'Captured on Halloween night at a friend’s haunted house with extra shots from the Short Fuse studio — all stitched into a delightfully eerie cut.',
+      'Captured on Halloween night at a friend’s haunted house, with additional shots from the Short Fuse studio, stitched together in Adobe Premiere.',
   },
   {
     id: 'rJDDaxmc3To',
     title: "Fart Bubble - You Haven't Eaten My Ass Lately",
     blurb:
-      'An unapologetically absurd fever dream starring Scara Darling, filmed in Las Vegas and loaded with the band’s signature filth-core charm.',
+      'Starring Scara Darling, this heartbreak song by Fart Bubble was recorded in Las Vegas, NV.',
   },
   {
     id: 'h_po9Gq1Dec',
     title: 'Vampire Mermaid from Outer Space',
-    blurb:
-      'A self-produced Bay Area cult oddity — campy, chaotic, and impossible to look away from once the first fangs appear.',
+    blurb: 'A cult classic in which I participated as both editor and the evil clown.',
   },
   {
     id: 'R8ClUsHqUMM',
     title: 'Short Fuse - Straight to the Guillotine',
     blurb:
-      'Commissioned for pro wrestler Jack Banning, this cut fuses brutal riffs with in-your-face wrestling promo chaos.',
+      'A song created for pro wrestler and longtime Short Fuse fan Jack Banning, with promotional footage used as the backdrop to the music.',
   },
   {
     id: '9QnQig_ak3U',
     title: 'Short Fuse - Terrible Embraces',
     blurb:
-      'Filmed on the road in 2019 with Six Feet Under — a gritty European tour memory captured outside Rock Cafe Southock in the Czech Republic.',
+      'Filmed on the road in 2019 with Six Feet Under, in the dead of winter outside Rock Café Southock in the Czech Republic.',
   },
   {
     id: 'SLLWJnrsQC8',
     title: 'Short Fuse - Funeral March',
     blurb:
-      'Fan-shot footage from the Short Fuse / Skinlab tour’s final show at Sinwave in Las Vegas — raw, loud, and unfiltered.',
+      'Compiled fan-shot footage from the final show of the Short Fuse/Skinlab tour at my music venue, Sinwave, in Las Vegas.',
   },
   {
     id: 'Gdavt-vJ-3Q',
     title: 'Short Fuse - Violent Riot',
-    blurb:
-      'A barrage of riot footage cut to pounding riffs — chaotic energy with a political snarl.',
+    blurb: 'A video created with impact, using stock footage and news outlet material.',
   },
   {
     id: 'dgdwznrtYNo',
     title: "Fart Bubble - Surfin' on a Turd",
     blurb:
-      'The grind-punk beach party no one asked for — pure toilet humor set to blast beats and distortion.',
+      'The grind beach party no one asked for — pure toilet humor set to blast beats and distortion.',
   },
   {
     id: 'U2Y0uUMs1eo',
     title: 'WWE #ToughEnough - Michael Johnson aka Drugz Bunny',
     blurb:
-      'A hype reel built to make waves — promo for pro wrestler Drugz Bunny’s run at WWE’s Tough Enough competition.',
+      'A hype reel built to make waves. I helped produce this promo for pro wrestler Drugz Bunny’s run at WWE’s Tough Enough competition.',
   },
   {
     id: 'dGKgQy82zEA',
     title: 'Short Fuse - Swallowed Earth',
     blurb:
-      'The very first Short Fuse video (2013), filmed at the Media Center in Palo Alto and pieced together in Final Cut Pro with pure DIY grit.',
+      'The very first Short Fuse video (2013), filmed at the Media Center in Palo Alto and pieced together in Final Cut Pro.',
   },
 ];
 
