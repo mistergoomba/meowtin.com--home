@@ -137,9 +137,9 @@ export default function HomePage() {
             </div>
           </HomePageCard>
 
-          {/* KARAOKE Card (Bottom Left) */}
+          {/* VIDEO PRODUCTION Card (Bottom Left) */}
           <HomePageCard
-            onClick={() => (window.location.href = 'https://kj.meowtin.com')}
+            onClick={() => router.push('/videos')}
             hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,200,0,0.3)]'
             animateCards={animateCards}
             cardId={2}
@@ -150,14 +150,8 @@ export default function HomePage() {
                 <source src='/reel.mp4' type='video/mp4' />
               </video>
             </div>
-            <div className='relative z-10 flex items-center justify-center h-full p-6'>
-              <Image
-                src='/okie-dokie-logo.png'
-                alt='Okie Dokie Karaoke'
-                width={300}
-                height={150}
-                className='drop-shadow-lg max-w-[80%]'
-              />
+            <div className='relative z-10 flex items-center justify-center h-full p-6 bg-black/40'>
+              <h2 className='text-3xl font-bold text-white text-center'>VIDEO PRODUCTION</h2>
             </div>
           </HomePageCard>
 
