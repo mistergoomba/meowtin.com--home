@@ -124,7 +124,7 @@ export default function HomePage() {
           >
             <div className='absolute inset-0 w-full h-full'>
               <Image
-                src='/art/02 learn to swim-1.png'
+                src='/art/02 learn to swim-1.webp'
                 alt='Art'
                 layout='fill'
                 objectFit='cover'
@@ -165,7 +165,7 @@ export default function HomePage() {
           >
             <div className='absolute inset-0 w-full h-full'>
               <Image
-                src='/music-card.png'
+                src='/music-card.webp'
                 alt='Music'
                 layout='fill'
                 objectFit='cover'
