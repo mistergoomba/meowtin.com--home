@@ -10,10 +10,11 @@ export const projects = [
       Developed embeddable petition widgets for third‑party sites, significantly expanding reach. Implemented analytics and A/B testing to improve conversion, tightened accessibility and SEO, and shipped UI/UX improvements that lifted signature completion rates while keeping the platform maintainable and secure.
     `,
     technologies: ['JavaScript', 'Node.js', 'REST API', 'SASS', 'PHP', 'MySQL', 'Gulp', 'Webpack'],
+    thumbnail: '/projects/petition-thumb.webp',
     screenshots: [
-      '/projects/petition-1.png',
-      '/projects/petition-2.png',
-      '/projects/petition-3.png',
+      '/projects/petition-1.webp',
+      '/projects/petition-2.webp',
+      '/projects/petition-3.webp',
     ],
   },
   {
@@ -25,7 +26,8 @@ export const projects = [
       Integrated directly into <strong>Shopify</strong> as a custom page, ensuring a smooth checkout flow. Enhanced with <strong>CSS3</strong> styling and responsive layouts so the builder worked seamlessly across devices, from desktop studio setups to mobile shoppers on the go.
     `,
     technologies: ['JavaScript', 'Shopify', 'HTML5', 'CSS3'],
-    screenshots: ['/projects/custom-mics-1.png', '/projects/custom-mics-2.png'],
+    thumbnail: '/projects/custom-mics-thumb.webp',
+    screenshots: ['/projects/custom-mics-1.webp', '/projects/custom-mics-2.webp'],
   },
   {
     title: 'AI-Driven Casino\nSimulator',
@@ -38,7 +40,8 @@ export const projects = [
       The project showcases strengths in <strong>game logic design</strong>, <strong>state management</strong>, and crafting <strong>intuitive, high‑fidelity UI</strong> with smooth, performant animations on mobile.
     `,
     technologies: ['React Native', 'Expo', 'JSON', 'State Management', 'Animations', 'Testing'],
-    screenshots: ['/projects/casino-simulator-1.png'],
+    thumbnail: '/projects/casino-simulator-thumb.webp',
+    screenshots: ['/projects/casino-simulator-1.webp'],
   },
   {
     title: 'Tabs Database and\nLyrics Formatter',
@@ -50,7 +53,8 @@ export const projects = [
       The result is a simple, fast workflow from idea → formatted song → ready‑to‑play setlists.
     `,
     technologies: ['React Native', 'Expo', 'React', 'JavaScript', 'JSON', 'SQLite'],
-    screenshots: ['/projects/chords-1.png', '/projects/chords-2.png'],
+    thumbnail: '/projects/chords-thumb.webp',
+    screenshots: ['/projects/chords-1.webp', '/projects/chords-2.webp'],
   },
   {
     title: 'Custom Video\nPlatform Features',
@@ -61,7 +65,8 @@ export const projects = [
       Deployments and local environments ran on <strong>Node.js</strong> + <strong>Docker</strong>, enabling reproducible builds and smooth CI/CD across teams.
     `,
     technologies: ['JavaScript', 'Node.js', 'MongoDB', 'Docker', 'Testing', 'Multimedia'],
-    screenshots: ['/projects/video-1.png'],
+    thumbnail: '/projects/video-thumb.webp',
+    screenshots: ['/projects/video-1.webp'],
   },
   {
     title: 'Warboy Guitars\nCustom Shop',
@@ -72,7 +77,8 @@ export const projects = [
       Delivered a site that highlights craftsmanship and attitude in equal measure while keeping maintenance simple and predictable.
     `,
     technologies: ['React', 'Next.js', 'Tailwind CSS', 'Responsive Design'],
-    screenshots: ['/projects/warboy-1.png', '/projects/warboy-2.png'],
+    thumbnail: '/projects/warboy-thumb.webp',
+    screenshots: ['/projects/warboy-1.webp', '/projects/warboy-2.webp', '/projects/warboy-3.webp'],
   },
   {
     title: 'Machine Gun\nExperience',
@@ -83,7 +89,8 @@ export const projects = [
       Result: smoother UX, fewer failed transactions, and a more dependable revenue flow for day‑to‑day operations.
     `,
     technologies: ['WordPress', 'WooCommerce', 'PHP', 'JavaScript', 'Payment Integration'],
-    screenshots: ['/projects/mge-1.png'],
+    thumbnail: '/projects/mge-thumb.webp',
+    screenshots: ['/projects/mge-1.webp', '/projects/mge-2.webp'],
   },
   {
     title: 'Sinwave\nVegas Venue',
@@ -101,7 +108,8 @@ export const projects = [
       'POS Systems',
       'WordPress',
     ],
-    screenshots: ['/projects/sinwave-1.png', '/projects/sinwave-2.png'],
+    thumbnail: '/projects/sinwave-thumb.webp',
+    screenshots: ['/projects/sinwave-1.webp', '/projects/sinwave-2.webp'],
   },
   {
     title: 'Metal Band\nWebsite',
@@ -112,6 +120,7 @@ export const projects = [
       Beyond the site itself, I’ve led <strong>album production</strong>, <strong>video production</strong>, and much of the band’s <strong>album & flyer art</strong> over the years—so the design language mirrors our sound and visual identity across releases, flyers, and social promos.
     `,
     technologies: ['React', 'Next.js', 'Ecommerce', 'Video Editing', 'Music Production'],
-    screenshots: ['/projects/sites-1.png', '/projects/sites-2.png'],
+    thumbnail: '/projects/sites-thumb.webp',
+    screenshots: ['/projects/sites-1.webp', '/projects/sites-2.webp'],
   },
 ];
