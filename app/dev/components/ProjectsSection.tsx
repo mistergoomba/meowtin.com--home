@@ -42,7 +42,9 @@ export default function ProjectsSection() {
 
               <div className='flex flex-1 flex-col gap-3 p-4'>
                 <h3 className='line-clamp-2 text-base font-semibold text-white'>{p.title}</h3>
-                <p className='line-clamp-3 text-sm text-white/80'>{p.description}</p>
+                <p className='line-clamp-3 text-sm text-white/80'>
+                  {p.description.replace(/<[^>]+>/g, '')}
+                </p>
                 {p.technologies?.length ? (
                   <div className='mt-auto flex flex-wrap gap-2'>
                     {p.technologies.map((t, idx) => (

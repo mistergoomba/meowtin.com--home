@@ -5,7 +5,7 @@ export default function Slide({
   slide,
   project,
 }: {
-  slide: { type: 'meta' | 'image'; src?: string };
+  slide: { type: 'meta' | 'image' | 'video'; src?: string };
   project: CardProject;
 }) {
   if (slide.type === 'meta') {
@@ -14,9 +14,11 @@ export default function Slide({
       <div className='absolute inset-0 flex items-center justify-center p-6 md:p-12'>
         <div className='w-full max-w-4xl h-screen rounded-2xl border border-white/15 bg-black/70 p-6 md:p-10 text-white shadow-2xl backdrop-blur-md'>
           <h3 className='mb-4 text-center text-2xl md:text-3xl font-bold'>{project.title}</h3>
-          <p className='mx-auto max-w-3xl text-sm md:text-base text-white/90'>
-            {project.description}
-          </p>
+          <p
+            className='mx-auto max-w-3xl text-sm md:text-base text-white/90'
+            dangerouslySetInnerHTML={{ __html: project.description }}
+          />
+
           {project.technologies?.length ? (
             <div className='mt-6 flex flex-wrap justify-center gap-2'>
               {project.technologies.map((t, i) => (
@@ -30,6 +32,23 @@ export default function Slide({
             </div>
           ) : null}
         </div>
+      </div>
+    );
+  }
+
+  // Video slide (fullscreen contain)
+  if (slide.type === 'video') {
+    return (
+      <div className='absolute inset-0 flex items-center justify-center bg-black'>
+        <video
+          src={slide.src}
+          controls
+          autoPlay
+          loop
+          muted
+          playsInline
+          className='max-h-full max-w-full object-contain'
+        />
       </div>
     );
   }

@@ -12,10 +12,18 @@ export default function ProjectOverlay({
   onClose: () => void;
 }) {
   // Build a gallery where the first slide is a meta slide with title/description/tags
-  const baseImages = project.screenshots?.length ? project.screenshots : [project.thumbnail!];
-  const slides: Array<{ type: 'meta' | 'image'; src?: string }> = [
+  const baseSlides: Array<{ type: 'image' | 'video'; src: string }> = project.screenshots?.map(
+    (src) => {
+      if (src.endsWith('.mov') || src.endsWith('.mp4') || src.endsWith('.webm')) {
+        return { type: 'video' as const, src };
+      }
+      return { type: 'image' as const, src };
+    }
+  ) ?? [{ type: 'image', src: project.thumbnail! }];
+
+  const slides: Array<{ type: 'meta' | 'image' | 'video'; src?: string }> = [
     { type: 'meta' },
-    ...baseImages.map((src) => ({ type: 'image' as const, src })),
+    ...baseSlides,
   ];
 
   // --- Simplified z-order flow ---
