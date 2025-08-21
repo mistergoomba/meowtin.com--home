@@ -6,82 +6,59 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 
 function Particles({ isMobile }: { isMobile: boolean }) {
   const mesh = useRef<THREE.Points>(null);
-  const { scene } = useThree();
+  const { camera } = useThree();
 
-  // STAR SIZE CONTROL Higher values = larger stars
-  const STAR_SIZE_FACTOR = 0.6;
-
-  // Control how quickly stars appear Higher value = faster fade in (was 0.01)
-  const STAR_FADE_IN_SPEED = 0.2;
-
-  // Increase star count for mobile devices
+  // ----- Config -----
+  const STAR_SIZE_FACTOR = 1.2; // base size multiplier
   const STAR_COUNT = 200;
-
-  // Increased influence radius for mouse
   const influenceRadius = 3.0;
 
-  // Reduced base opacity to make stars dimmer by default
-  const baseOpacity = 0.3;
+  const baseOpacity = 0.6;
   const maxOpacity = 0.9;
 
-  // Store time for throbbing effect
-  const timeRef = useRef(0);
+  // Pop config
+  const HIT_RADIUS_PX = 5; // click leeway in pixels
+  const POP_SPEED = 0.25; // higher = faster pop
+  const POP_SCALE = 2.0; // how big it grows during pop
 
-  // Store individual star throbbing phases
+  const timeRef = useRef(0);
   const phaseRef = useRef<number[]>([]);
 
-  // Track fade-in progress
-  const fadeInProgressRef = useRef(0);
+  // Per-star pop state
+  // popProgress: -1 = inactive; 0..1 animating; >1 finished
+  const popProgressRef = useRef<Float32Array>(new Float32Array(STAR_COUNT).fill(-1));
+  const poppedRef = useRef<Uint8Array>(new Uint8Array(STAR_COUNT)); // 0/1 flags
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [starTexture, setStarTexture] = useState<THREE.Texture | null>(null);
 
-  // Define star color palettes - these are common star colors in astronomy
   const starColorPalettes = useMemo(
     () => [
-      // Blue-white hot stars (O, B type)
       new THREE.Color(0xcae1ff),
       new THREE.Color(0xa2c0ff),
       new THREE.Color(0x8db9ff),
-
-      // White stars (A type)
       new THREE.Color(0xffffff),
       new THREE.Color(0xf8f7ff),
-
-      // Yellow-white stars (F type)
       new THREE.Color(0xfff4e8),
       new THREE.Color(0xfff2dd),
-
-      // Yellow stars like our Sun (G type)
       new THREE.Color(0xffe4b5),
       new THREE.Color(0xffd700),
-
-      // Orange stars (K type)
       new THREE.Color(0xffb347),
       new THREE.Color(0xffa500),
-
-      // Red stars (M type)
       new THREE.Color(0xff6b4a),
       new THREE.Color(0xff4500),
     ],
     []
   );
 
-  // Load texture with error handling
+  // Load texture (fallback to circle if needed)
   useEffect(() => {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.crossOrigin = 'anonymous'; // Important for CORS
-
-    // Try to load the texture with absolute URL
-    textureLoader.load(
+    const loader = new THREE.TextureLoader();
+    loader.load(
       '/star.png',
-      (texture) => {
-        setStarTexture(texture);
-      },
-      undefined, // onProgress callback not needed
-      (err) => {
-        console.error('Error loading star texture:', err);
-        // Create a fallback texture - a simple white circle
+      (tex) => setStarTexture(tex),
+      undefined,
+      () => {
         const canvas = document.createElement('canvas');
         canvas.width = 64;
         canvas.height = 64;
@@ -91,24 +68,19 @@ function Particles({ isMobile }: { isMobile: boolean }) {
           ctx.beginPath();
           ctx.arc(32, 32, 16, 0, Math.PI * 2);
           ctx.fill();
-
-          const fallbackTexture = new THREE.CanvasTexture(canvas);
-          setStarTexture(fallbackTexture);
+          setStarTexture(new THREE.CanvasTexture(canvas));
         }
       }
     );
   }, []);
 
-  // Optimize the Particles component for better performance
-
-  // 1. Memoize the positions, alphas, sizes, and colors arrays
+  // Geometry attributes
   const { positions, alphas, sizes, colors } = useMemo(() => {
     const posArray = new Float32Array(STAR_COUNT * 3);
     const alphaArray = new Float32Array(STAR_COUNT);
     const sizeArray = new Float32Array(STAR_COUNT);
     const colorArray = new Float32Array(STAR_COUNT * 3);
 
-    // Initialize random phases for each star
     phaseRef.current = Array(STAR_COUNT)
       .fill(0)
       .map(() => Math.random() * Math.PI * 2);
@@ -118,120 +90,162 @@ function Particles({ isMobile }: { isMobile: boolean }) {
       posArray[i * 3 + 1] = (Math.random() - 0.5) * 10;
       posArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
 
-      // Start with very low opacity for fade-in effect
-      alphaArray[i] = 0.01;
+      alphaArray[i] = baseOpacity;
 
-      // Base size scaled by STAR_SIZE_FACTOR
-      // Make stars slightly smaller on mobile to prevent overcrowding
       const sizeFactor = isMobile ? STAR_SIZE_FACTOR * 0.8 : STAR_SIZE_FACTOR;
-      const baseSize = 0.1 * sizeFactor;
-      const randomVariation = 0.05 * sizeFactor;
+      const baseSize = 0.2 * sizeFactor;
+      const randomVariation = 0.1 * sizeFactor;
       sizeArray[i] = baseSize + Math.random() * randomVariation;
 
-      // Assign a random color from our palette
       const randomColor = starColorPalettes[Math.floor(Math.random() * starColorPalettes.length)];
       colorArray[i * 3 + 0] = randomColor.r;
       colorArray[i * 3 + 1] = randomColor.g;
       colorArray[i * 3 + 2] = randomColor.b;
     }
 
-    return {
-      positions: posArray,
-      alphas: alphaArray,
-      sizes: sizeArray,
-      colors: colorArray,
-    };
+    return { positions: posArray, alphas: alphaArray, sizes: sizeArray, colors: colorArray };
   }, [starColorPalettes, isMobile]);
 
   const alphaRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
   const sizeRef = useRef<THREE.BufferAttribute>(new THREE.BufferAttribute(new Float32Array(0), 1));
+  const positionAttrRef = useRef<THREE.BufferAttribute>(
+    new THREE.BufferAttribute(new Float32Array(0), 3)
+  );
 
+  // Mouse/touch movement (for the subtle world rotation & opacity)
   useEffect(() => {
-    // Handle both mouse and touch events with the same function
     const handlePointerMove = (e: MouseEvent | TouchEvent) => {
-      let clientX, clientY;
-
+      let clientX: number, clientY: number;
       if ('touches' in e) {
-        // Touch event
         if (e.touches.length === 0) return;
         clientX = e.touches[0].clientX;
         clientY = e.touches[0].clientY;
       } else {
-        // Mouse event
         clientX = e.clientX;
         clientY = e.clientY;
       }
-
       setMouse({
         x: (clientX / window.innerWidth - 0.5) * 2 * 5,
         y: -(clientY / window.innerHeight - 0.5) * 2 * 5,
       });
     };
 
-    // Add event listeners for both mouse and touch
     window.addEventListener('mousemove', handlePointerMove as any);
     window.addEventListener('touchmove', handlePointerMove as any);
-
     return () => {
       window.removeEventListener('mousemove', handlePointerMove as any);
       window.removeEventListener('touchmove', handlePointerMove as any);
     };
   }, []);
 
-  // 2. Optimize the useFrame function to reduce calculations and handle fade-in
-  useFrame((state) => {
+  // Click-to-pop: project each star to screen and test 5px radius
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      if (!mesh.current) return;
+
+      const positionsArr = mesh.current.geometry.attributes.position.array as Float32Array;
+      const alphaArray = alphaRef.current.array as Float32Array;
+      const sizeArray = sizeRef.current.array as Float32Array;
+
+      const clickX = e.clientX;
+      const clickY = e.clientY;
+
+      // Find first star within HIT_RADIUS_PX
+      const v = new THREE.Vector3();
+      const sp = new THREE.Vector3(); // screen projection
+      for (let i = 0; i < STAR_COUNT; i++) {
+        // skip already popped
+        if (poppedRef.current[i]) continue;
+        // Skip fully transparent
+        if (alphaArray[i] <= 0) continue;
+
+        v.set(positionsArr[i * 3 + 0], positionsArr[i * 3 + 1], positionsArr[i * 3 + 2]);
+
+        // Project to NDC
+        sp.copy(v).project(camera);
+        // Convert to pixels
+        const sx = (sp.x * 0.5 + 0.5) * window.innerWidth;
+        const sy = (-sp.y * 0.5 + 0.5) * window.innerHeight;
+
+        const dx = sx - clickX;
+        const dy = sy - clickY;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist <= HIT_RADIUS_PX) {
+          // Start pop
+          popProgressRef.current[i] = 0.0;
+          break; // single hit per click
+        }
+      }
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => window.removeEventListener('pointerdown', handlePointerDown);
+  }, [camera]);
+
+  useFrame(() => {
     if (!mesh.current || !alphaRef.current || !sizeRef.current) return;
 
-    // Update time for throbbing effect - use smaller increment for smoother animation
     timeRef.current += 0.008;
 
-    const positions = mesh.current.geometry.attributes.position.array as Float32Array;
+    const positionsArr = mesh.current.geometry.attributes.position.array as Float32Array;
     const alphaArray = alphaRef.current.array as Float32Array;
     const sizeArray = sizeRef.current.array as Float32Array;
 
-    // Pre-calculate values outside the loop
     const mouseXPos = mouse.x;
     const mouseYPos = mouse.y;
-    const currentTime = timeRef.current;
     const influenceRadiusSq = influenceRadius * influenceRadius;
     const opacityRange = maxOpacity - baseOpacity;
     const proximityIncrease = 0.15 * STAR_SIZE_FACTOR;
 
-    // Handle fade-in effect - faster now
-    if (fadeInProgressRef.current < 1) {
-      fadeInProgressRef.current = Math.min(1, fadeInProgressRef.current + STAR_FADE_IN_SPEED);
-    }
+    for (let i = 0; i < alphaArray.length; i++) {
+      // If popped, hold at zero & skip behavior
+      if (poppedRef.current[i]) {
+        alphaArray[i] = 0;
+        sizeArray[i] = 0;
+        continue;
+      }
 
-    const currentFadeIn = fadeInProgressRef.current;
+      // Pop animation
+      const p = popProgressRef.current[i];
+      if (p >= 0 && p <= 1.2) {
+        const next = p + POP_SPEED; // fast advance
+        popProgressRef.current[i] = next;
 
-    for (let i = 0; i < alphas.length; i++) {
-      const x = positions[i * 3 + 0];
-      const y = positions[i * 3 + 1];
+        // Scale up and fade out quickly
+        const scaleUp = 1.0 + Math.min(next, 1.0) * POP_SCALE;
+        sizeArray[i] = sizes[i] * scaleUp;
+        alphaArray[i] = Math.max(0, 1.0 - next);
 
-      // Calculate distance to mouse in 3D space - only use x and y for better performance
+        if (next >= 1.0) {
+          // Mark dead
+          poppedRef.current[i] = 1;
+          alphaArray[i] = 0;
+          sizeArray[i] = 0;
+        }
+
+        // No other effects while popping
+        continue;
+      }
+
+      // Normal behavior: subtle opacity & size with mouse proximity (no pulsating)
+      const x = positionsArr[i * 3 + 0];
+      const y = positionsArr[i * 3 + 1];
       const dx = mouseXPos - x;
       const dy = mouseYPos - y;
       const distSq = dx * dx + dy * dy;
 
-      // Calculate influence factor (0 to 1) with quadratic easing
       const t = Math.max(0, Math.min(1, 1 - distSq / influenceRadiusSq));
 
-      // Calculate throbbing effect - stronger when closer to mouse
-      const phase = phaseRef.current[i];
-      const throb = t * Math.sin(currentTime * 3 + phase) * 0.3 + 0.7;
-
-      // Combine base opacity, proximity effect, throbbing, and fade-in
-      const targetAlpha = baseOpacity + t * opacityRange * throb;
-      alphaArray[i] = targetAlpha * currentFadeIn;
-
-      // Size increase on proximity scaled by STAR_SIZE_FACTOR
-      sizeArray[i] = sizes[i] + t * proximityIncrease * throb;
+      // No sine-based throbbing; steady response only
+      alphaArray[i] = baseOpacity + t * opacityRange;
+      sizeArray[i] = sizes[i] + t * proximityIncrease;
     }
 
     alphaRef.current.needsUpdate = true;
     sizeRef.current.needsUpdate = true;
 
-    // SLOWED DOWN ROTATION SPEED - use smaller increments for smoother rotation
+    // Gentle rotation influenced by mouse
     mesh.current.rotation.x += 0.00002 + mouseYPos * 0.0003;
     mesh.current.rotation.y += 0.00002 + mouseXPos * 0.0003;
   });
@@ -239,13 +253,13 @@ function Particles({ isMobile }: { isMobile: boolean }) {
   const uniforms = useMemo(
     () => ({
       pointTexture: { value: starTexture },
+      pointBase: { value: 7.5 * STAR_SIZE_FACTOR },
     }),
     [starTexture]
   );
 
   const material = useMemo(() => {
     if (!starTexture) return null;
-
     return new THREE.ShaderMaterial({
       uniforms,
       vertexShader: `
@@ -254,12 +268,13 @@ function Particles({ isMobile }: { isMobile: boolean }) {
         attribute vec3 color;
         varying float vAlpha;
         varying vec3 vColor;
+        uniform float pointBase;
+
         void main() {
           vAlpha = alpha;
           vColor = color;
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          // Base shader size scaled by STAR_SIZE_FACTOR
-          gl_PointSize = ${7.5 * STAR_SIZE_FACTOR} * size * (1.0 / -mvPosition.z);
+          gl_PointSize = pointBase * size * (1.0 / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -270,7 +285,6 @@ function Particles({ isMobile }: { isMobile: boolean }) {
         void main() {
           vec4 texColor = texture2D(pointTexture, gl_PointCoord);
           if (texColor.a < 0.1) discard;
-          // Apply the star's color to the texture
           gl_FragColor = vec4(texColor.rgb * vColor, vAlpha);
         }
       `,
@@ -279,7 +293,6 @@ function Particles({ isMobile }: { isMobile: boolean }) {
     });
   }, [uniforms, starTexture]);
 
-  // Don't render until texture is loaded
   if (!starTexture || !material) return null;
 
   return (
@@ -290,6 +303,7 @@ function Particles({ isMobile }: { isMobile: boolean }) {
           array={positions}
           count={positions.length / 3}
           itemSize={3}
+          ref={positionAttrRef}
           args={[positions, 3]}
         />
         <bufferAttribute
