@@ -46,12 +46,13 @@ export const projects = [
       Delivered a site that highlights craftsmanship and attitude in equal measure while keeping maintenance simple and predictable.
     `,
     technologies: ['React', 'Next.js', 'Tailwind CSS', 'Responsive Design'],
-    thumbnails: [
-      '/projects/warboy-thumb.webp',
+    thumbnails: ['/projects/warboy-thumb.webp', '/projects/warboy-video-small.mp4'],
+    screenshots: [
+      '/projects/warboy-video.mp4',
+      '/projects/warboy-1.webp',
       '/projects/warboy-2.webp',
       '/projects/warboy-3.webp',
     ],
-    screenshots: ['/projects/warboy-1.webp', '/projects/warboy-2.webp', '/projects/warboy-3.webp'],
   },
   {
     title: 'Sinwave\nVegas Venue',
