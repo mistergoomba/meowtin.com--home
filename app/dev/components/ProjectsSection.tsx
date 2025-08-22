@@ -3,15 +3,52 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 import { projects } from '../config/projects';
 import ProjectOverlay from './ProjectOverlay';
 import { CardProject } from '../types/projects';
 
+function isVideo(src: string) {
+  return /\.(mp4|mov|webm)$/i.test(src);
+}
+
+function MediaLayer({ src, alt, visible }: { src: string; alt: string; visible: boolean }) {
+  const common = `absolute inset-0 transition-opacity duration-500 ${
+    visible ? 'opacity-100' : 'opacity-0'
+  }`;
+
+  if (isVideo(src)) {
+    return (
+      <video
+        key={`vid-${src}`} // ensure fresh playback on swap
+        src={src}
+        muted
+        loop
+        playsInline
+        autoPlay
+        className={`${common} w-full h-full object-cover`}
+      />
+    );
+  }
+
+  return (
+    <Image
+      key={`img-${src}`}
+      src={src}
+      alt={alt}
+      fill
+      className={`${common} object-cover`}
+      sizes='(max-width: 640px) 100vw, (max-width: 1536px) 33vw, 300px'
+      priority={false}
+    />
+  );
+}
+
 export default function ProjectsSection() {
   const items: CardProject[] = projects.map((p) => ({
     ...p,
-    // prefer an explicit thumbnail; otherwise fall back to first screenshot/placeholder
-    thumbnail: p.thumbnail ?? p.screenshots?.[0] ?? '/placeholder.svg',
+    // prefer explicit thumbnail[0]; fallback remains safe
+    thumbnail: p.thumbnails?.[0] ?? p.screenshots?.[0] ?? '/placeholder.svg',
   }));
 
   const [active, setActive] = useState<number | null>(null);
@@ -40,13 +77,12 @@ export default function ProjectsSection() {
 }
 
 function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
-  // Build the cycle list: images only (no videos), then skip the first image
-  const imagesOnly = (p.screenshots ?? []).filter((src) => /\.(png|jpe?g|webp)$/i.test(src));
-  const cycleList = imagesOnly.slice(1); // ignore the first image
-  const canCycle = cycleList.length > 0;
+  // 🚀 New: cycle through p.thumbnails (can include images or videos)
+  const order = (p.thumbnails ?? []).filter(Boolean);
+  const canCycle = order.length > 1;
 
   // Two-layer crossfade
-  const [frontSrc, setFrontSrc] = useState(p.thumbnail!);
+  const [frontSrc, setFrontSrc] = useState(order[0] ?? p.thumbnails?.[0]!);
   const [backSrc, setBackSrc] = useState<string | null>(null);
   const [showFront, setShowFront] = useState(true);
 
@@ -58,19 +94,20 @@ function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
     showFrontRef.current = showFront;
   }, [showFront]);
 
-  // Reset to the provided thumbnail if data changes
+  // Reset to the provided primary thumbnail if data changes
   useEffect(() => {
-    setFrontSrc(p.thumbnail!);
+    const initial = order[0] ?? p.thumbnails?.[0]!;
+    setFrontSrc(initial);
     setBackSrc(null);
     setShowFront(true);
-  }, [p.thumbnail]);
+    stepRef.current = 1 % Math.max(order.length, 1);
+  }, [p.thumbnails, p.thumbnails?.[0]]); // re-run if thumbnails change
 
   const startCycle = () => {
     if (!canCycle) return;
 
-    // Thumbnail first, then other screenshots (images only)
-    const order = [p.thumbnail!, ...cycleList];
-    stepRef.current = 0;
+    // Start at the next item after the first
+    stepRef.current = 1 % order.length;
 
     // Prime first fade
     setBackSrc(order[stepRef.current]);
@@ -95,49 +132,58 @@ function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
   const stopCycle = () => {
     if (timerRef.current) window.clearInterval(timerRef.current);
     timerRef.current = null;
-    // Reset to thumbnail
+    // Reset to first thumbnail
+    const initial = order[0] ?? p.thumbnails?.[0]!;
     setBackSrc(null);
-    setFrontSrc(p.thumbnail!);
+    setFrontSrc(initial);
     setShowFront(true);
   };
 
   // Clean up on unmount
   useEffect(() => stopCycle, []);
 
+  // keyboard support
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
-    <button
+    <div
+      role='button'
+      tabIndex={0}
       className='group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/50 text-left shadow-lg backdrop-blur-md transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/20'
       onClick={onClick}
+      onKeyDown={onKeyDown}
       onMouseEnter={startCycle}
       onMouseLeave={stopCycle}
     >
       <div className='relative aspect-[4/3] w-full overflow-hidden'>
-        {/* Front layer */}
-        <Image
-          src={frontSrc}
-          alt={`${p.title} thumbnail`}
-          fill
-          className={`absolute inset-0 object-cover transition-opacity duration-500 ${
-            showFront ? 'opacity-100' : 'opacity-0'
-          }`}
-          sizes='(max-width: 640px) 100vw, (max-width: 1536px) 33vw, 300px'
-          priority={false}
-        />
-        {/* Back layer */}
-        {backSrc && (
-          <Image
-            src={backSrc}
-            alt={`${p.title} preview`}
-            fill
-            className={`absolute inset-0 object-cover transition-opacity duration-500 ${
-              showFront ? 'opacity-0' : 'opacity-100'
-            }`}
-            sizes='(max-width: 640px) 100vw, (max-width: 1536px) 33vw, 300px'
-            priority={false}
-          />
-        )}
+        {/* Front layer (image or video) */}
+        <MediaLayer src={frontSrc} alt={`${p.title} thumbnail`} visible={showFront} />
 
+        {/* Back layer (image or video) */}
+        {backSrc && <MediaLayer src={backSrc} alt={`${p.title} preview`} visible={!showFront} />}
+
+        {/* Gradient overlay */}
         <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent' />
+
+        {/* Optional external link icon */}
+        {p.url && (
+          <a
+            href={p.url}
+            target='_blank'
+            rel='noopener noreferrer'
+            title='Open website'
+            onClick={(e) => e.stopPropagation()}
+            className='absolute right-2 top-2 z-20 inline-flex items-center justify-center rounded-full bg-black/60 p-2 text-white/90 backdrop-blur hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-white/30'
+          >
+            <ExternalLink className='h-5 w-5' />
+            <span className='sr-only'>Open {p.title} website</span>
+          </a>
+        )}
       </div>
 
       <div className='flex flex-1 flex-col gap-3 p-4'>
@@ -158,6 +204,6 @@ function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
           </div>
         ) : null}
       </div>
-    </button>
+    </div>
   );
 }

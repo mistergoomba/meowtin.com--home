@@ -1,5 +1,6 @@
 import { CardProject } from '../types/projects';
 import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
 
 export default function Slide({
   slide,
@@ -31,6 +32,20 @@ export default function Slide({
               ))}
             </div>
           ) : null}
+
+          {project.url && (
+            <div className='mt-8 flex justify-center'>
+              <a
+                href={project.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/30'
+              >
+                <span>Visit website</span>
+                <ExternalLink className='h-4 w-4' />
+              </a>
+            </div>
+          )}
         </div>
       </div>
     );
