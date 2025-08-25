@@ -4,7 +4,7 @@ export type CardProject = {
   url?: string;
   description: string;
   technologies: string[];
-  thumbnail?: string;
-  link?: string;
-  screenshots?: string[];
+  thumbnail: string;
+  preview?: string;
+  screenshots: string[];
 };

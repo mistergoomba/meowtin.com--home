@@ -11,11 +11,8 @@ export const projects = [
       Developed embeddable petition widgets for third‑party sites, significantly expanding reach. Implemented analytics and A/B testing to improve conversion, tightened accessibility and SEO, and shipped UI/UX improvements that lifted signature completion rates while keeping the platform maintainable and secure.
     `,
     technologies: ['JavaScript', 'Node.js', 'REST API', 'SASS', 'PHP', 'MySQL', 'Gulp', 'Webpack'],
-    thumbnails: [
-      '/projects/petition-thumb.webp',
-      '/projects/petition-2.webp',
-      '/projects/petition-3.webp',
-    ],
+    thumbnail: '/projects/petition-thumb.webp',
+    preview: '/projects/petition-video-small.mp4',
     screenshots: [
       '/projects/petition-1.webp',
       '/projects/petition-2.webp',
@@ -33,7 +30,7 @@ export const projects = [
       The project showcases strengths in <strong>game logic design</strong>, <strong>state management</strong>, and crafting <strong>intuitive, high‑fidelity UI</strong> with smooth, performant animations on mobile.
     `,
     technologies: ['React Native', 'Expo', 'JSON', 'State Management', 'Animations', 'Testing'],
-    thumbnails: ['/projects/casino-simulator-thumb.webp'],
+    thumbnail: '/projects/casino-simulator-thumb.webp',
     screenshots: ['/projects/casino-simulator-1.webp'],
   },
   {
@@ -46,7 +43,8 @@ export const projects = [
       Delivered a site that highlights craftsmanship and attitude in equal measure while keeping maintenance simple and predictable.
     `,
     technologies: ['React', 'Next.js', 'Tailwind CSS', 'Responsive Design'],
-    thumbnails: ['/projects/warboy-thumb.webp', '/projects/warboy-video-small.mp4'],
+    thumbnail: '/projects/warboy-thumb.webp',
+    preview: '/projects/warboy-video-small.mp4',
     screenshots: [
       '/projects/warboy-video.mp4',
       '/projects/warboy-1.webp',
@@ -71,7 +69,8 @@ export const projects = [
       'POS Systems',
       'WordPress',
     ],
-    thumbnails: ['/projects/sinwave-thumb.webp', '/projects/sinwave-video-small.mp4'],
+    thumbnail: '/projects/sinwave-thumb.webp',
+    preview: '/projects/sinwave-video-small.mp4',
     screenshots: [
       '/projects/sinwave-video.mp4',
       '/projects/sinwave-1.webp',
@@ -88,7 +87,8 @@ export const projects = [
       Beyond the site itself, I’ve led <strong>album production</strong>, <strong>video production</strong>, and much of the band’s <strong>album & flyer art</strong> over the years—so the design language mirrors our sound and visual identity across releases, flyers, and social promos.
     `,
     technologies: ['React', 'Next.js', 'Ecommerce', 'Video Editing', 'Music Production'],
-    thumbnails: ['/projects/sites-thumb.webp', '/projects/sites-video-small.mp4'],
+    thumbnail: '/projects/sites-thumb.webp',
+    preview: '/projects/sites-video-small.mp4',
     screenshots: ['/projects/sites-video.mp4', '/projects/sites-1.webp', '/projects/sites-2.webp'],
   },
   {
@@ -101,7 +101,8 @@ export const projects = [
       Integrated directly into <strong>Shopify</strong> as a custom page, ensuring a smooth checkout flow. Enhanced with <strong>CSS3</strong> styling and responsive layouts so the builder worked seamlessly across devices, from desktop studio setups to mobile shoppers on the go.
     `,
     technologies: ['JavaScript', 'Shopify', 'HTML5', 'CSS3'],
-    thumbnails: ['/projects/custom-mics-thumb.webp', '/projects/custom-mics-2.webp'],
+    thumbnail: '/projects/custom-mics-thumb.webp',
+    preview: '/projects/custom-mics-video-small.mp4',
     screenshots: ['/projects/custom-mics-1.webp', '/projects/custom-mics-2.webp'],
   },
   {
@@ -114,8 +115,13 @@ export const projects = [
       The result is a simple, fast workflow from idea → formatted song → ready‑to‑play setlists.
     `,
     technologies: ['React Native', 'Expo', 'React', 'JavaScript', 'JSON', 'SQLite'],
-    thumbnails: ['/projects/chords-thumb.webp', '/projects/chords-2.webp'],
-    screenshots: ['/projects/chords-1.webp', '/projects/chords-2.webp'],
+    thumbnail: '/projects/chords-thumb.webp',
+    preview: '/projects/chords-video-small.mp4',
+    screenshots: [
+      '/projects/chords-video.mp4',
+      '/projects/chords-1.webp',
+      '/projects/chords-2.webp',
+    ],
   },
   {
     title: 'Custom Video\nPlatform Features',
@@ -126,7 +132,7 @@ export const projects = [
       Deployments and local environments ran on <strong>Node.js</strong> + <strong>Docker</strong>, enabling reproducible builds and smooth CI/CD across teams.
     `,
     technologies: ['JavaScript', 'Node.js', 'MongoDB', 'Docker', 'Testing', 'Multimedia'],
-    thumbnails: ['/projects/video-thumb.webp'],
+    thumbnail: '/projects/video-thumb.webp',
     screenshots: ['/projects/video-1.webp'],
   },
   {
@@ -139,7 +145,7 @@ export const projects = [
       Result: smoother UX, fewer failed transactions, and a more dependable revenue flow for day‑to‑day operations.
     `,
     technologies: ['WordPress', 'WooCommerce', 'PHP', 'JavaScript', 'Payment Integration'],
-    thumbnails: ['/projects/mge-thumb.webp', '/projects/mge-2.webp'],
+    thumbnail: '/projects/mge-thumb.webp',
     screenshots: ['/projects/mge-1.webp', '/projects/mge-2.webp'],
   },
 ];

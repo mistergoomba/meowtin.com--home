@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
@@ -12,21 +12,18 @@ function isVideo(src: string) {
   return /\.(mp4|mov|webm)$/i.test(src);
 }
 
-function MediaLayer({ src, alt, visible }: { src: string; alt: string; visible: boolean }) {
-  const common = `absolute inset-0 transition-opacity duration-500 ${
-    visible ? 'opacity-100' : 'opacity-0'
-  }`;
-
+function MediaLayer({ src, alt }: { src: string; alt: string }) {
+  // Keep video/image handling unified
   if (isVideo(src)) {
     return (
       <video
-        key={`vid-${src}`} // ensure fresh playback on swap
+        key={`vid-${src}`} // restart playback on swap
         src={src}
         muted
         loop
         playsInline
         autoPlay
-        className={`${common} w-full h-full object-cover`}
+        className='absolute inset-0 w-full h-full object-cover transition-opacity duration-300'
       />
     );
   }
@@ -37,7 +34,7 @@ function MediaLayer({ src, alt, visible }: { src: string; alt: string; visible: 
       src={src}
       alt={alt}
       fill
-      className={`${common} object-cover`}
+      className='absolute inset-0 object-cover transition-opacity duration-300'
       sizes='(max-width: 640px) 100vw, (max-width: 1536px) 33vw, 300px'
       priority={false}
     />
@@ -45,10 +42,10 @@ function MediaLayer({ src, alt, visible }: { src: string; alt: string; visible: 
 }
 
 export default function ProjectsSection() {
+  // Prefer explicit thumbnails[0]; fallback to screenshots[0]; final fallback placeholder
   const items: CardProject[] = projects.map((p) => ({
     ...p,
-    // prefer explicit thumbnail[0]; fallback remains safe
-    thumbnail: p.thumbnails?.[0] ?? p.screenshots?.[0] ?? '/placeholder.svg',
+    thumbnail: p.thumbnail ?? p.screenshots[0] ?? '/placeholder.svg',
   }));
 
   const [active, setActive] = useState<number | null>(null);
@@ -77,70 +74,11 @@ export default function ProjectsSection() {
 }
 
 function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
-  // 🚀 New: cycle through p.thumbnails (can include images or videos)
-  const order = (p.thumbnails ?? []).filter(Boolean);
-  const canCycle = order.length > 1;
+  const primaryThumb = p.thumbnail ?? p.screenshots[0] ?? '/placeholder.svg';
+  const [hovered, setHovered] = useState(false);
 
-  // Two-layer crossfade
-  const [frontSrc, setFrontSrc] = useState(order[0] ?? p.thumbnails?.[0]!);
-  const [backSrc, setBackSrc] = useState<string | null>(null);
-  const [showFront, setShowFront] = useState(true);
-
-  const timerRef = useRef<number | null>(null);
-  const stepRef = useRef(0);
-  const showFrontRef = useRef(showFront);
-
-  useEffect(() => {
-    showFrontRef.current = showFront;
-  }, [showFront]);
-
-  // Reset to the provided primary thumbnail if data changes
-  useEffect(() => {
-    const initial = order[0] ?? p.thumbnails?.[0]!;
-    setFrontSrc(initial);
-    setBackSrc(null);
-    setShowFront(true);
-    stepRef.current = 1 % Math.max(order.length, 1);
-  }, [p.thumbnails, p.thumbnails?.[0]]); // re-run if thumbnails change
-
-  const startCycle = () => {
-    if (!canCycle) return;
-
-    // Start at the next item after the first
-    stepRef.current = 1 % order.length;
-
-    // Prime first fade
-    setBackSrc(order[stepRef.current]);
-    setShowFront(false);
-    stepRef.current = (stepRef.current + 1) % order.length;
-
-    timerRef.current = window.setInterval(() => {
-      const next = order[stepRef.current];
-      if (showFrontRef.current) {
-        // Front is visible → prepare back and fade to it
-        setBackSrc(next);
-        setShowFront(false);
-      } else {
-        // Back is visible → update front and fade back
-        setFrontSrc(next);
-        setShowFront(true);
-      }
-      stepRef.current = (stepRef.current + 1) % order.length;
-    }, 1500);
-  };
-
-  const stopCycle = () => {
-    if (timerRef.current) window.clearInterval(timerRef.current);
-    timerRef.current = null;
-    // Reset to first thumbnail
-    const initial = order[0] ?? p.thumbnails?.[0]!;
-    setBackSrc(null);
-    setFrontSrc(initial);
-    setShowFront(true);
-  };
-
-  // Clean up on unmount
-  useEffect(() => stopCycle, []);
+  // When hovered and a preview exists, use it. Otherwise show the primary thumbnail.
+  const activeSrc = hovered && p.preview ? p.preview : primaryThumb;
 
   // keyboard support
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -157,15 +95,14 @@ function ProjectCard({ p, onClick }: { p: CardProject; onClick: () => void }) {
       className='group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/50 text-left shadow-lg backdrop-blur-md transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/20'
       onClick={onClick}
       onKeyDown={onKeyDown}
-      onMouseEnter={startCycle}
-      onMouseLeave={stopCycle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
     >
       <div className='relative aspect-[4/3] w-full overflow-hidden'>
-        {/* Front layer (image or video) */}
-        <MediaLayer src={frontSrc} alt={`${p.title} thumbnail`} visible={showFront} />
-
-        {/* Back layer (image or video) */}
-        {backSrc && <MediaLayer src={backSrc} alt={`${p.title} preview`} visible={!showFront} />}
+        {/* Active media (image or video) */}
+        <MediaLayer src={activeSrc} alt={`${p.title} thumbnail`} />
 
         {/* Gradient overlay */}
         <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent' />
