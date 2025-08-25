@@ -175,7 +175,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
           align-items: center;
           gap: 6px;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-          z-index: 30;
+          z-index: 100;
           transition: opacity 120ms ease, transform 120ms ease;
         }
         .labelText {
