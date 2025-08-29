@@ -1,10 +1,29 @@
 'use client';
 
 import { useMemo } from 'react';
-import { FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaSoundcloud } from 'react-icons/fa';
+import {
+  FaInstagram,
+  FaTiktok,
+  FaYoutube,
+  FaLinkedin,
+  FaSoundcloud,
+  FaCode,
+  FaPalette,
+  FaVideo,
+  FaMusic,
+} from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 
-type IconKey = 'instagram' | 'linkedin' | 'soundcloud' | 'tiktok' | 'youtube';
+type IconKey =
+  | 'instagram'
+  | 'linkedin'
+  | 'soundcloud'
+  | 'tiktok'
+  | 'youtube'
+  | 'dev'
+  | 'art'
+  | 'videos'
+  | 'music';
 
 export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolean }) {
   // Updated: urls + labels
@@ -29,6 +48,22 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
       url: 'https://www.youtube.com/@mistergoomba',
       label: 'Subscribe on YouTube',
     },
+    dev: {
+      url: '/dev/',
+      label: 'Visit Developer Portfolio',
+    },
+    art: {
+      url: '/art/',
+      label: 'View Art Gallery',
+    },
+    videos: {
+      url: '/videos/',
+      label: 'Watch Meowtin-Created Videos',
+    },
+    music: {
+      url: '/music/',
+      label: 'Explore My Music Projects',
+    },
   };
 
   const icons = {
@@ -37,6 +72,10 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
     soundcloud: FaSoundcloud,
     tiktok: FaTiktok,
     youtube: FaYoutube,
+    dev: FaCode,
+    art: FaPalette,
+    videos: FaVideo,
+    music: FaMusic,
   } as const;
 
   const isMobile =
@@ -55,7 +94,17 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   // 75% density
   const seeds = useMemo<IconSeed[]>(() => {
     const COUNT = isMobile ? 32 : 72;
-    const keys: IconKey[] = ['instagram', 'linkedin', 'soundcloud', 'tiktok', 'youtube'];
+    const keys: IconKey[] = [
+      'instagram',
+      'linkedin',
+      'soundcloud',
+      'tiktok',
+      'youtube',
+      'dev',
+      'art',
+      'videos',
+      'music',
+    ];
     const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
     return Array.from({ length: COUNT }, (_, i) => ({
       id: i,
@@ -72,7 +121,6 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   const handleEnter: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
-    // If icon's top is close to the top edge, place label below
     const THRESHOLD = 44; // px
     el.setAttribute('data-tip-pos', rect.top <= THRESHOLD ? 'below' : 'above');
   };
@@ -95,8 +143,8 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
             <a
               key={s.id}
               href={url}
-              target='_blank'
-              rel='noopener noreferrer'
+              target={url.startsWith('http') ? '_blank' : '_self'}
+              rel={url.startsWith('http') ? 'noopener noreferrer' : undefined}
               className='rainItem absolute'
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
@@ -104,7 +152,6 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
                 {
                   left: `${s.leftVW}vw`,
                   top: '-10%',
-                  // per-item tunables via CSS vars
                   '--fallDur': `${s.durationSec}s`,
                   '--fallDelay': `${s.delayMs}ms`,
                   '--chromaDur': `${8 + (s.id % 7)}s`,
@@ -114,10 +161,8 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
                 } as React.CSSProperties
               }
             >
-              {/* We animate color on iconNode so fall pause doesn't stop chroma */}
               <span className='inline-block iconNode'>
                 <Icon className='dark-rainbow' />
-                {/* Tooltip label (inherits currentColor from icon for bg) */}
                 <span className='iconLabel'>
                   <span className='labelText'>{label}</span>
                   <FiExternalLink className='labelIcon' aria-hidden />
