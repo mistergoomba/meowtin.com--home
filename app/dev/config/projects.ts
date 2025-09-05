@@ -103,7 +103,11 @@ export const projects = [
     technologies: ['JavaScript', 'Shopify', 'HTML5', 'CSS3'],
     thumbnail: '/projects/custom-mics-thumb.webp',
     preview: '/projects/custom-mics-video-small.mp4',
-    screenshots: ['/projects/custom-mics-1.webp', '/projects/custom-mics-2.webp'],
+    screenshots: [
+      '/projects/custom-mics-video.mp4',
+      '/projects/custom-mics-1.webp',
+      '/projects/custom-mics-2.webp',
+    ],
   },
   {
     title: 'Tabs Database and\nLyrics Formatter',
