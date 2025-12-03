@@ -12,7 +12,7 @@ const videos: Vid[] = [
     id: 'AHwqPe_nC2A',
     title: 'Short Fuse - Apocalyptic Times',
     blurb:
-      'Stitched together in Premiere using 122 AI-generated clips derived from Short Fuse artwork, my own photos, and meticulously curated images.',
+      'Manually stitched together in Premiere using 122 AI-generated clips derived from Short Fuse artwork, my own photos, and meticulously curated images.',
   },
   {
     id: 'DgExa19NJFI',

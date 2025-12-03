@@ -149,8 +149,8 @@ export default function HomePage() {
                   Short Fuse - Apocalyptic Times
                 </h3>
                 <p className='text-base text-gray-300 leading-relaxed mb-4'>
-                  Stitched together in Premiere using 122 AI-generated clips derived from Short Fuse
-                  artwork, my own photos, and meticulously curated images.
+                  Manually stitched together in Premiere using 122 AI-generated clips derived from
+                  Short Fuse artwork, my own photos, and meticulously curated images.
                 </p>
                 <a
                   href='/videos'
