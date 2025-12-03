@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Shadows_Into_Light } from 'next/font/google';
+import { Shadows_Into_Light, Share_Tech } from 'next/font/google';
 import './globals.css';
 
-// Initialize the font
-const shadowsIntoLight = Shadows_Into_Light({
+const shareTech = Share_Tech({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
+  variable: '--font-share-tech',
 });
 
 export const metadata: Metadata = {
@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='bg-black text-white'>{children}</body>
+      <body className={`bg-black text-white ${shareTech.variable}`}>{children}</body>
     </html>
   );
 }

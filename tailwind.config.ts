@@ -12,6 +12,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         handwritten: ['Shadows Into Light', 'cursive'],
+        'share-tech': ['var(--font-share-tech)', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
