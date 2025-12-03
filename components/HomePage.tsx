@@ -15,6 +15,8 @@ const TronGrid = dynamic(() => import('./TronGrid'), { ssr: false });
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [animateHeader, setAnimateHeader] = useState(false);
+  const [animateHeroImage, setAnimateHeroImage] = useState(false);
+  const [animateHeroText, setAnimateHeroText] = useState(false);
   const [animateCards, setAnimateCards] = useState([false, false, false, false]);
   const [animateFooter, setAnimateFooter] = useState(false);
 
@@ -24,6 +26,8 @@ export default function HomePage() {
   useEffect(() => {
     setIsLoaded(true);
     setTimeout(() => setAnimateHeader(true), 500);
+    setTimeout(() => setAnimateHeroImage(true), 800);
+    setTimeout(() => setAnimateHeroText(true), 1000);
     setTimeout(() => setAnimateCards((prev) => [true, prev[1], prev[2], prev[3]]), 1200);
     setTimeout(() => setAnimateCards((prev) => [prev[0], true, prev[2], prev[3]]), 1600);
     setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], true, prev[3]]), 2000);
@@ -41,10 +45,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className='relative min-h-screen w-full overflow-hidden bg-black flex flex-col'>
+    <div className='relative w-full bg-black flex flex-col'>
       {isLoaded && <TronGrid backgroundImageUrl='/background.png' />}
 
-      <div className='relative z-10 flex flex-col w-full px-4 py-0 flex-grow h-full'>
+      <div className='relative z-10 flex flex-col w-full px-4 py-0'>
         <div
           className={`mb-1 grid grid-cols-3 items-start w-full max-w-[1200px] mx-auto relative transition-all duration-1000 ease-out transform ${
             animateHeader ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
@@ -79,9 +83,36 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Hero Section */}
+        <section className='flex flex-col md:flex-row items-center justify-center py-8 md:py-12 px-4 text-left max-w-6xl mx-auto'>
+          <img
+            src='/me.png'
+            alt='Meowtin'
+            className={`w-72 h-[16.8rem] object-cover object-top rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl transition-all duration-1000 ease-out transform ${
+              animateHeroImage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+            }`}
+          />
+          <div
+            className={`transition-all duration-1000 ease-out transform ${
+              animateHeroText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+            }`}
+          >
+            <p className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'>
+              Welcome to Meowtin&#39;s Domain, the home page and personal portfolio of Martin
+              Boynton. Who is Meowtin besides someone who refers to himself in the third person?
+              Well, he is a creative professional with a passion for performance, music, and visual
+              storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music producer,
+              video producer, web site and mobile app builder, and music venue owner. Aside from his
+              professional accomplishments, Meowtin prides himself as well travelled, a lover of
+              people and life, yoga and meditation enthusiast, pro wrestling connoisseur, video game
+              devotee, and all around good guy.
+            </p>
+          </div>
+        </section>
+
         <div
           ref={containerRef}
-          className='flex-grow relative grid grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-2 gap-6 max-w-[1200px] w-full mx-auto h-full'
+          className='relative grid grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-2 gap-6 max-w-[1200px] w-full mx-auto pb-8'
         >
           {/* DEVELOPER Card */}
           <HomePageCard
