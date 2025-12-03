@@ -168,13 +168,15 @@ export default function HomePage() {
               }`}
             >
               <div className='relative aspect-video w-full overflow-hidden'>
-                <Image
-                  src='/projects/warboy-thumb.webp'
-                  alt='Warboy Guitars Custom Shop'
-                  layout='fill'
-                  objectFit='cover'
-                  className='opacity-90'
-                />
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className='w-full h-full object-cover opacity-90'
+                >
+                  <source src='/projects/warboy-video-small.mp4' type='video/mp4' />
+                </video>
                 <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent' />
               </div>
               <div className='p-6'>
