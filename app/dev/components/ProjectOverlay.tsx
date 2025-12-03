@@ -11,7 +11,7 @@ export default function ProjectOverlay({
   project: CardProject;
   onClose: () => void;
 }) {
-  // Build a gallery where the first slide is a meta slide with title/description/tags
+  // Build a gallery where the description tile is the second slide
   const baseSlides: Array<{ type: 'image' | 'video'; src: string }> = project.screenshots?.map(
     (src) => {
       if (src.endsWith('.mov') || src.endsWith('.mp4') || src.endsWith('.webm')) {
@@ -21,10 +21,10 @@ export default function ProjectOverlay({
     }
   ) ?? [{ type: 'image', src: project.thumbnail! }];
 
-  const slides: Array<{ type: 'meta' | 'image' | 'video'; src?: string }> = [
-    { type: 'meta' },
-    ...baseSlides,
-  ];
+  const slides: Array<{ type: 'meta' | 'image' | 'video'; src?: string }> =
+    baseSlides.length > 0
+      ? [baseSlides[0], { type: 'meta' }, ...baseSlides.slice(1)]
+      : [{ type: 'meta' }];
 
   // --- Simplified z-order flow ---
   // current = top card

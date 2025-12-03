@@ -1,39 +1,6 @@
 // Project data for multiple sections
 export const projects = [
   {
-    title: 'Viral Petition\nPlatform Rebuild',
-    navTitle: 'Petition Platform',
-    url: 'https://thepetitionsite.com',
-    description: `
-      Led the transformation of <strong>ThePetitionSite.com</strong> from a simple form-based flow into a modern, scalable web application used by millions of people worldwide.<br/><br/>
-      Built a modular JavaScript frontend backed by a <strong>REST API</strong>, with a <strong>Webpack</strong>-driven build for code splitting and long‑term caching, and a <strong>Gulp</strong> pipeline for asset processing (compiling <strong>SASS</strong>, image optimization, and fingerprinting).<br/><br/>
-      Engineered backend resilience for <em>viral‑scale</em> petition traffic: caching and CDN strategies, defensive rate limiting, and performance profiling to keep page loads fast during peak share spikes.<br/><br/>
-      Developed embeddable petition widgets for third‑party sites, significantly expanding reach. Implemented analytics and A/B testing to improve conversion, tightened accessibility and SEO, and shipped UI/UX improvements that lifted signature completion rates while keeping the platform maintainable and secure.
-    `,
-    technologies: ['JavaScript', 'Node.js', 'REST API', 'SASS', 'PHP', 'MySQL', 'Gulp', 'Webpack'],
-    thumbnail: '/projects/petition-thumb.webp',
-    preview: '/projects/petition-video-small.mp4',
-    screenshots: [
-      '/projects/petition-1.webp',
-      '/projects/petition-2.webp',
-      '/projects/petition-3.webp',
-    ],
-  },
-  {
-    title: 'AI-Driven Casino\nSimulator',
-    navTitle: 'Casino Simulator',
-    description: `
-      A private simulator built in <strong>React Native</strong> with <strong>Expo</strong> for rapid iteration and offline-friendly testing.<br/><br/>
-      Core to the app is a custom <strong>JSON behavior engine</strong> that scripts NPCs (dealers/players), table rules, and floor dynamics. The simulation models <strong>player budgets, emotions, and preferences</strong> (e.g., risk tolerance, game affinity, pacing, churn risk) to <strong>optimize casino flow</strong> by testing layouts, staffing, and pacing to increase engagement and dwell time while reducing friction. All scenarios run on synthetic data and are kept deliberately high‑level for confidentiality.<br/><br/>
-      A robust <strong>Edit Mode</strong> empowers non‑dev users to lay out the casino floor: <strong>drag‑and‑drop tables</strong>, snapping + validity checks, seat maps with precise placement, add/remove flows, and animated confirmations for destructive actions. <strong>Quality-of-life features</strong> were added throughout to make the workflow smoother and more efficient for users.<br/><br/>
-      <strong>Play Mode</strong> simulates betting rounds, dealer logic, table states, and AI movement/choices. A centralized <strong>activity log</strong> captures state transitions for debugging and analysis, while consolidated rule modules keep the system extensible and maintainable.<br/><br/>
-      The project showcases strengths in <strong>game logic design</strong>, <strong>state management</strong>, and crafting <strong>intuitive, high‑fidelity UI</strong> with smooth, performant animations on mobile.
-    `,
-    technologies: ['React Native', 'Expo', 'JSON', 'State Management', 'Animations', 'Testing'],
-    thumbnail: '/projects/casino-simulator-thumb.webp',
-    screenshots: ['/projects/casino-simulator-1.webp'],
-  },
-  {
     title: 'Warboy Guitars\nCustom Shop',
     navTitle: 'Warboy Guitars',
     url: 'https://warboyguitars.com',
@@ -51,6 +18,58 @@ export const projects = [
       '/projects/warboy-2.webp',
       '/projects/warboy-3.webp',
     ],
+  },
+  {
+    title: 'Viral Petition\nPlatform Rebuild',
+    navTitle: 'Petition Platform',
+    url: 'https://thepetitionsite.com',
+    description: `
+      Led the transformation of <strong>ThePetitionSite.com</strong> from a simple form-based flow into a modern, scalable web application used by millions of people worldwide.<br/><br/>
+      Built a modular JavaScript frontend backed by a <strong>REST API</strong>, with a <strong>Webpack</strong>-driven build for code splitting and long‑term caching, and a <strong>Gulp</strong> pipeline for asset processing (compiling <strong>SASS</strong>, image optimization, and fingerprinting).<br/><br/>
+      Engineered backend resilience for <em>viral‑scale</em> petition traffic: caching and CDN strategies, defensive rate limiting, and performance profiling to keep page loads fast during peak share spikes.<br/><br/>
+      Developed embeddable petition widgets for third‑party sites, significantly expanding reach. Implemented analytics and A/B testing to improve conversion, tightened accessibility and SEO, and shipped UI/UX improvements that lifted signature completion rates while keeping the platform maintainable and secure.
+    `,
+    technologies: ['JavaScript', 'Node.js', 'REST API', 'SASS', 'PHP', 'MySQL', 'Gulp', 'Webpack'],
+    thumbnail: '/projects/petition-thumb.webp',
+    preview: '/projects/petition-video-small.mp4',
+    screenshots: [
+      '/projects/petition-video.mp4',
+      '/projects/petition-1.webp',
+      '/projects/petition-2.webp',
+      '/projects/petition-3.webp',
+    ],
+  },
+  {
+    title: 'Custom Microphone\nBuilder',
+    navTitle: 'Customization Tool',
+    url: 'https://register.roswellproaudio.com/cs/',
+    description: `
+      Developed an interactive <strong>product configurator</strong> for <strong>Roswell Audio</strong> that let customers design their own microphones by selecting bodies, capsules, finishes, and visual options.<br/><br/>
+      Built with native <strong>JavaScript</strong> and <strong>HTML5</strong>, the tool delivered real-time visual feedback, updating the microphone’s appearance instantly as options were chosen. This gave audio enthusiasts a more engaging, hands-on buying experience and reduced guesswork before purchase.<br/><br/>
+      Integrated directly into <strong>Shopify</strong> as a custom page, ensuring a smooth checkout flow. Enhanced with <strong>CSS3</strong> styling and responsive layouts so the builder worked seamlessly across devices, from desktop studio setups to mobile shoppers on the go.
+    `,
+    technologies: ['JavaScript', 'Shopify', 'HTML5', 'CSS3'],
+    thumbnail: '/projects/custom-mics-thumb.webp',
+    preview: '/projects/custom-mics-video-small.mp4',
+    screenshots: [
+      '/projects/custom-mics-video.mp4',
+      '/projects/custom-mics-1.webp',
+      '/projects/custom-mics-2.webp',
+    ],
+  },
+  {
+    title: 'AI-Driven Casino\nSimulator',
+    navTitle: 'Casino Simulator',
+    description: `
+      A private simulator built in <strong>React Native</strong> with <strong>Expo</strong> for rapid iteration and offline-friendly testing.<br/><br/>
+      Core to the app is a custom <strong>JSON behavior engine</strong> that scripts NPCs (dealers/players), table rules, and floor dynamics. The simulation models <strong>player budgets, emotions, and preferences</strong> (e.g., risk tolerance, game affinity, pacing, churn risk) to <strong>optimize casino flow</strong> by testing layouts, staffing, and pacing to increase engagement and dwell time while reducing friction. All scenarios run on synthetic data and are kept deliberately high‑level for confidentiality.<br/><br/>
+      A robust <strong>Edit Mode</strong> empowers non‑dev users to lay out the casino floor: <strong>drag‑and‑drop tables</strong>, snapping + validity checks, seat maps with precise placement, add/remove flows, and animated confirmations for destructive actions. <strong>Quality-of-life features</strong> were added throughout to make the workflow smoother and more efficient for users.<br/><br/>
+      <strong>Play Mode</strong> simulates betting rounds, dealer logic, table states, and AI movement/choices. A centralized <strong>activity log</strong> captures state transitions for debugging and analysis, while consolidated rule modules keep the system extensible and maintainable.<br/><br/>
+      The project showcases strengths in <strong>game logic design</strong>, <strong>state management</strong>, and crafting <strong>intuitive, high‑fidelity UI</strong> with smooth, performant animations on mobile.
+    `,
+    technologies: ['React Native', 'Expo', 'JSON', 'State Management', 'Animations', 'Testing'],
+    thumbnail: '/projects/casino-simulator-thumb.webp',
+    screenshots: ['/projects/casino-simulator-1.webp'],
   },
   {
     title: 'Sinwave\nVegas Venue',
@@ -90,24 +109,6 @@ export const projects = [
     thumbnail: '/projects/sites-thumb.webp',
     preview: '/projects/sites-video-small.mp4',
     screenshots: ['/projects/sites-video.mp4', '/projects/sites-1.webp', '/projects/sites-2.webp'],
-  },
-  {
-    title: 'Custom Microphone\nBuilder',
-    navTitle: 'Customization Tool',
-    url: 'https://register.roswellproaudio.com/cs/',
-    description: `
-      Developed an interactive <strong>product configurator</strong> for <strong>Roswell Audio</strong> that let customers design their own microphones by selecting bodies, capsules, finishes, and visual options.<br/><br/>
-      Built with native <strong>JavaScript</strong> and <strong>HTML5</strong>, the tool delivered real-time visual feedback, updating the microphone’s appearance instantly as options were chosen. This gave audio enthusiasts a more engaging, hands-on buying experience and reduced guesswork before purchase.<br/><br/>
-      Integrated directly into <strong>Shopify</strong> as a custom page, ensuring a smooth checkout flow. Enhanced with <strong>CSS3</strong> styling and responsive layouts so the builder worked seamlessly across devices, from desktop studio setups to mobile shoppers on the go.
-    `,
-    technologies: ['JavaScript', 'Shopify', 'HTML5', 'CSS3'],
-    thumbnail: '/projects/custom-mics-thumb.webp',
-    preview: '/projects/custom-mics-video-small.mp4',
-    screenshots: [
-      '/projects/custom-mics-video.mp4',
-      '/projects/custom-mics-1.webp',
-      '/projects/custom-mics-2.webp',
-    ],
   },
   {
     title: 'Tabs Database and\nLyrics Formatter',
