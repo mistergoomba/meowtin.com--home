@@ -137,8 +137,8 @@ export default function HomePage() {
               <div className='aspect-video w-full overflow-hidden'>
                 <iframe
                   className='w-full h-full'
-                  src='https://www.youtube.com/embed/AHwqPe_nC2A?rel=0'
-                  title='Short Fuse - Apocalyptic Times'
+                  src='https://www.youtube.com/embed/7ZEgBegWVV4?rel=0'
+                  title='AITTALA - Ashes'
                   allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
                   referrerPolicy='strict-origin-when-cross-origin'
                   allowFullScreen
@@ -146,11 +146,11 @@ export default function HomePage() {
               </div>
               <div className='p-6'>
                 <h3 className='text-xl font-semibold text-white mb-2'>
-                  Short Fuse - Apocalyptic Times
+                  AITTALA - Ashes
                 </h3>
                 <p className='text-base text-gray-300 leading-relaxed mb-4'>
-                  Manually stitched together in Premiere using 122 AI-generated clips derived from
-                  Short Fuse artwork, my own photos, and meticulously curated images.
+                  A fully animated music video channeling the dark, stylized energy of Batman: The
+                  Animated Series and Heavy Metal, built through a hand-curated AI animation pipeline.
                 </p>
                 <a
                   href='/videos'

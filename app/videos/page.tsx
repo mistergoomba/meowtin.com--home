@@ -9,6 +9,12 @@ type Vid = {
 
 const videos: Vid[] = [
   {
+    id: '7ZEgBegWVV4',
+    title: 'AITTALA - Ashes',
+    blurb:
+      'A fully animated music video channeling the dark, stylized energy of Batman: The Animated Series and Heavy Metal, built through a hand-curated AI animation pipeline.',
+  },
+  {
     id: 'AHwqPe_nC2A',
     title: 'Short Fuse - Apocalyptic Times',
     blurb:
