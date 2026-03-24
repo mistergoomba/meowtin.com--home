@@ -89,13 +89,43 @@ export default function BioPage() {
               <p className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'>
                 Welcome to Meowtin&#39;s Domain, the home page and personal portfolio of Martin
                 Boynton. Who is Meowtin besides someone who refers to himself in the third person?
-                Well, he is a creative professional with a passion for performance, music, and
-                visual storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music
+                Well, he is a creative professional and massage therapist with a passion for
+                performance, music, and visual storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music
                 producer, video producer, web site and mobile app builder, and music venue owner.
                 Aside from his professional accomplishments, Meowtin prides himself as well
                 travelled, a lover of people and life, yoga and meditation enthusiast, pro wrestling
                 connoisseur, video game devotee, and all around good guy.
               </p>
+            </div>
+          </section>
+        </AnimatedSection>
+
+        {/* MASSAGE THERAPY */}
+        <AnimatedSection delay={0.1}>
+          <section className='flex flex-col md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
+            <div className='flex justify-center w-full md:w-1/2'>
+              <img
+                src='/massage-card.png'
+                alt='Massage Therapy'
+                className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
+              />
+            </div>
+            <div className='flex flex-col items-center text-center w-full md:w-1/2'>
+              <h2 className='text-3xl md:text-5xl font-bold text-gray-100 mb-6'>
+                Licensed Massage Therapist
+              </h2>
+              <p className='text-xl md:text-2xl text-gray-300 max-w-xl mb-8'>
+                Offering therapeutic massage services focused on relaxation, recovery, and
+                well-being.
+              </p>
+              <a
+                href='https://massage.meowtin.com'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-block px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-full transition'
+              >
+                Book a Session →
+              </a>
             </div>
           </section>
         </AnimatedSection>

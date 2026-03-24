@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { SiPaypal, SiCashapp, SiZelle } from 'react-icons/si';
+import { FaInstagram, FaTiktok } from 'react-icons/fa';
 
 function VenmoV({ size = 48 }: { size?: number }) {
   return (
@@ -57,11 +58,13 @@ export default function QrPage() {
 
   return (
     <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white flex flex-col items-center px-4 pt-8'>
-      <img
-        src='/qr-header.png'
-        alt='Tip Meowtin'
-        className='w-[95%] max-w-sm h-auto object-contain mb-8 drop-shadow-lg'
-      />
+      <a href='https://meowtin.com'>
+        <img
+          src='/qr-header.png'
+          alt='Tip Meowtin'
+          className='w-[95%] max-w-sm h-auto object-contain mb-8 drop-shadow-lg'
+        />
+      </a>
 
       <div className='grid grid-cols-2 gap-4 w-full max-w-sm'>
         {payments.map(({ name, handle, href, color, icon: Icon }) => (
@@ -90,6 +93,25 @@ export default function QrPage() {
             {copied ? 'Copied!' : 'mistergoomba@gmail.com'}
           </span>
         </button>
+      </div>
+
+      <div className='flex gap-6 mt-8'>
+        <a
+          href='https://www.instagram.com/mistergoomba'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='text-gray-400 hover:text-white transition'
+        >
+          <FaInstagram size={32} />
+        </a>
+        <a
+          href='https://www.tiktok.com/@mrgoomba'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='text-gray-400 hover:text-white transition'
+        >
+          <FaTiktok size={32} />
+        </a>
       </div>
     </main>
   );

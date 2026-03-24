@@ -21,7 +21,7 @@ export default function HomePage() {
   const [animateSpotlightVideo, setAnimateSpotlightVideo] = useState(false);
   const [animateSpotlightProject, setAnimateSpotlightProject] = useState(false);
   const [animateCardsHeader, setAnimateCardsHeader] = useState(false);
-  const [animateCards, setAnimateCards] = useState([false, false, false, false]);
+  const [animateCards, setAnimateCards] = useState([false, false, false, false, false]);
   const [animateFooter, setAnimateFooter] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,8 +39,9 @@ export default function HomePage() {
     setTimeout(() => setAnimateCards((prev) => [true, prev[1], prev[2], prev[3]]), 1500);
     setTimeout(() => setAnimateCards((prev) => [prev[0], true, prev[2], prev[3]]), 1900);
     setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], true, prev[3]]), 2300);
-    setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], prev[2], true]), 2700);
-    setTimeout(() => setAnimateFooter(true), 3100);
+    setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], prev[2], true, prev[4]]), 2700);
+    setTimeout(() => setAnimateCards((prev) => [prev[0], prev[1], prev[2], prev[3], true]), 3100);
+    setTimeout(() => setAnimateFooter(true), 3500);
 
     // Preload the static video
     if (typeof window !== 'undefined') {
@@ -108,9 +109,10 @@ export default function HomePage() {
             <p className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'>
               Welcome to Meowtin&#39;s Domain, the home page and personal portfolio of Martin
               Boynton. Who is Meowtin besides someone who refers to himself in the third person?
-              Well, he is a creative professional with a passion for performance, music, and visual
-              storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music producer,
-              video producer, web site and mobile app builder, and music venue owner. Aside from his
+              Well, he is a creative professional and massage therapist with a passion for
+              performance, music, and visual storytelling. He is an accomplished musician, karaoke
+              host, emcee, DJ, music producer, video producer, web site and mobile app builder, and
+              music venue owner. Aside from his
               professional accomplishments, Meowtin prides himself as well travelled, a lover of
               people and life, yoga and meditation enthusiast, pro wrestling connoisseur, video game
               devotee, and all around good guy.
@@ -219,8 +221,9 @@ export default function HomePage() {
           </h2>
           <div
             ref={containerRef}
-            className='relative grid grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-2 gap-6 pb-8'
+            className='relative grid grid-cols-1 md:grid-cols-2 gap-6 pb-8'
           >
+            {/* Row 1: DEVELOPER + MASSAGE THERAPIST */}
             {/* DEVELOPER Card */}
             <HomePageCard
               onClick={() => router.push('/dev')}
@@ -252,6 +255,31 @@ export default function HomePage() {
               </div>
             </HomePageCard>
 
+            {/* MASSAGE THERAPIST Card */}
+            <HomePageCard
+              onClick={() => window.open('https://massage.meowtin.com', '_blank')}
+              hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,136,102,0.3)]'
+              animateCards={animateCards}
+              cardId={1}
+              laserColor='#ff8866'
+            >
+              <div className='absolute inset-0 w-full h-full'>
+                <Image
+                  src='/massage-card.png'
+                  alt='Massage Therapy'
+                  layout='fill'
+                  objectFit='cover'
+                  className='opacity-90'
+                />
+              </div>
+              <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent justify-end'>
+                <h2 className='text-3xl font-bold text-white text-center w-full mb-2'>
+                  MASSAGE THERAPIST
+                </h2>
+              </div>
+            </HomePageCard>
+
+            {/* Row 2: VIDEO PRODUCTION + MUSIC */}
             {/* VIDEO PRODUCTION Card */}
             <HomePageCard
               onClick={() => router.push('/videos')}
@@ -294,28 +322,30 @@ export default function HomePage() {
               </div>
             </HomePageCard>
 
-            {/* ART Card */}
-            <HomePageCard
-              onClick={() => router.push('/art')}
-              hoverShadowColor='hover:shadow-[0_0_25px_rgba(0,170,255,0.3)]'
-              animateCards={animateCards}
-              cardId={1}
-              laserColor='#00aaff'
-            >
-              <div className='absolute inset-0 w-full h-full'>
-                <Image
-                  src='/art/02 learn to swim-1.webp'
-                  alt='Art'
-                  layout='fill'
-                  objectFit='cover'
-                  objectPosition='top'
-                  className='opacity-90'
-                />
-              </div>
-              <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent'>
-                <h2 className='text-3xl font-bold text-white mb-2 mt-auto'>ART</h2>
-              </div>
-            </HomePageCard>
+            {/* Row 3: ART (full width) */}
+            <div className='md:col-span-2'>
+              <HomePageCard
+                onClick={() => router.push('/art')}
+                hoverShadowColor='hover:shadow-[0_0_25px_rgba(0,170,255,0.3)]'
+                animateCards={animateCards}
+                cardId={4}
+                laserColor='#00aaff'
+              >
+                <div className='absolute inset-0 w-full h-full'>
+                  <Image
+                    src='/art/02 learn to swim-1.webp'
+                    alt='Art'
+                    layout='fill'
+                    objectFit='cover'
+                    objectPosition='top'
+                    className='opacity-90'
+                  />
+                </div>
+                <div className='p-6 flex flex-col h-full relative z-10 mt-auto bg-gradient-to-t from-black/80 to-transparent'>
+                  <h2 className='text-3xl font-bold text-white mb-2 mt-auto'>ART</h2>
+                </div>
+              </HomePageCard>
+            </div>
           </div>
         </section>
 

@@ -59,7 +59,7 @@ export default function BioSection() {
 
   const bio = `I'm Meowtin — a creative, experienced full-stack developer with over 25 years in the game, specializing in JavaScript, React, React Native, and Node.js. I build artistic, immersive, and technically sound websites and apps that stand out both visually and functionally. Whether you need a modern custom-designed site, a scalable backend, a mobile app, or someone to untangle your messy JavaScript repo — I'm your guy.
 
-Beyond the code, I'm a multidisciplinary creative with a passion for performance, music, and visual storytelling. I'm an internationally touring musician, karaoke host, emcee, DJ, music producer, video editor, and former music venue owner. I'm also a world traveler, yoga and meditation enthusiast, pro wrestling connoisseur, video game devotee, and all-around good guy.`;
+Beyond the code, I'm a multidisciplinary creative and massage therapist with a passion for performance, music, and visual storytelling. I'm an internationally touring musician, karaoke host, emcee, DJ, music producer, video editor, and former music venue owner. I'm also a world traveler, yoga and meditation enthusiast, pro wrestling connoisseur, video game devotee, and all-around good guy.`;
 
   const lines = useMemo(() => splitIntoLines(bio), [bio]);
 
