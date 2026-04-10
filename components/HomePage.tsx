@@ -112,10 +112,9 @@ export default function HomePage() {
               Well, he is a creative professional and massage therapist with a passion for
               performance, music, and visual storytelling. He is an accomplished musician, karaoke
               host, emcee, DJ, music producer, video producer, web site and mobile app builder, and
-              music venue owner. Aside from his
-              professional accomplishments, Meowtin prides himself as well travelled, a lover of
-              people and life, yoga and meditation enthusiast, pro wrestling connoisseur, video game
-              devotee, and all around good guy.
+              music venue owner. Aside from his professional accomplishments, Meowtin prides himself
+              as well travelled, a lover of people and life, yoga and meditation enthusiast, pro
+              wrestling connoisseur, video game devotee, and all around good guy.
             </p>
           </div>
         </section>
@@ -147,12 +146,11 @@ export default function HomePage() {
                 />
               </div>
               <div className='p-6'>
-                <h3 className='text-xl font-semibold text-white mb-2'>
-                  AITTALA - Ashes
-                </h3>
+                <h3 className='text-xl font-semibold text-white mb-2'>AITTALA - Ashes</h3>
                 <p className='text-base text-gray-300 leading-relaxed mb-4'>
                   A fully animated music video channeling the dark, stylized energy of Batman: The
-                  Animated Series and Heavy Metal, built through a hand-curated AI animation pipeline.
+                  Animated Series and Heavy Metal, built through a hand-curated AI animation
+                  pipeline.
                 </p>
                 <a
                   href='/videos'
@@ -219,10 +217,7 @@ export default function HomePage() {
           >
             What I Do
           </h2>
-          <div
-            ref={containerRef}
-            className='relative grid grid-cols-1 md:grid-cols-2 gap-6 pb-8'
-          >
+          <div ref={containerRef} className='relative grid grid-cols-1 md:grid-cols-2 gap-6 pb-8'>
             {/* Row 1: DEVELOPER + MASSAGE THERAPIST */}
             {/* DEVELOPER Card */}
             <HomePageCard
@@ -257,7 +252,7 @@ export default function HomePage() {
 
             {/* MASSAGE THERAPIST Card */}
             <HomePageCard
-              onClick={() => window.open('https://massage.meowtin.com', '_blank')}
+              onClick={() => router.push('https://massage.meowtin.com')}
               hoverShadowColor='hover:shadow-[0_0_25px_rgba(255,136,102,0.3)]'
               animateCards={animateCards}
               cardId={1}
@@ -265,7 +260,7 @@ export default function HomePage() {
             >
               <div className='absolute inset-0 w-full h-full'>
                 <Image
-                  src='/massage-card.png'
+                  src='/massage-profile.webp'
                   alt='Massage Therapy'
                   layout='fill'
                   objectFit='cover'
