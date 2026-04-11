@@ -472,7 +472,7 @@ function Scene({ backgroundImageUrl }: { backgroundImageUrl: string }) {
 
 // Main component
 export default function TronGrid({
-  backgroundImageUrl = '/background.png',
+  backgroundImageUrl = '/background.webp',
 }: {
   backgroundImageUrl?: string;
 }) {

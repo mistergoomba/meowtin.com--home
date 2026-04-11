@@ -9,7 +9,7 @@ export default function IntroEndSection() {
       <motion.div className='flex flex-col items-center px-4'>
         <a href='/'>
           <img
-            src='/logo.png'
+            src='/logo.webp'
             alt='Meowtin Logo'
             className={`${isMobile ? 'w-[90vw]' : 'w-[50vw]'} max-w-[600px] mb-6`}
           />

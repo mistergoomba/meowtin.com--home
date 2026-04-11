@@ -590,7 +590,7 @@ export default function MiniEye() {
           </defs>
 
           <image
-            href='/eye.png'
+            href='/eye.webp'
             width='200'
             height='200'
             y='-10'

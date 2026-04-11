@@ -55,7 +55,7 @@ export default function HomePage() {
 
   return (
     <div className='relative w-full bg-black flex flex-col font-share-tech'>
-      {isLoaded && <TronGrid backgroundImageUrl='/background.png' />}
+      {isLoaded && <TronGrid backgroundImageUrl='/background.webp' />}
 
       <div className='relative z-10 flex flex-col w-full px-4 py-0'>
         <div
@@ -72,7 +72,7 @@ export default function HomePage() {
           <div className='flex flex-col items-center justify-center pt-2'>
             <a href='/'>
               <Image
-                src='/logo.png'
+                src='/logo.webp'
                 alt='Meowtin Logo'
                 width={200}
                 height={120}
@@ -95,7 +95,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <section className='flex flex-col md:flex-row items-center justify-center py-8 md:py-12 px-4 text-left max-w-6xl mx-auto'>
           <img
-            src='/me.png'
+            src='/me.webp'
             alt='Meowtin'
             className={`w-72 h-[16.8rem] object-cover object-top rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl transition-all duration-1000 ease-out transform ${
               animateHeroImage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'

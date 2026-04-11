@@ -336,7 +336,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
             {useCircularEye ? (
               <>
                 <svg width='200' height='200'>
-                  <image href='/eye.png' width='200' height='200' />
+                  <image href='/eye.webp' width='200' height='200' />
                 </svg>
                 <g style={{ transform: `translate(0px, 50px)` }}>
                   <circle cx='100' cy='50' r='25' fill='#5b8fb9' />
@@ -353,7 +353,7 @@ export default function EyeAnimation({ mouseX, mouseY }: { mouseX: any; mouseY: 
                     </clipPath>
                   </defs>
                   <image
-                    href='/eye.png'
+                    href='/eye.webp'
                     width='200'
                     height='200'
                     y='-10'

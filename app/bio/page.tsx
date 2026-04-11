@@ -64,7 +64,7 @@ export default function BioPage() {
           <header className='flex flex-col items-center justify-center py-8 space-y-8'>
             <a href='/'>
               <img
-                src='/logo.png'
+                src='/logo.webp'
                 alt='Meowtin Logo'
                 className='w-96 h-auto object-contain drop-shadow-lg max-w-xs md:max-w-none'
               />
@@ -78,7 +78,7 @@ export default function BioPage() {
         <AnimatedSection delay={0.1}>
           <section className='flex flex-col md:flex-row items-center justify-center py-0 md:py-8 px-4 text-left max-w-6xl mx-auto'>
             <img
-              src='/me.png'
+              src='/me.webp'
               alt='Meowtin'
               className='w-72 h-[28rem] object-cover rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl'
             />
@@ -105,7 +105,7 @@ export default function BioPage() {
           <section className='flex flex-col md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
             <div className='flex justify-center w-full md:w-1/2'>
               <img
-                src='/massage-card.png'
+                src='/massage-card.webp'
                 alt='Massage Therapy'
                 className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
               />
@@ -135,7 +135,7 @@ export default function BioPage() {
           <section className='flex flex-col md:flex-row items-start justify-between py-16 px-4 max-w-7xl mx-auto w-full space-y-6 md:space-y-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
             <div className='flex flex-col items-center flex-grow'>
               <img
-                src='/okie-dokie-logo.png'
+                src='/okie-dokie-logo.webp'
                 alt='Okie Dokie Karaoke Logo'
                 className='w-[700px] max-w-full mb-6 drop-shadow-lg'
               />
@@ -161,14 +161,14 @@ export default function BioPage() {
           <section className='flex flex-col-reverse md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
             <div className='flex justify-center w-full md:w-1/2'>
               <img
-                src='/dj-flyer.png'
+                src='/dj-flyer.webp'
                 alt='DJ Flyer'
                 className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
               />
             </div>
             <div className='flex flex-col items-center text-center w-full md:w-1/2'>
               <img
-                src='/logo.png'
+                src='/logo.webp'
                 alt='Meowtin DJ Logo'
                 className='w-[500px] max-w-full mb-8 drop-shadow-lg'
               />
@@ -186,7 +186,7 @@ export default function BioPage() {
             <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
               <a href='https://shortfusemusic.com' target='_blank' rel='noopener noreferrer'>
                 <img
-                  src='/short-fuse-logo.png'
+                  src='/short-fuse-logo.webp'
                   alt='Short Fuse Logo'
                   className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
                 />
@@ -206,7 +206,7 @@ export default function BioPage() {
             <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
               <a href='https://fartxbubble.com/' target='_blank' rel='noopener noreferrer'>
                 <img
-                  src='/fart-bubble-logo.png'
+                  src='/fart-bubble-logo.webp'
                   alt='Fart Bubble Logo'
                   className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
                 />
@@ -240,21 +240,21 @@ export default function BioPage() {
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-5xl'>
               <a href='https://kink.com' target='_blank' rel='noopener noreferrer'>
                 <img
-                  src='/kink-logo.png'
+                  src='/kink-logo.webp'
                   alt='Kink.com'
                   className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
                 />
               </a>
               <a href='https://care2.com' target='_blank' rel='noopener noreferrer'>
                 <img
-                  src='/care2-logo.png'
+                  src='/care2-logo.webp'
                   alt='Care2.com'
                   className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
                 />
               </a>
               <a href='https://yahoo.com' target='_blank' rel='noopener noreferrer'>
                 <img
-                  src='/yahoo-logo.png'
+                  src='/yahoo-logo.webp'
                   alt='Yahoo.com'
                   className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
                 />

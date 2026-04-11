@@ -80,7 +80,7 @@ Beyond the code, I'm a multidisciplinary creative and massage therapist with a p
         {/* Avatar / Image pop-in */}
         <motion.div variants={imageVariants} className='mx-auto md:mx-0'>
           <Image
-            src='/me.png'
+            src='/me.webp'
             alt='Meowtin'
             width={288}
             height={288}

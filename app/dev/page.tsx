@@ -13,7 +13,7 @@ export default function DevPage() {
   return (
     <main
       style={{
-        backgroundImage: "url('/grid-background.png')",
+        backgroundImage: "url('/grid-background.webp')",
         backgroundAttachment: 'fixed',
         backgroundSize: 'cover',
         backgroundPosition: 'center',

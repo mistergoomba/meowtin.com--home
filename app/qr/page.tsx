@@ -60,7 +60,7 @@ export default function QrPage() {
     <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white flex flex-col items-center px-4 pt-8'>
       <a href='https://meowtin.com'>
         <img
-          src='/qr-header.png'
+          src='/qr-header.webp'
           alt='Tip Meowtin'
           className='w-[95%] max-w-sm h-auto object-contain mb-8 drop-shadow-lg'
         />

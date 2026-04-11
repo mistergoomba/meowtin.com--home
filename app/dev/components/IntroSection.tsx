@@ -15,7 +15,7 @@ export default function IntroSection() {
   return (
     <section className='h-screen w-full flex flex-col justify-center items-center pointer-events-auto'>
       <a href='/'>
-        <img src='/logo.png' alt='Meowtin Logo' className={`${contentWidth} mb-6`} />
+        <img src='/logo.webp' alt='Meowtin Logo' className={`${contentWidth} mb-6`} />
       </a>
 
       <div className={`flex flex-wrap justify-center md:justify-between ${contentWidth}`}>
