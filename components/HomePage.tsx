@@ -128,7 +128,7 @@ export default function HomePage() {
           >
             Recent Projects
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {/* Video Spotlight */}
             <div
               className={`rounded-2xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-lg overflow-hidden transition-all duration-1000 ease-out transform ${
@@ -151,6 +151,39 @@ export default function HomePage() {
                   A fully animated music video channeling the dark, stylized energy of Batman: The
                   Animated Series and Heavy Metal, built through a hand-curated AI animation
                   pipeline.
+                </p>
+                <a
+                  href='/videos'
+                  className='text-base text-purple-400 hover:text-purple-300 transition-colors underline'
+                >
+                  View All Videos →
+                </a>
+              </div>
+            </div>
+
+            {/* Short Fuse Video Spotlight */}
+            <div
+              className={`rounded-2xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-lg overflow-hidden transition-all duration-1000 ease-out transform ${
+                animateSpotlightVideo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+              }`}
+            >
+              <div className='aspect-video w-full overflow-hidden'>
+                <iframe
+                  className='w-full h-full'
+                  src='https://www.youtube.com/embed/AHwqPe_nC2A?rel=0'
+                  title='Short Fuse - Apocalyptic Times'
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                  referrerPolicy='strict-origin-when-cross-origin'
+                  allowFullScreen
+                />
+              </div>
+              <div className='p-6'>
+                <h3 className='text-xl font-semibold text-white mb-2'>
+                  Short Fuse - Apocalyptic Times
+                </h3>
+                <p className='text-base text-gray-300 leading-relaxed mb-4'>
+                  Manually stitched together in Premiere using 122 AI-generated clips derived from
+                  Short Fuse artwork, my own photos, and meticulously curated images.
                 </p>
                 <a
                   href='/videos'
