@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import {
-  FaFacebook,
+  FaFacebookF,
   FaInstagram,
   FaTiktok,
   FaYoutube,
@@ -73,7 +73,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   };
 
   const icons = {
-    facebook: FaFacebook,
+    facebook: FaFacebookF,
     instagram: FaInstagram,
     linkedin: FaLinkedin,
     soundcloud: FaSoundcloud,

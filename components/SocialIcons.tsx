@@ -1,4 +1,4 @@
-import { FaFacebook, FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaSoundcloud } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaLinkedin, FaSoundcloud } from 'react-icons/fa';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function SocialIcons({
@@ -31,7 +31,7 @@ export default function SocialIcons({
   return (
     <div className={className}>
       <a href='https://www.facebook.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
-        <FaFacebook className={big + ' text-gray-400 hover:text-white transition'} />
+        <FaFacebookF className={big + ' text-gray-400 hover:text-white transition'} />
       </a>
       <a href='https://www.instagram.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
         <FaInstagram className={big + ' text-gray-400 hover:text-white transition'} />
