@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import {
+  FaFacebook,
   FaInstagram,
   FaTiktok,
   FaYoutube,
@@ -15,6 +16,7 @@ import {
 import { FiExternalLink } from 'react-icons/fi';
 
 type IconKey =
+  | 'facebook'
   | 'instagram'
   | 'linkedin'
   | 'soundcloud'
@@ -28,6 +30,10 @@ type IconKey =
 export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolean }) {
   // Updated: urls + labels
   const links: Record<IconKey, { url: string; label: string }> = {
+    facebook: {
+      url: 'https://www.facebook.com/mistergoomba',
+      label: 'Follow on Facebook',
+    },
     instagram: {
       url: 'https://www.instagram.com/mistergoomba',
       label: 'Follow on Instagram',
@@ -67,6 +73,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   };
 
   const icons = {
+    facebook: FaFacebook,
     instagram: FaInstagram,
     linkedin: FaLinkedin,
     soundcloud: FaSoundcloud,
@@ -95,6 +102,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   const seeds = useMemo<IconSeed[]>(() => {
     const COUNT = isMobile ? 32 : 72;
     const keys: IconKey[] = [
+      'facebook',
       'instagram',
       'linkedin',
       'soundcloud',
