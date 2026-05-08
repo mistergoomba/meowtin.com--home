@@ -31,7 +31,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
   // Updated: urls + labels
   const links: Record<IconKey, { url: string; label: string }> = {
     facebook: {
-      url: 'https://www.facebook.com/mistergoomba',
+      url: 'https://www.facebook.com/profile.php?id=518468975',
       label: 'Follow on Facebook',
     },
     instagram: {

@@ -30,7 +30,7 @@ export default function SocialIcons({
 
   return (
     <div className={className}>
-      <a href='https://www.facebook.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
+      <a href='https://www.facebook.com/profile.php?id=518468975' target='_blank' rel='noopener noreferrer'>
         <FaFacebookF className={big + ' text-gray-400 hover:text-white transition'} />
       </a>
       <a href='https://www.instagram.com/mistergoomba' target='_blank' rel='noopener noreferrer'>
