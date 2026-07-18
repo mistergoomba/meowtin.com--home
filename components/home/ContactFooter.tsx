@@ -7,15 +7,27 @@ import SocialIcons from '@/components/SocialIcons';
 
 export default function ContactFooter() {
   return (
-    <footer className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 py-24 md:px-10">
-      {/* sacred-geometry eye, centered behind the content (black bg blends in) */}
+    <footer className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 pb-20 pt-4 md:px-10 md:py-24">
+      {/* DESKTOP: sacred-geometry eye centered behind the content (black bg blends in) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/footer-eye.webp"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[38%] -z-0 w-[clamp(340px,44vw,560px)] -translate-x-1/2 -translate-y-1/2 select-none opacity-90 mix-blend-screen"
+        className="pointer-events-none absolute left-1/2 top-[38%] -z-0 hidden w-[clamp(340px,44vw,560px)] -translate-x-1/2 -translate-y-1/2 select-none opacity-90 mix-blend-screen md:block"
       />
+
+      {/* MOBILE: oversized eye above the heading as a separator (black sides
+          bleed off-screen and vanish via screen blend) */}
+      <div className="mb-2 flex justify-center md:hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/footer-eye.webp"
+          alt=""
+          aria-hidden
+          className="pointer-events-none w-[150vw] max-w-none shrink-0 select-none opacity-90 mix-blend-screen"
+        />
+      </div>
 
       <div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
         <Reveal>

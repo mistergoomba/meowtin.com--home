@@ -19,7 +19,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative w-full overflow-x-hidden bg-[#050506] font-share-tech text-white">
+    <div className="relative w-full overflow-x-hidden bg-black font-share-tech text-white">
       <SiteHeader />
       <Hero onExplore={scrollToContent} />
 
