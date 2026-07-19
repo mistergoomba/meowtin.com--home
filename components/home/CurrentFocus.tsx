@@ -9,6 +9,7 @@ const CARDS = [
     body: 'Building AI tools, agents, and simulations that solve real-world problems.',
     cta: 'Explore AI Projects',
     href: '/dev',
+    external: false,
     accent: '#38bdf8',
     src: '/focus/ai.webp',
     label: 'AI Development',
@@ -16,8 +17,9 @@ const CARDS = [
   {
     title: 'Meowtin Massage',
     body: 'Therapeutic massage for pain relief, mobility, and whole-body wellness.',
-    cta: 'Visit meowtin.com',
+    cta: 'Book a Massage',
     href: 'https://massage.meowtin.com',
+    external: true,
     accent: '#facc7a',
     src: '/focus/massage.webp',
     label: 'Massage',
@@ -26,7 +28,8 @@ const CARDS = [
     title: 'Creative Work',
     body: 'Music, videos, art, and visual experiences that inspire and connect.',
     cta: 'View Creative Work',
-    href: '/videos',
+    href: '/creative',
+    external: false,
     accent: '#a855f7',
     src: '/focus/creative.webp',
     label: 'Creative Work',
@@ -50,6 +53,8 @@ export default function CurrentFocus() {
           <Reveal key={card.title} delay={i * 0.08}>
             <a
               href={card.href}
+              target={card.external ? '_blank' : undefined}
+              rel={card.external ? 'noopener noreferrer' : undefined}
               className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0c] transition-colors duration-300 hover:border-white/25"
             >
               {/* image ~top half, fading into the card's dark interior at the bottom */}

@@ -1,15 +1,22 @@
 // app/music/page.tsx
-import MiniHeader from '@/components/MiniHeader';
+import PageShell from '@/components/site/PageShell';
+import PageHero from '@/components/site/PageHero';
 import MusicProjects from '@/components/MusicProjects';
 
 export default function MusicPage() {
   return (
-    <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans space-y-12'>
-      <MiniHeader />
-      <div className='max-w-5xl mx-auto px-4'>
-        <MusicProjects />
-      </div>
-      <footer className='text-center text-sm text-gray-400 py-6'>© 2025 MEOWTIN</footer>
-    </main>
+    <PageShell>
+      <PageHero
+        eyebrow="Music"
+        title={
+          <>
+            I create <span className="bg-gradient-to-r from-purple-400 to-fuchsia-400 bg-clip-text text-transparent">sound.</span>
+          </>
+        }
+        intro="Metal, grind, dubstep, and dark electronica — a lifetime of bands, projects, and productions. Plus the weekly karaoke night."
+        accent="#a855f7"
+      />
+      <MusicProjects />
+    </PageShell>
   );
 }

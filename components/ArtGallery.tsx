@@ -10,52 +10,35 @@ export default function ArtGallery({ images }: { images: any[] }) {
   };
 
   return (
-    <section className='px-4 sm:px-8 py-8'>
-      <h1 className='text-3xl font-bold mb-4 text-center'>My Art, Enhanced</h1>
+    <section className="mx-auto w-full max-w-[1200px] px-6 pb-20 md:px-10">
+      <p className="mb-10 max-w-2xl text-sm leading-relaxed text-white/50">
+        Click any image to view the original drawing. Hit <span className="text-emerald-400">Buy Now</span>{' '}
+        to grab the artwork on a shirt, tapestry, or other merch.
+      </p>
 
-      <div className='max-w-3xl mx-auto text-center text-gray-300 mb-8'>
-        <p className='mb-4'>
-          Over the years, drawing, doodling, and painting have been one of my purest forms of
-          <span className='text-purple-300 font-semibold'> expression</span>—a kind of visual
-          journaling where I let my
-          <span className='text-purple-300 font-semibold'> subconscious</span> speak freely. I
-          always imagined turning these sketches into more elaborate works, but time and talent
-          constraints often got in the way. With the help of
-          <span className='text-purple-300 font-semibold'> AI</span>, I was able to bring these
-          ideas to life. Some pieces captured the exact vision I had in mind, while others missed a
-          few of my more personal, quirky details. Either way, it's been a joy to see them
-          reimagined.
-        </p>
-
-        <p>
-          Click on any image to view the
-          <span className='text-purple-300 font-semibold'> original drawing</span>. Click on the
-          <span className='text-purple-300 font-semibold'> buy now</span> button to purchase the
-          artwork on a shirt, tapestry, or other merchandise.
-        </p>
-      </div>
-
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
         {images.map(({ key, img1, img2, exists, buy }, index) => (
-          <div key={key} className='flex flex-col items-center'>
+          <div key={key} className="flex flex-col items-center">
             <div
-              className='relative overflow-hidden rounded shadow-lg cursor-pointer aspect-[2/3] w-full'
+              className="relative aspect-[2/3] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-colors duration-300 hover:border-white/25"
               onClick={() => toggleImage(key)}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`/art/${img1}`}
-                alt=''
+                alt=""
                 loading={index < 3 ? 'eager' : 'lazy'}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
                   activeKey === key || !exists ? 'opacity-0' : 'opacity-100'
                 }`}
               />
               {exists && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={`/art/${img2}`}
-                  alt=''
+                  alt=""
                   loading={index < 3 ? 'eager' : 'lazy'}
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
                     activeKey === key ? 'opacity-100' : 'opacity-0'
                   }`}
                 />
@@ -65,11 +48,11 @@ export default function ArtGallery({ images }: { images: any[] }) {
             {buy && (
               <a
                 href={buy}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='mt-3 inline-block px-4 py-2 bg-purple-600 text-white font-semibold rounded hover:bg-purple-500 transition'
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-emerald-400/50 hover:bg-white/[0.08]"
               >
-                Buy Now
+                Buy Now →
               </a>
             )}
           </div>

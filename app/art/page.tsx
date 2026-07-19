@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import MiniHeader from '@/components/MiniHeader';
+
+import PageShell from '@/components/site/PageShell';
+import PageHero from '@/components/site/PageHero';
 import ArtGallery from '@/components/ArtGallery';
 
 export default function ArtPage() {
@@ -8,10 +10,18 @@ export default function ArtPage() {
   const images = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
   return (
-    <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans space-y-12'>
-      <MiniHeader />
+    <PageShell>
+      <PageHero
+        eyebrow="Art"
+        title={
+          <>
+            My art, <span className="bg-gradient-to-r from-yellow-300 to-amber-500 bg-clip-text text-transparent">enhanced.</span>
+          </>
+        }
+        intro="Years of drawing, doodling, and painting — my purest form of expression, a kind of visual journaling — reimagined with the help of AI. Click any piece to reveal the original drawing."
+        accent="#eab308"
+      />
       <ArtGallery images={images} />
-      <footer className='text-center text-sm text-gray-500 py-6'>© 2025 MEOWTIN</footer>
-    </main>
+    </PageShell>
   );
 }

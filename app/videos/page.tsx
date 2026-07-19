@@ -1,5 +1,7 @@
 // app/videos/page.tsx
-import MiniHeader from '@/components/MiniHeader';
+import PageShell from '@/components/site/PageShell';
+import PageHero from '@/components/site/PageHero';
+import Reveal from '@/components/home/Reveal';
 
 type Vid = {
   id: string;
@@ -94,43 +96,45 @@ const videos: Vid[] = [
 
 export default function VideosPage() {
   return (
-    <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans'>
-      <MiniHeader />
+    <PageShell>
+      <PageHero
+        eyebrow="Video Production"
+        title={
+          <>
+            Stories in <span className="bg-gradient-to-r from-amber-300 to-yellow-500 bg-clip-text text-transparent">motion.</span>
+          </>
+        }
+        intro="A growing collection of music videos, live moments, promos, and AI‑animation experiments. More coming soon."
+        accent="#f59e0b"
+      />
 
-      <section className='max-w-6xl mx-auto px-4 pb-16 pt-6'>
-        <h1 className='text-3xl md:text-4xl font-extrabold tracking-wide mb-6'>Video Production</h1>
-        <p className='text-gray-300 mb-10'>
-          A growing collection of music videos, live moments, promos, and experiments. More coming
-          soon.
-        </p>
+      <section className="mx-auto w-full max-w-[1200px] px-6 pb-20 md:px-10">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {videos.map((v, i) => (
+            <Reveal key={v.id} delay={(i % 3) * 0.06}>
+              <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-colors duration-300 hover:border-white/25">
+                <div className="aspect-video w-full overflow-hidden">
+                  <iframe
+                    className="h-full w-full"
+                    src={`https://www.youtube.com/embed/${v.id}?rel=0`}
+                    title={v.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
 
-        <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
-          {videos.map((v) => (
-            <article
-              key={v.id}
-              className='rounded-2xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-lg overflow-hidden hover:shadow-purple-500/20 transition-shadow'
-            >
-              <div className='aspect-video w-full overflow-hidden'>
-                <iframe
-                  className='w-full h-full'
-                  src={`https://www.youtube.com/embed/${v.id}?rel=0`}
-                  title={v.title}
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                  referrerPolicy='strict-origin-when-cross-origin'
-                  allowFullScreen
-                />
-              </div>
-
-              <div className='p-4'>
-                <h3 className='text-lg font-semibold'>{v.title}</h3>
-                <p className='mt-2 text-sm text-gray-300 leading-relaxed'>{v.blurb}</p>
-              </div>
-            </article>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="text-base font-semibold uppercase tracking-wide text-white">
+                    {v.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/55">{v.blurb}</p>
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
-
-      <footer className='text-center text-sm text-gray-400 py-6'>© 2025 MEOWTIN</footer>
-    </main>
+    </PageShell>
   );
 }

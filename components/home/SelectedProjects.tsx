@@ -4,12 +4,12 @@ import Reveal from './Reveal';
 import AssetSlot from './AssetSlot';
 
 const PROJECTS = [
-  { title: 'AI Interview Avatar', desc: 'AI Interview Assistant', focus: 'AI Development', href: '/dev', accent: '#38bdf8', src: '/projects/ai-avatar.webp', label: 'AI Interview Avatar' },
-  { title: 'AI Casino Simulator', desc: 'AI Reinforcement Learning', focus: 'AI Development', href: '/dev', accent: '#2dd4bf', src: '/projects/ai-casino.webp', label: 'AI Casino Simulator' },
-  { title: 'Warboy Guitars', desc: 'Custom Shop Website', focus: 'Web Development', href: 'https://warboyguitars.com', accent: '#00ffaa', src: '/projects/warboy-site.webp', label: 'Warboy Guitars' },
-  { title: 'Apocalyptic Times', desc: 'Music Video', focus: 'Video Production', href: 'https://youtu.be/AHwqPe_nC2A', accent: '#f59e0b', src: '/projects/apocalyptic-times.webp', label: 'Apocalyptic Times' },
-  { title: 'Aittala – Ashes', desc: 'Animated Music Video', focus: 'Animation / Video', href: 'https://youtu.be/7ZEgBegWVV4', accent: '#a855f7', src: '/projects/aittala-ashes.webp', label: 'Aittala – Ashes' },
-  { title: 'Meowtin Massage', desc: 'Massage Therapy Website', focus: 'Web Development', href: 'https://massage.meowtin.com', accent: '#facc7a', src: '/projects/massage-site.webp', label: 'Meowtin Massage' },
+  { title: 'AI Interview Avatar', desc: 'AI Interview Assistant', focus: 'AI Development', href: '/dev/ai-interview-avatar', external: false, accent: '#38bdf8', src: '/projects/ai-avatar.webp', label: 'AI Interview Avatar' },
+  { title: 'AI Casino Simulator', desc: 'AI Reinforcement Learning', focus: 'AI Development', href: '/dev/ai-casino-simulator', external: false, accent: '#2dd4bf', src: '/projects/ai-casino.webp', label: 'AI Casino Simulator' },
+  { title: 'Warboy Guitars', desc: 'Custom Shop Website', focus: 'Web Development', href: '/dev/warboy-guitars', external: false, accent: '#00ffaa', src: '/projects/warboy-site.webp', label: 'Warboy Guitars' },
+  { title: 'Apocalyptic Times', desc: 'Music Video', focus: 'Video Production', href: 'https://youtu.be/AHwqPe_nC2A', external: true, accent: '#f59e0b', src: '/projects/apocalyptic-times.webp', label: 'Apocalyptic Times' },
+  { title: 'Aittala – Ashes', desc: 'Animated Music Video', focus: 'Animation / Video', href: 'https://youtu.be/7ZEgBegWVV4', external: true, accent: '#a855f7', src: '/projects/aittala-ashes.webp', label: 'Aittala – Ashes' },
+  { title: 'Meowtin Massage', desc: 'Massage Therapy Website', focus: 'Web Development', href: '/dev/meowtin-massage', external: false, accent: '#facc7a', src: '/projects/massage-site.webp', label: 'Meowtin Massage' },
 ] as const;
 
 export default function SelectedProjects() {
@@ -28,6 +28,8 @@ export default function SelectedProjects() {
             <a
               key={p.title}
               href={p.href}
+              target={p.external ? '_blank' : undefined}
+              rel={p.external ? 'noopener noreferrer' : undefined}
               className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-white/25"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden">

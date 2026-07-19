@@ -8,10 +8,8 @@ import SocialIcons from '@/components/SocialIcons';
 
 const NAV = [
   { label: 'Developer', href: '/dev' },
-  { label: 'Videos', href: '/videos' },
-  { label: 'Music', href: '/music' },
-  { label: 'Art', href: '/art' },
-  { label: 'Massage', href: 'https://massage.meowtin.com' },
+  { label: 'Creative', href: '/creative' },
+  { label: 'Wellness', href: '/wellness' },
   { label: 'Bio', href: '/bio' },
 ];
 
@@ -57,7 +55,7 @@ export default function SiteHeader() {
             className="mx-auto max-w-[1400px] px-6 md:px-10"
           >
             <div className="rounded-2xl border border-white/10 bg-black/70 p-4 backdrop-blur-xl">
-              <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-1 sm:grid-cols-4">
                 {NAV.map((item) => (
                   <li key={item.label}>
                     <a

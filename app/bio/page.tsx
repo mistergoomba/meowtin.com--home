@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 
-import AnimatedSection from '@/components/AnimatedSection';
-import SocialIcons from '@/components/SocialIcons';
+import PageShell from '@/components/site/PageShell';
+import PageHero from '@/components/site/PageHero';
+import Reveal from '@/components/home/Reveal';
 
 function ArtPreview() {
   const [previewImages, setPreviewImages] = useState<Array<{ key: string; img1: string }>>([]);
@@ -13,311 +14,283 @@ function ArtPreview() {
       try {
         const res = await fetch('/art-index.json');
         const allImages = await res.json();
-
         const shuffled = allImages.sort(() => 0.5 - Math.random());
-        const selected = shuffled.slice(0, 3);
-        setPreviewImages(selected);
+        setPreviewImages(shuffled.slice(0, 3));
       } catch (error) {
         console.error('Failed to fetch art images:', error);
         setPreviewImages([]);
       }
     }
-
     fetchImages();
   }, []);
 
   return (
-    <section className='flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto w-full space-y-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-      <div className='text-center'>
-        <h2 className='text-3xl md:text-5xl font-bold text-gray-100'>
-          <a href='/art'>My Art, Enhanced</a>
-        </h2>
-      </div>
-
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-5xl justify-items-center'>
+    <div>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
         {previewImages.map(({ key, img1 }) => (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             key={key}
             src={`/art/${img1}`}
-            alt='Art preview'
-            className='w-full max-w-[400px] object-cover rounded-2xl transition-transform duration-300 drop-shadow-lg'
+            alt="Art preview"
+            className="w-full rounded-2xl border border-white/10 object-cover"
           />
         ))}
       </div>
-
       <a
-        href='/art'
-        className='inline-block px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-full transition'
+        href="/art"
+        className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-white/15 px-7 py-3.5 text-sm uppercase tracking-[0.25em] text-white/80 transition-all duration-300 hover:border-white/40 hover:text-white"
       >
-        See All Images
+        See All Art →
       </a>
-    </section>
+    </div>
   );
 }
 
+const DEV_LINKS = [
+  { label: 'Short Fuse official band website', href: 'https://shortfusemusic.com' },
+  { label: 'Sinwave Live Music Venue official site', href: 'https://sinwavevegas.com' },
+  { label: 'Ukulele tabs site', href: 'https://uke.meowtin.com' },
+  { label: 'Fart Bubble official band website', href: 'https://fartxbubble.com' },
+  { label: 'WARBOY Guitars official site', href: 'https://warboyguitars.com' },
+];
+
+const DEV_LOGOS = [
+  { src: '/kink-logo.webp', alt: 'Kink.com', href: 'https://kink.com' },
+  { src: '/care2-logo.webp', alt: 'Care2.com', href: 'https://care2.com' },
+  { src: '/yahoo-logo.webp', alt: 'Yahoo.com', href: 'https://yahoo.com' },
+];
+
+const sectionClass = 'mx-auto w-full max-w-[1200px] px-6 py-14 md:px-10';
+const cardClass = 'rounded-3xl border border-white/10 bg-white/[0.02] p-8 md:p-12';
+
 export default function BioPage() {
   return (
-    <main className='min-h-screen bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans space-y-12'>
-      <div className='w-full bg-gradient-to-b from-[#0e001a] via-purple-950 to-purple-900 text-white font-sans space-y-12'>
-        {/* HEADER */}
-        <AnimatedSection delay={0.1}>
-          <header className='flex flex-col items-center justify-center py-8 space-y-8'>
-            <a href='/'>
-              <img
-                src='/logo.webp'
-                alt='Meowtin Logo'
-                className='w-96 h-auto object-contain drop-shadow-lg max-w-xs md:max-w-none'
-              />
-            </a>
+    <PageShell>
+      <PageHero
+        eyebrow="Bio"
+        title={
+          <>
+            Who is <span className="bg-gradient-to-r from-teal-300 to-emerald-400 bg-clip-text text-transparent">Meowtin?</span>
+          </>
+        }
+        intro="The home base of Martin Boynton — creative professional, massage therapist, musician, karaoke host, DJ, producer, developer, and all-around good guy."
+      />
 
-            <SocialIcons size='big' className='flex space-x-6 mt-4' />
-          </header>
-        </AnimatedSection>
-
-        {/* ABOUT ME */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col md:flex-row items-center justify-center py-0 md:py-8 px-4 text-left max-w-6xl mx-auto'>
+      {/* ABOUT */}
+      <section className={sectionClass}>
+        <Reveal>
+          <div className={`grid grid-cols-1 items-center gap-10 md:grid-cols-[auto_1fr] ${cardClass}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src='/me.webp'
-              alt='Meowtin'
-              className='w-72 h-[28rem] object-cover rounded-2xl mb-6 md:mb-0 md:mr-12 shadow-xl'
+              src="/me.webp"
+              alt="Meowtin"
+              className="h-[28rem] w-72 justify-self-center rounded-2xl object-cover"
             />
             <div>
-              <h1 className='text-4xl md:text-6xl font-bold mb-6'>
-                Welcome to Meowtin&#39;s Domain
-              </h1>
-              <p className='text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl'>
-                Welcome to Meowtin&#39;s Domain, the home page and personal portfolio of Martin
-                Boynton. Who is Meowtin besides someone who refers to himself in the third person?
-                Well, he is a creative professional and massage therapist with a passion for
-                performance, music, and visual storytelling. He is an accomplished musician, karaoke host, emcee, DJ, music
-                producer, video producer, web site and mobile app builder, and music venue owner.
-                Aside from his professional accomplishments, Meowtin prides himself as well
-                travelled, a lover of people and life, yoga and meditation enthusiast, pro wrestling
-                connoisseur, video game devotee, and all around good guy.
+              <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">About Me</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                Meowtin&#39;s Domain
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-white/60">
+                Welcome to Meowtin&#39;s Domain, the personal portfolio of Martin Boynton. Who is
+                Meowtin besides someone who refers to himself in the third person? A creative
+                professional and massage therapist with a passion for performance, music, and visual
+                storytelling — an accomplished musician, karaoke host, emcee, DJ, music producer,
+                video producer, web &amp; mobile app builder, and music venue owner. Aside from the
+                professional accomplishments, Meowtin is well travelled, a lover of people and life,
+                a yoga and meditation enthusiast, pro wrestling connoisseur, video game devotee, and
+                all-around good guy.
               </p>
             </div>
-          </section>
-        </AnimatedSection>
+          </div>
+        </Reveal>
+      </section>
 
-        {/* MASSAGE THERAPY */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-            <div className='flex justify-center w-full md:w-1/2'>
-              <img
-                src='/massage-card.webp'
-                alt='Massage Therapy'
-                className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
-              />
-            </div>
-            <div className='flex flex-col items-center text-center w-full md:w-1/2'>
-              <h2 className='text-3xl md:text-5xl font-bold text-gray-100 mb-6'>
+      {/* MASSAGE */}
+      <section className={sectionClass}>
+        <Reveal>
+          <div className={`grid grid-cols-1 items-center gap-10 md:grid-cols-2 ${cardClass}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/massage-card.webp"
+              alt="Massage Therapy"
+              className="w-full max-w-sm justify-self-center rounded-2xl object-cover"
+            />
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Wellness</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
                 Licensed Massage Therapist
               </h2>
-              <p className='text-xl md:text-2xl text-gray-300 max-w-xl mb-8'>
-                Offering therapeutic massage services focused on relaxation, recovery, and
-                well-being.
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/60">
+                Therapeutic massage focused on relaxation, recovery, and well-being.
               </p>
               <a
-                href='https://massage.meowtin.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-block px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-full transition'
+                href="https://massage.meowtin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.04] px-7 py-4 text-sm uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-emerald-400/50 hover:bg-white/[0.08]"
               >
                 Book a Session →
               </a>
             </div>
-          </section>
-        </AnimatedSection>
+          </div>
+        </Reveal>
+      </section>
 
-        {/* KARAOKE */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col md:flex-row items-start justify-between py-16 px-4 max-w-7xl mx-auto w-full space-y-6 md:space-y-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-            <div className='flex flex-col items-center flex-grow'>
+      {/* KARAOKE */}
+      <section className={sectionClass}>
+        <Reveal>
+          <div className={`grid grid-cols-1 items-center gap-10 md:grid-cols-2 ${cardClass}`}>
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Karaoke</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src='/okie-dokie-logo.webp'
-                alt='Okie Dokie Karaoke Logo'
-                className='w-[700px] max-w-full mb-6 drop-shadow-lg'
+                src="/okie-dokie-logo.webp"
+                alt="Okie Dokie Karaoke"
+                className="mt-5 w-full max-w-md"
               />
-              <p className='text-3xl md:text-5xl text-gray-300 font-semibold text-center'>
+              <p className="mt-6 text-2xl font-semibold text-white md:text-3xl">
                 Every Thursday at the DIVE BAR
               </p>
             </div>
-            <div className='flex justify-center w-full md:w-auto md:ml-8'>
-              <video
-                src='/okie-dokie-reel.mp4'
-                autoPlay
-                muted
-                loop
-                playsInline
-                className='w-80 h-[42rem] object-cover rounded-2xl shadow-xl'
-              />
-            </div>
-          </section>
-        </AnimatedSection>
+            <video
+              src="/okie-dokie-reel.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="h-[42rem] w-80 justify-self-center rounded-2xl object-cover"
+            />
+          </div>
+        </Reveal>
+      </section>
 
-        {/* DJ */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col-reverse md:flex-row items-center justify-between py-20 px-4 max-w-7xl mx-auto w-full gap-12 md:gap-0 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-            <div className='flex justify-center w-full md:w-1/2'>
-              <img
-                src='/dj-flyer.webp'
-                alt='DJ Flyer'
-                className='w-full max-w-xs md:max-w-sm rounded-2xl shadow-xl object-cover'
-              />
-            </div>
-            <div className='flex flex-col items-center text-center w-full md:w-1/2'>
-              <img
-                src='/logo.webp'
-                alt='Meowtin DJ Logo'
-                className='w-[500px] max-w-full mb-8 drop-shadow-lg'
-              />
-              <p className='text-2xl md:text-4xl font-semibold text-gray-200'>DJ Styles:</p>
-              <p className='text-xl md:text-2xl text-gray-300 mt-4 max-w-xl'>
-                Dubstep, Trap, Chillstep, Dark Electro, EBSM, and Industrial
+      {/* DJ */}
+      <section className={sectionClass}>
+        <Reveal>
+          <div className={`grid grid-cols-1 items-center gap-10 md:grid-cols-2 ${cardClass}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/dj-flyer.webp"
+              alt="DJ Flyer"
+              className="w-full max-w-sm justify-self-center rounded-2xl object-cover"
+            />
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">DJ / Producer</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                Mister Goomba
+              </h2>
+              <p className="mt-5 text-sm uppercase tracking-[0.15em] text-white/40">DJ Styles</p>
+              <p className="mt-2 max-w-xl text-base leading-relaxed text-white/60">
+                Dubstep, Trap, Chillstep, Dark Electro, EBSM, and Industrial.
               </p>
             </div>
-          </section>
-        </AnimatedSection>
+          </div>
+        </Reveal>
+      </section>
 
-        {/* MUSIC */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col md:flex-row items-end justify-between py-10 px-4 max-w-7xl mx-auto w-full space-y-12 md:space-y-0 md:space-x-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-            <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
-              <a href='https://shortfusemusic.com' target='_blank' rel='noopener noreferrer'>
-                <img
-                  src='/short-fuse-logo.webp'
-                  alt='Short Fuse Logo'
-                  className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
-                />
-              </a>
-              <iframe
-                width='100%'
-                height='315'
-                src='https://www.youtube.com/embed/videoseries?list=PLnegzC5lUH_c55bne_g0ui2KIjizTfkQj'
-                title='Short Fuse Playlist'
-                frameBorder='0'
-                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                allowFullScreen
-                className='rounded-xl shadow-lg'
-              ></iframe>
-            </div>
-
-            <div className='flex flex-col items-center text-center w-full md:w-1/2 space-y-6'>
-              <a href='https://fartxbubble.com/' target='_blank' rel='noopener noreferrer'>
-                <img
-                  src='/fart-bubble-logo.webp'
-                  alt='Fart Bubble Logo'
-                  className='w-full max-w-full drop-shadow-lg hover:scale-105 transition-transform duration-300'
-                />
-              </a>
-              <iframe
-                width='100%'
-                height='315'
-                src='https://www.youtube.com/embed/videoseries?list=PLKKmm8SuBRnMununJdexGWuz19NW48MPU'
-                title='Fart Bubble Playlist'
-                frameBorder='0'
-                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                allowFullScreen
-                className='rounded-xl shadow-lg'
-              ></iframe>
-            </div>
-          </section>
-        </AnimatedSection>
-
-        {/* ART */}
-        <AnimatedSection delay={0.1}>
-          <ArtPreview />
-        </AnimatedSection>
-
-        {/* DEVELOPMENT */}
-        <AnimatedSection delay={0.1}>
-          <section className='flex flex-col items-center justify-center py-20 px-4 max-w-7xl mx-auto w-full space-y-12 rounded-2xl shadow-inner shadow-purple-900/60 bg-[linear-gradient(to_right,_#111827,_#000000,_#111827)]'>
-            <h2 className='text-3xl md:text-5xl font-bold text-center text-gray-100'>
-              Past and Present Development Projects
-            </h2>
-
-            <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-5xl'>
-              <a href='https://kink.com' target='_blank' rel='noopener noreferrer'>
-                <img
-                  src='/kink-logo.webp'
-                  alt='Kink.com'
-                  className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-                />
-              </a>
-              <a href='https://care2.com' target='_blank' rel='noopener noreferrer'>
-                <img
-                  src='/care2-logo.webp'
-                  alt='Care2.com'
-                  className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-                />
-              </a>
-              <a href='https://yahoo.com' target='_blank' rel='noopener noreferrer'>
-                <img
-                  src='/yahoo-logo.webp'
-                  alt='Yahoo.com'
-                  className='w-full max-w-[400px] object-contain rounded-2xl hover:scale-105 transition-transform duration-300 drop-shadow-lg mx-auto'
-                />
-              </a>
-            </div>
-
-            <ul className='text-gray-300 text-lg space-y-2 text-center'>
-              <li>
-                <a
-                  href='https://shortfusemusic.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:underline'
-                >
-                  Short Fuse official band website
+      {/* MUSIC */}
+      <section className={sectionClass}>
+        <Reveal>
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Music</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">Bands &amp; Projects</h2>
+        </Reveal>
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {[
+            {
+              logo: '/short-fuse-logo.webp',
+              alt: 'Short Fuse',
+              href: 'https://shortfusemusic.com',
+              list: 'PLnegzC5lUH_c55bne_g0ui2KIjizTfkQj',
+            },
+            {
+              logo: '/fart-bubble-logo.webp',
+              alt: 'Fart Bubble',
+              href: 'https://fartxbubble.com/',
+              list: 'PLKKmm8SuBRnMununJdexGWuz19NW48MPU',
+            },
+          ].map((m, i) => (
+            <Reveal key={m.alt} delay={i * 0.06}>
+              <div className={`flex flex-col items-center gap-6 ${cardClass}`}>
+                <a href={m.href} target="_blank" rel="noopener noreferrer">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={m.logo}
+                    alt={m.alt}
+                    className="w-full max-w-xs transition-transform duration-300 hover:scale-105"
+                  />
                 </a>
-              </li>
-              <li>
-                <a
-                  href='https://sinwavevegas.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:underline'
-                >
-                  Sinwave Live Music Venue official site
-                </a>
-              </li>
-              <li>
-                <a
-                  href='https://uke.meowtin.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:underline'
-                >
-                  Ukulele tabs site
-                </a>
-              </li>
-              <li>
-                <a
-                  href='https://fartxbubble.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:underline'
-                >
-                  Fart Bubble official band website
-                </a>
-              </li>
-              <li>
-                <a
-                  href='https://warboyguitars.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:underline'
-                >
-                  WARBOY Guitars official site
-                </a>
-              </li>
-            </ul>
-          </section>
-        </AnimatedSection>
-      </div>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={`https://www.youtube.com/embed/videoseries?list=${m.list}`}
+                  title={`${m.alt} Playlist`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="w-full rounded-xl"
+                />
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
-      <footer className='text-center text-sm text-gray-500 py-6'>© 2025 MEOWTIN</footer>
-    </main>
+      {/* ART */}
+      <section className={sectionClass}>
+        <Reveal>
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Art</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+            <a href="/art" className="hover:text-emerald-300">My Art, Enhanced</a>
+          </h2>
+          <div className="mt-8">
+            <ArtPreview />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* DEVELOPMENT */}
+      <section className={sectionClass}>
+        <Reveal>
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Development</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+            Past &amp; Present Projects
+          </h2>
+        </Reveal>
+        <div className="mt-8 grid grid-cols-1 items-center gap-8 sm:grid-cols-3">
+          {DEV_LOGOS.map((l) => (
+            <a key={l.alt} href={l.href} target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={l.src}
+                alt={l.alt}
+                className="mx-auto w-full max-w-[280px] rounded-2xl object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </a>
+          ))}
+        </div>
+        <ul className="mt-10 space-y-2 text-white/60">
+          {DEV_LINKS.map((d) => (
+            <li key={d.href}>
+              <a
+                href={d.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-emerald-300 hover:underline"
+              >
+                {d.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a
+          href="/dev"
+          className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-white/15 px-7 py-3.5 text-sm uppercase tracking-[0.25em] text-white/80 transition-all duration-300 hover:border-white/40 hover:text-white"
+        >
+          View Full Portfolio →
+        </a>
+      </section>
+    </PageShell>
   );
 }

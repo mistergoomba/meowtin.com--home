@@ -3,6 +3,8 @@
 import Image from 'next/legacy/image';
 import { ExternalLink } from 'lucide-react';
 
+import Reveal from '@/components/home/Reveal';
+
 type Project = {
   title: string;
   logo: string; // path under /public
@@ -51,52 +53,53 @@ const projects: Project[] = [
 
 export default function MusicProjects() {
   return (
-    <div className='space-y-6'>
-      <h1 className='text-3xl font-bold mb-4 text-center'>My Music Projects</h1>
-
-      {projects.map((p) => (
-        <article
-          key={p.title}
-          className='rounded-2xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-lg overflow-hidden hover:shadow-purple-500/20 transition-shadow'
-        >
-          <div className='grid grid-cols-1 md:grid-cols-4'>
-            {/* Logo (25%) */}
-            <div className='relative md:col-span-1 bg-black flex items-center justify-center p-6'>
-              <div className='relative w-56 h-56'>
-                <Image
-                  src={p.logo}
-                  alt={`${p.title} logo`}
-                  layout='fill'
-                  objectFit='contain'
-                  priority={false}
-                />
-              </div>
-            </div>
-
-            {/* Content (75%) */}
-            <div className='md:col-span-3 p-6 flex items-center'>
-              <div className='w-full flex flex-col md:flex-row md:items-center gap-4 md:gap-6'>
-                <div className='flex-1'>
-                  <h3 className='text-xl font-bold tracking-wide'>{p.title}</h3>
-                  <p className='mt-2 text-sm text-gray-300 leading-relaxed'>{p.blurb}</p>
+    <section className="mx-auto w-full max-w-[1100px] px-6 pb-16 md:px-10">
+      <div className="space-y-6">
+        {projects.map((p, i) => (
+          <Reveal key={p.title} delay={(i % 2) * 0.06}>
+            <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] transition-colors duration-300 hover:border-white/25">
+              <div className="grid grid-cols-1 md:grid-cols-4">
+                {/* Logo */}
+                <div className="flex items-center justify-center p-6 md:col-span-1">
+                  <div className="relative h-48 w-48">
+                    <Image
+                      src={p.logo}
+                      alt={`${p.title} logo`}
+                      layout="fill"
+                      objectFit="contain"
+                      priority={false}
+                    />
+                  </div>
                 </div>
 
-                <div className='flex-shrink-0'>
-                  <a
-                    href={p.url}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='inline-flex items-center gap-2 rounded-xl border border-purple-400/40 bg-purple-600/20 hover:bg-purple-600/30 px-4 py-2 text-sm font-semibold transition-colors'
-                  >
-                    Visit
-                    <ExternalLink className='w-4 h-4' />
-                  </a>
+                {/* Content */}
+                <div className="flex items-center p-6 md:col-span-3 md:pl-0">
+                  <div className="flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold uppercase tracking-wide text-white">
+                        {p.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-white/55">{p.blurb}</p>
+                    </div>
+
+                    <div className="flex-shrink-0">
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-3 text-xs uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-emerald-400/50 hover:bg-white/[0.08]"
+                      >
+                        Visit
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </section>
   );
 }
