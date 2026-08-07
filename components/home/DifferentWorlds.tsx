@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react';
 import Reveal from './Reveal';
 
 const WORLDS: { title: string; body: string; href: string; accent: string; Icon: LucideIcon }[] = [
-  { title: 'Developer', body: 'Building systems, web apps, and AI solutions.', href: '/dev', accent: '#2dd4bf', Icon: CodeXml },
+  { title: 'Developer', body: 'Building systems, web apps, and AI solutions.', href: '/development', accent: '#2dd4bf', Icon: CodeXml },
   { title: 'Wellness', body: 'Helping people move better and feel better.', href: '/wellness', accent: '#6ee7b7', Icon: Flower2 },
   { title: 'Music', body: 'Creating sound, atmosphere, and emotion.', href: '/music', accent: '#a855f7', Icon: AudioLines },
   { title: 'Video', body: 'Telling stories through motion and visuals.', href: '/videos', accent: '#f59e0b', Icon: SquarePlay },

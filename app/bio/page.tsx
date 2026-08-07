@@ -285,7 +285,7 @@ export default function BioPage() {
           ))}
         </ul>
         <a
-          href="/dev"
+          href="/development"
           className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-white/15 px-7 py-3.5 text-sm uppercase tracking-[0.25em] text-white/80 transition-all duration-300 hover:border-white/40 hover:text-white"
         >
           View Full Portfolio →

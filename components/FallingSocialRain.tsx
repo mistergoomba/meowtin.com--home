@@ -55,7 +55,7 @@ export default function FallingSocialRain({ eyeHovering }: { eyeHovering: boolea
       label: 'Subscribe on YouTube',
     },
     dev: {
-      url: '/dev/',
+      url: '/development/',
       label: 'Visit Developer Portfolio',
     },
     art: {

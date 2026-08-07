@@ -3,13 +3,15 @@
 import Reveal from './Reveal';
 import AssetSlot from './AssetSlot';
 
+// Leads with the flagship dev work, then the creative pieces. Slugs must match
+// app/development/config/projects.ts. `src` omitted => red MISSING IMAGE square.
 const PROJECTS = [
-  { title: 'AI Interview Avatar', desc: 'AI Interview Assistant', focus: 'AI Development', href: '/dev/ai-interview-avatar', external: false, accent: '#38bdf8', src: '/projects/ai-avatar.webp', label: 'AI Interview Avatar' },
-  { title: 'AI Casino Simulator', desc: 'AI Reinforcement Learning', focus: 'AI Development', href: '/dev/ai-casino-simulator', external: false, accent: '#2dd4bf', src: '/projects/ai-casino.webp', label: 'AI Casino Simulator' },
-  { title: 'Warboy Guitars', desc: 'Custom Shop Website', focus: 'Web Development', href: '/dev/warboy-guitars', external: false, accent: '#00ffaa', src: '/projects/warboy-site.webp', label: 'Warboy Guitars' },
+  { title: 'AI Agent Platform', desc: 'Tools & Skills for AI Agents', focus: 'AI Development', href: '/development/ai-agent-platform', external: false, accent: '#38bdf8', src: undefined, label: 'AI Agent Platform' },
+  { title: 'Casino Simulator', desc: 'Distributed Machine Learning', focus: 'Machine Learning', href: '/development/ai-casino-simulator', external: false, accent: '#2dd4bf', src: '/projects/ai-casino.webp', label: 'Casino Simulator' },
+  { title: 'Roswell Pro Audio', desc: 'Storefront & Fulfillment Tools', focus: 'Ecommerce', href: '/development/roswell-pro-audio', external: false, accent: '#00ffaa', src: '/projects/custom-mics-thumb.webp', label: 'Roswell Pro Audio' },
   { title: 'Apocalyptic Times', desc: 'Music Video', focus: 'Video Production', href: 'https://youtu.be/AHwqPe_nC2A', external: true, accent: '#f59e0b', src: '/projects/apocalyptic-times.webp', label: 'Apocalyptic Times' },
   { title: 'Aittala – Ashes', desc: 'Animated Music Video', focus: 'Animation / Video', href: 'https://youtu.be/7ZEgBegWVV4', external: true, accent: '#a855f7', src: '/projects/aittala-ashes.webp', label: 'Aittala – Ashes' },
-  { title: 'Meowtin Massage', desc: 'Massage Therapy Website', focus: 'Web Development', href: '/dev/meowtin-massage', external: false, accent: '#facc7a', src: '/projects/massage-site.webp', label: 'Meowtin Massage' },
+  { title: 'Warboy Guitars', desc: 'Custom Shop Website', focus: 'Web Development', href: '/development/warboy-guitars', external: false, accent: '#00ffaa', src: '/projects/warboy-site.webp', label: 'Warboy Guitars' },
 ] as const;
 
 export default function SelectedProjects() {
@@ -56,7 +58,7 @@ export default function SelectedProjects() {
       <Reveal delay={0.1}>
         <div className="mt-10 flex justify-center">
           <a
-            href="/dev"
+            href="/development"
             className="inline-flex items-center gap-3 rounded-2xl border border-white/15 px-7 py-3.5 text-sm uppercase tracking-[0.25em] text-white/80 transition-all duration-300 hover:border-white/40 hover:text-white"
           >
             View All Projects →

@@ -56,7 +56,7 @@ const SLIDES: Slide[] = [
     body:
       'Full-stack web and mobile developer. React, React Native, Node. Polished, interactive experiences that ship.',
     cta: 'Browse Projects',
-    href: '/dev',
+    href: '/development',
     accent: '#00ffaa',
   },
 ];

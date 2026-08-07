@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <section className="mx-auto w-full max-w-[1100px] px-6 pb-10 pt-40 md:px-10 md:pt-48">
         <Reveal>
           <a
-            href="/dev"
+            href="/development"
             className="text-xs uppercase tracking-[0.25em] text-white/40 transition-colors hover:text-white"
           >
             ← Back to Portfolio
@@ -48,6 +48,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <h1 className="mt-3 text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
             {displayTitle}
           </h1>
+
+          {(project.client || project.metric) && (
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+              {project.client && (
+                <span className="text-xs uppercase tracking-[0.15em] text-white/40">
+                  {project.client}
+                </span>
+              )}
+              {project.metric && (
+                <span className="text-sm font-semibold uppercase tracking-[0.15em] text-emerald-300">
+                  {project.metric}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center gap-2">
             {project.technologies.map((t) => (
@@ -83,12 +98,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </Reveal>
       </section>
 
-      {/* Screenshots */}
-      {images.length > 0 && (
-        <section className="mx-auto w-full max-w-[1100px] px-6 py-12 md:px-10">
-          <Reveal>
-            <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Screenshots</p>
-          </Reveal>
+      {/* Screenshots — or a single loud placeholder when there are none yet. */}
+      <section className="mx-auto w-full max-w-[1100px] px-6 py-12 md:px-10">
+        <Reveal>
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Screenshots</p>
+        </Reveal>
+        {images.length > 0 ? (
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {images.map((src, i) => (
               <Reveal key={src} delay={(i % 2) * 0.06}>
@@ -100,13 +115,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               </Reveal>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <Reveal>
+            <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
+              <div className="relative aspect-[16/9] w-full">
+                <AssetSlot label={`${project.navTitle} — screenshots`} />
+              </div>
+            </div>
+          </Reveal>
+        )}
+      </section>
 
       {/* Footer nav */}
       <section className="mx-auto w-full max-w-[1100px] px-6 pb-8 pt-4 md:px-10">
         <a
-          href="/dev"
+          href="/development"
           className="inline-flex items-center gap-3 rounded-2xl border border-white/15 px-7 py-3.5 text-sm uppercase tracking-[0.25em] text-white/80 transition-all duration-300 hover:border-white/40 hover:text-white"
         >
           ← All Projects

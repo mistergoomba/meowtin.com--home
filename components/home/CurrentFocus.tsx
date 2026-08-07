@@ -4,15 +4,18 @@ import Reveal from './Reveal';
 import AssetSlot from './AssetSlot';
 
 const CARDS = [
+  // Names the identity; the body carries the current AI focus. AI & Agent
+  // Engineering is the first section on /development, so the promise lands on
+  // arrival — no anchor link to keep in sync.
   {
-    title: 'AI Development',
-    body: 'Building AI tools, agents, and simulations that solve real-world problems.',
-    cta: 'Explore AI Projects',
-    href: '/dev',
+    title: 'Software & AI',
+    body: '25 years of full-stack work. Right now: building tools and skills for AI agents.',
+    cta: 'See the Work',
+    href: '/development',
     external: false,
     accent: '#38bdf8',
     src: '/focus/ai.webp',
-    label: 'AI Development',
+    label: 'Software & AI Development',
   },
   {
     title: 'Meowtin Massage',

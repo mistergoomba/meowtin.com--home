@@ -148,7 +148,7 @@ meowtin.com--home/
 
 ### Adding New Content
 
-1. **Projects**: Update `app/dev/config/projects.ts` with new project data
+1. **Projects**: Update `app/development/config/projects.ts` with new project data
 2. **Art Gallery**: Add images to `public/art/` and update `public/art-index.json`
 3. **Music Projects**: Modify `components/MusicProjects.tsx` with new projects
 4. **Videos**: Update video data in `app/videos/page.tsx`

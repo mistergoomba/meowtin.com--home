@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import SocialIcons from '@/components/SocialIcons';
 
 const NAV = [
-  { label: 'Developer', href: '/dev' },
+  { label: 'Developer', href: '/development' },
   { label: 'Creative', href: '/creative' },
   { label: 'Wellness', href: '/wellness' },
   { label: 'Bio', href: '/bio' },

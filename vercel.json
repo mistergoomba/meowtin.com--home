@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/dev/ai-interview-avatar",
+      "destination": "/development/ai-clinical-assessment",
+      "permanent": true
+    },
+    {
+      "source": "/dev/mic-builder",
+      "destination": "/development/roswell-pro-audio",
+      "permanent": true
+    },
+    {
+      "source": "/dev/:slug*",
+      "destination": "/development/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/dev",
+      "destination": "/development",
+      "permanent": true
+    }
+  ]
+}
