@@ -13,6 +13,8 @@ const config: Config = {
       fontFamily: {
         handwritten: ['Shadows Into Light', 'cursive'],
         'share-tech': ['var(--font-share-tech)', 'sans-serif'],
+        cormorant: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        anton: ['var(--font-anton)', 'Impact', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

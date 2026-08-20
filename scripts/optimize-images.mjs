@@ -28,6 +28,13 @@ const config = {
   "projects/apocalyptic-times.jpg": { maxWidth: 420, quality: 76 },
   "projects/ai-casino.png":         { maxWidth: 420, quality: 78 },
   "projects/ai-avatar.png":         { maxWidth: 420, quality: 78 },
+  // Flagship card renders at ~600 CSS px (half of the 1200px container).
+  "projects/agent-platform-thumb.png":    { maxWidth: 1200, quality: 80 },
+  // Portrait crop for the 3:4 home-page tile (~200 CSS px).
+  "projects/agent-platform-portrait.png": { maxWidth: 420,  quality: 80 },
+  // Detail-page architecture diagrams (~530 CSS px in the 2-col grid).
+  "projects/agent-platform-tools.png":    { maxWidth: 1100, quality: 80 },
+  "projects/agent-platform-orgs.png":     { maxWidth: 1100, quality: 80 },
   "massage-card.png":            { maxWidth: 800,  quality: 82 },
   "dj-flyer.png":                { maxWidth: 800,  quality: 82 },
   "qr-header.png":               { maxWidth: 900,  quality: 82 },

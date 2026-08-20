@@ -33,6 +33,9 @@ export type Project = {
   url?: string;
   description: string; // HTML
   technologies: string[];
+  /** Heading over the image grid. Defaults to "Screenshots" — override when the
+   *  images are diagrams or concept art rather than UI captures. */
+  imagesLabel?: string;
   thumbnail?: string;
   preview?: string; // legacy site-capture video — not shown on the redesigned pages
   screenshots: string[]; // may include .mp4 — detail page filters these out
@@ -43,7 +46,7 @@ export const SECTIONS: { id: SectionId; label: string; blurb: string }[] = [
     id: 'ai',
     label: 'AI & Agent Engineering',
     blurb:
-      'Where my work is focused right now: building the tools and skills AI agents actually call, and making their output trustworthy enough to run a business on.',
+      'Where my work is focused right now: building the tools and skills that turn AI agents into a virtual workforce — and making their output trustworthy enough to run a business on.',
   },
   {
     id: 'platforms',
@@ -71,29 +74,36 @@ export const projects: Project[] = [
   // ────────────────────────────────────────────────────────────────────────
   {
     slug: 'ai-agent-platform',
-    title: 'AI Agent\nTooling Platform',
+    title: 'AI Agent Platform:\nA Virtual Workforce',
     navTitle: 'AI Agent Platform',
-    category: 'AI Development',
+    category: 'AI Agents & Tooling',
     section: 'ai',
     order: 1,
     flagship: true,
     flagshipRank: 1,
     client: 'Enterprise client — under NDA',
-    metric: '37 tool groups · 205 methods',
+    metric: '10 agents · 21 skills · 205 tool methods',
     problem:
-      'An agent that re-types its own data will miscount rows and claim work it never did. Nobody can run a business on that.',
+      'Most of what a growing company pays for isn’t the work — it’s the coordination around it. Status meetings, handoffs, routing information between systems that don’t talk.',
     result:
-      'Rebuilt so the model never touches the data — a whole class of errors went to zero, and the token bill went down with it.',
+      'A virtual workforce: specialized AI agents with shared memory and real authority to act, running that coordination layer 24/7 through the company’s actual systems.',
     description: `
-      I build the <strong>tools and skills that AI agents use</strong> — the layer between a language model and the systems it&#39;s supposed to operate. This is an enterprise platform where a fleet of agents does real business work (tasks, pipeline, CRM, content, reporting) and people supervise them from a dashboard.<br/><br/>
-      The problem I was brought in to solve is the one that kills most AI products: <strong>you can&#39;t trust the numbers</strong>. When a model narrates its own tool results back to you in prose, it miscounts rows, invents entries, and confidently reports actions it never performed. Prompt-engineering around that is a losing game.<br/><br/>
-      So I fixed it at the architecture layer instead. The server captures the <strong>structured payload the tool actually returned</strong>, and the UI renders it directly — counts are a literal array length, rows map one-to-one, and the model never sees the data at all. That took a persistent class of data errors <strong>to zero</strong>, and cut the token cost of every request that used to make the model re-type a result set.<br/><br/>
-      On top of that: a <strong>tool layer of 37 groups and 205 methods</strong> with schema validation at every boundary, so a malformed agent call fails loudly instead of silently writing garbage. Per-organization authorization so an agent can&#39;t reach another org&#39;s data. An anomaly detector that flags fabrication and count drift. And a test that asserts every tool method has a skill teaching an agent how to use it.<br/><br/>
-      I also converted <strong>12 dashboard widgets</strong> to read through that same tool layer, so humans and agents finally share one data path instead of two that drift apart — and rebuilt the team&#39;s Kubernetes dev loop so an edit on a workstation is live with no rebuild and no restart.<br/><br/>
-      <strong>134 commits in three weeks</strong> across chat UI, widgets, tool handlers, and infrastructure. Every bug fix shipped with a regression test proven to fail before and pass after.
+      An enterprise platform that gives a company a <strong>virtual workforce</strong> — a fleet of AI agents that do real business work around the clock, while the humans stay at the edge doing the judgment, relationship, and creative work that actually needs a person.<br/><br/>
+      The premise is that most of what a growing company spends on isn&#39;t the work itself, it&#39;s the <strong>coordination around the work</strong>: status meetings, email chains, manual handoffs, someone re-typing a number from one system into another. That layer is what the agents replace.<br/><br/>
+      <strong>The agents.</strong> Each one is specialized by function rather than being one general-purpose chatbot — revenue and pipeline, operations, marketing, finance, customer success, executive assistant, communications, and a QA agent whose job is watching the other agents&#39; output for drift. They have persistent memory, they share context with each other, and they run continuously instead of waiting to be asked. People talk to them in chat, watch what they&#39;re doing, and set what they&#39;re allowed to touch.<br/><br/>
+      <strong>Organizations and sub-organizations.</strong> The whole platform is scoped to an org hierarchy, and <strong>authority inherits downward</strong>. A parent org&#39;s agent can act across its children; a child org&#39;s agent can&#39;t see sideways or upward. That scoping isn&#39;t a UI convention — it&#39;s injected at the data layer, so an agent can&#39;t ask for another organization&#39;s data even if it tries. For a product where the whole value proposition is handing autonomous software real access to your business, that boundary is the thing that makes it adoptable.<br/><br/>
+      <strong>Tools and skills — this is the part I build.</strong> The distinction matters: <strong>tools are the APIs</strong>, the concrete things an agent is capable of doing, and <strong>skills are how and when to use them</strong> — the instructions that turn raw capability into judgment. An agent with a tool can technically call it; an agent with the matching skill knows it should. The platform runs <strong>37 tool groups across 205 methods, with 21 skills</strong> teaching 10 agents how to wield them.<br/><br/>
+      Those tools come in three flavors:<br/><br/>
+      <strong>Internal</strong> — the company&#39;s own operating surface: tasks, tickets, deals and pipeline, metrics, agent management, and the dashboard widgets people read.<br/>
+      <strong>Integrations</strong> — the systems a business already runs on: Google Workspace, Salesforce, Intuit, calendar and email.<br/>
+      <strong>Creative</strong> — the ones that make an agent able to actually produce something rather than just report: HeyGen for video, ElevenLabs for voice, Brandfetch for brand assets.<br/><br/>
+      Every one of them is parsed and validated at the boundary, so a malformed agent call fails loudly instead of quietly writing garbage into a live business system. There&#39;s a test asserting that <em>every</em> tool method has a skill granting it — closing the gap between what an agent can reach and what it&#39;s been taught to reach.<br/><br/>
+      <strong>One thing worth calling out.</strong> When a language model narrates its own tool results back to you in prose, it miscounts rows and invents entries — and a virtual workforce nobody can trust the numbers from is just an expensive demo. So the product renders the <strong>structured payload the tool actually returned</strong>, one-to-one, as real components. Counts are a literal array length. The model never touches the data. That took a persistent class of data errors to zero and cut the token cost at the same time, since the model no longer re-types result sets it already fetched.<br/><br/>
+      Built on Next.js and React with a TypeScript, PostgreSQL, and Drizzle data layer, deployed on Kubernetes and AWS.
     `,
     technologies: [
       'AI / LLM Agents',
+      'Agent Tooling',
       'Next.js',
       'React',
       'TypeScript',
@@ -102,7 +112,14 @@ export const projects: Project[] = [
       'Kubernetes',
       'AWS',
     ],
-    screenshots: [],
+    // Client is under NDA, so these are architecture illustrations rather than
+    // UI captures — label the section honestly.
+    imagesLabel: 'Architecture',
+    thumbnail: '/projects/agent-platform-thumb.webp',
+    screenshots: [
+      '/projects/agent-platform-tools.webp',
+      '/projects/agent-platform-orgs.webp',
+    ],
   },
   {
     slug: 'ai-clinical-assessment',

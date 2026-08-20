@@ -98,18 +98,27 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </Reveal>
       </section>
 
-      {/* Screenshots — or a single loud placeholder when there are none yet. */}
+      {/* Imagery — or a single loud placeholder when there is none yet. */}
       <section className="mx-auto w-full max-w-[1100px] px-6 py-12 md:px-10">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">Screenshots</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">
+            {project.imagesLabel ?? 'Screenshots'}
+          </p>
         </Reveal>
         {images.length > 0 ? (
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          // A lone image goes full width — stranding it in half a 2-column grid
+          // reads as a layout bug.
+          <div
+            className={`mt-6 grid grid-cols-1 gap-6 ${images.length > 1 ? 'sm:grid-cols-2' : ''}`}
+          >
             {images.map((src, i) => (
               <Reveal key={src} delay={(i % 2) * 0.06}>
                 <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
                   <div className="relative aspect-[16/10] w-full">
-                    <AssetSlot src={src} alt={`${project.navTitle} screenshot ${i + 1}`} />
+                    <AssetSlot
+                      src={src}
+                      alt={`${project.navTitle} — ${project.imagesLabel ?? 'screenshot'} ${i + 1}`}
+                    />
                   </div>
                 </div>
               </Reveal>
@@ -119,7 +128,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <Reveal>
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
               <div className="relative aspect-[16/9] w-full">
-                <AssetSlot label={`${project.navTitle} — screenshots`} />
+                <AssetSlot
+                  label={`${project.navTitle} — ${project.imagesLabel ?? 'screenshots'}`}
+                />
               </div>
             </div>
           </Reveal>

@@ -1,5 +1,5 @@
-import HomePage from '@/components/HomePage';
+import Gate from '@/components/gate/Gate';
 
 export default function HomePagePage() {
-  return <HomePage />;
+  return <Gate />;
 }

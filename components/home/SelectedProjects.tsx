@@ -6,7 +6,7 @@ import AssetSlot from './AssetSlot';
 // Leads with the flagship dev work, then the creative pieces. Slugs must match
 // app/development/config/projects.ts. `src` omitted => red MISSING IMAGE square.
 const PROJECTS = [
-  { title: 'AI Agent Platform', desc: 'Tools & Skills for AI Agents', focus: 'AI Development', href: '/development/ai-agent-platform', external: false, accent: '#38bdf8', src: undefined, label: 'AI Agent Platform' },
+  { title: 'AI Agent Platform', desc: 'A Virtual AI Workforce', focus: 'AI Agents & Tooling', href: '/development/ai-agent-platform', external: false, accent: '#38bdf8', src: '/projects/agent-platform-portrait.webp', label: 'AI Agent Platform' },
   { title: 'Casino Simulator', desc: 'Distributed Machine Learning', focus: 'Machine Learning', href: '/development/ai-casino-simulator', external: false, accent: '#2dd4bf', src: '/projects/ai-casino.webp', label: 'Casino Simulator' },
   { title: 'Roswell Pro Audio', desc: 'Storefront & Fulfillment Tools', focus: 'Ecommerce', href: '/development/roswell-pro-audio', external: false, accent: '#00ffaa', src: '/projects/custom-mics-thumb.webp', label: 'Roswell Pro Audio' },
   { title: 'Apocalyptic Times', desc: 'Music Video', focus: 'Video Production', href: 'https://youtu.be/AHwqPe_nC2A', external: true, accent: '#f59e0b', src: '/projects/apocalyptic-times.webp', label: 'Apocalyptic Times' },
