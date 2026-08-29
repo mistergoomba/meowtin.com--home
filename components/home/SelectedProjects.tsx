@@ -12,7 +12,7 @@ import AssetSlot from './AssetSlot';
 const PROJECTS = [
   { title: 'AI & Agent Engineering', desc: 'Tools, Skills & Trust', focus: 'Current Focus', href: '/development/ai', external: false, accent: '#38bdf8', src: '/projects/agent-platform-portrait.webp', label: 'AI & Agent Engineering' },
   { title: 'Petition Platform', desc: 'Viral-Scale Rebuild', focus: 'Web Platform', href: '/development/petition-platform', external: false, accent: '#2dd4bf', src: '/projects/petition-thumb.webp', label: 'Petition Platform' },
-  { title: 'Roswell Custom Shop', desc: 'Custom Mic Builder', focus: 'Ecommerce', href: '/development/roswell-custom-shop', external: false, accent: '#00ffaa', src: '/projects/custom-mics-thumb.webp', label: 'Roswell Custom Shop' },
+  { title: 'Roswell Mic Builder', desc: 'Product Configurator', focus: 'Ecommerce', href: '/development/roswell-mic-builder', external: false, accent: '#00ffaa', src: '/projects/custom-mics-thumb.webp', label: 'Roswell Mic Builder' },
   { title: 'Apocalyptic Times', desc: 'Music Video', focus: 'Video Production', href: 'https://youtu.be/AHwqPe_nC2A', external: true, accent: '#f59e0b', src: '/projects/apocalyptic-times.webp', label: 'Apocalyptic Times' },
   { title: 'Aittala – Ashes', desc: 'Animated Music Video', focus: 'Animation / Video', href: 'https://youtu.be/7ZEgBegWVV4', external: true, accent: '#a855f7', src: '/projects/aittala-ashes.webp', label: 'Aittala – Ashes' },
   { title: 'Warboy Guitars', desc: 'Custom Shop Website', focus: 'Web Development', href: '/development/warboy-guitars', external: false, accent: '#00ffaa', src: '/projects/warboy-site.webp', label: 'Warboy Guitars' },

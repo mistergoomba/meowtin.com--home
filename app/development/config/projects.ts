@@ -169,7 +169,7 @@ export const projects: Project[] = [
     client: 'Roswell Pro Audio',
     metric: '15 internal tools · 7 sales channels',
     description: `
-      The operations half of an ongoing solo engagement for a professional microphone manufacturer. (The customer-facing half is the <a href="/development/roswell-custom-shop" class="underline decoration-emerald-400/40 underline-offset-4">custom mic builder</a>.)<br/><br/>
+      The operations half of an ongoing solo engagement for a professional microphone manufacturer. (The customer-facing half is the <a href="/development/roswell-mic-builder" class="underline decoration-emerald-400/40 underline-offset-4">custom mic builder</a>.)<br/><br/>
       When I started, staff were <strong>handwriting serial numbers at the shipping bench and transcribing them into spreadsheets</strong> — at exactly the point where an error is most expensive, because a wrong serial breaks warranty lookup for the entire life of the microphone.<br/><br/>
       I replaced that with a <strong>suite of 15 internal tools</strong> (~7,900 lines of PHP against a 20+ table MySQL schema) that pulls the live order from <strong>ShipStation across 7 sales channels</strong> — Shopify, Amazon, eBay, Reverb, and more — identifies which line items are actually microphones, prompts for serials at the bench, and writes a full lifecycle record. Every mic they build is now a queryable row instead of a line of handwriting.<br/><br/>
       Most of the real work was the <strong>long tail of messy order data</strong> that separates a demo from a tool people use every day: Reverb never returns a customer email and the database required one; merged orders delete the number you searched for; cancelled shipping labels zero out a line&#39;s quantity so nothing renders; matched pairs arrive as two line items for the same two physical microphones. Each one now has a visible, reversible prompt rather than a silent guess — the governing rule is <strong>suggest, never silently expand</strong>.<br/><br/>
@@ -189,6 +189,10 @@ export const projects: Project[] = [
   // ────────────────────────────────────────────────────────────────────────
   // Commerce
   // ────────────────────────────────────────────────────────────────────────
+  // Short Fuse is TWO projects for the same reason Roswell is: a brand site and a
+  // commerce build, in separate repos, sharing one set of design tokens. Each
+  // description links the other so the relationship is never hidden. If the tokens
+  // ever stop being shared, delete that claim from BOTH entries.
   {
     slug: 'short-fuse-shop',
     title: 'Short Fuse\nMerch Store',
@@ -196,28 +200,55 @@ export const projects: Project[] = [
     category: 'Ecommerce',
     section: 'commerce',
     order: 1,
-    status: 'in-progress',
     client: 'Short Fuse',
-    metric: 'In development',
-    url: 'https://shortfusemusic.com',
+    metric: '30 products · 110 tests',
+    url: 'https://shop.shortfusemusic.com',
     description: `
-      <em>In development — this entry describes work in progress, not a shipped store.</em><br/><br/>
-      A merch store for <strong>Short Fuse</strong>, bolted onto the band&#39;s existing Next.js site rather than handed off to a hosted platform. The deciding factor is margin: on the volumes an independent band actually moves, per-transaction fees and a monthly platform subscription eat a meaningful share of what a shirt earns — and a band&#39;s catalog is small enough that most of what those platforms charge for goes unused.<br/><br/>
-      So the plan is a <strong>custom commerce back end</strong>: a small product and variant model, Stripe for payments so card data never touches my infrastructure, and a fulfillment path that tells whoever is packing boxes what to put in them. Shirt sizes, record variants, bundles, and the merch-table reality of selling the same items in person on a Friday night.<br/><br/>
-      It also has to survive the traffic pattern a band actually has, which is nothing at all for weeks and then a spike the hour a record drops.<br/><br/>
-      I&#39;ll update this entry with real numbers once it is live. Until then it is here because it is what I am building next, not because it is done.
+      A custom merch store for <strong>Short Fuse</strong>, replacing the band&#39;s Big Cartel shop. (The band&#39;s <a href="/development/short-fuse" class="underline decoration-emerald-400/40 underline-offset-4">official site</a> is a separate codebase that shares this one&#39;s design system.)<br/><br/>
+      Hosted platforms charge a monthly subscription plus a cut of every sale, and on the volumes an independent band actually moves that is a meaningful share of what a shirt earns — for a 30-product catalog that uses almost none of what the subscription buys.<br/><br/>
+      Built as a <strong>pnpm workspace</strong>: a Next.js storefront and admin, Drizzle over Postgres, and a framework-free <code>core</code> package holding every calculation that decides what a customer is charged. The route handlers are thin wrappers over it, and it is unit-tested on its own. <strong>110 tests, ~13,000 lines of TypeScript, 11 tables.</strong><br/><br/>
+      <strong>The browser never sends a price.</strong> It sends product ids, sizes, quantities and a country; <code>/api/cart</code> and <code>/api/checkout</code> both reload every product from the database and recompute the total through the same function, and the Stripe line items are built from that result. A tampered cart in <code>localStorage</code> changes what the customer sees and never what they are charged — there is a test for exactly that.<br/><br/>
+      <strong>Shipping had to be quoted before payment.</strong> Stripe Checkout collects the address <em>after</em> the session is created, so it cannot pick a destination-based rate for you. The review step asks for the country first, quotes the flat rate from it, and locks the session to that one country — otherwise a customer is quoted the US rate and ships to Australia.<br/><br/>
+      <strong>An order only becomes paid from a signature-verified webhook.</strong> Reaching the success page proves nothing — the customer could navigate there directly. Every Stripe event id is inserted under a unique index before the event is handled, so a redelivery is a no-op, verified with a concurrency test; orders whose webhook never arrived are reconciled against the Stripe API rather than left pending forever. Line items snapshot the product name, size and price at purchase, so a later price change cannot rewrite an old receipt.<br/><br/>
+      Behind it, an admin the band runs themselves: products and per-size availability, categories, cart offers with four fixed trigger types, order status, and store settings. The Big Cartel importer is idempotent and refuses to clobber fields the admin has since edited.<br/><br/>
+      Two things are deliberately not done. <strong>Tax is off</strong> — the band is not registered to collect anywhere; orders still carry a tax field and the webhook records whatever Stripe reports, so turning on Stripe Tax later is a config change rather than a migration. And <strong>per-size stock could not be recovered from Big Cartel</strong>, whose export marks every option as available including on products the store itself shows as sold out — so size availability is derived from the product, and low stock is set by hand.
     `,
-    technologies: ['Next.js', 'React', 'TypeScript', 'Stripe', 'PostgreSQL'],
-    screenshots: [],
+    technologies: [
+      'Next.js',
+      'TypeScript',
+      'PostgreSQL',
+      'Drizzle',
+      'Stripe',
+      'Zod',
+      'Vitest',
+      'Vercel',
+    ],
+    thumbnail: '/projects/short-fuse-shop-thumb.webp',
+    // Order is deliberate: storefront, then the two screens that carry the
+    // engineering claims (the offer strip and the country-before-payment step),
+    // then a product page, then the admin. `-5` is a REAL order and its customer
+    // name, email and shipping address are redacted in the image itself — do not
+    // replace it with an unredacted capture.
+    screenshots: [
+      '/projects/short-fuse-shop-1.webp',
+      '/projects/short-fuse-shop-2.webp',
+      '/projects/short-fuse-shop-3.webp',
+      '/projects/short-fuse-shop-4.webp',
+      '/projects/short-fuse-shop-5.webp',
+    ],
   },
   // Roswell is ONE ongoing engagement presented as TWO projects, because they
   // sell to different readers: the builder is a customer-facing configurator, the
   // back office is operations software. Both descriptions point at each other so
   // the relationship is never hidden.
   {
-    slug: 'roswell-custom-shop',
+    slug: 'roswell-mic-builder',
     title: 'Roswell Pro Audio\nCustom Mic Builder',
-    navTitle: 'Roswell Custom Shop',
+    // The product being sold here is the builder app, not Roswell's "Custom Shop"
+    // product line — so the nav label names the app. (The phrase "Custom Shop"
+    // still appears in the description below, where it correctly refers to
+    // Roswell's own line that the catalog manager administers.)
+    navTitle: 'Roswell Mic Builder',
     category: 'Ecommerce / Product Configurator',
     section: 'commerce',
     order: 0,
@@ -382,16 +413,33 @@ export const projects: Project[] = [
     category: 'Web Development',
     section: 'brands',
     order: 2,
+    client: 'Short Fuse — my band',
     url: 'https://shortfusemusic.com',
     description: `
-      Designed and developed a high‑impact website for <strong>Short Fuse</strong> — my band of 20+ years, where I handle <strong>electronics</strong> and <strong>keyboards</strong> — to centralize music, videos, and updates in a bold, immersive format.<br/><br/>
-      Built with <strong>React</strong> + <strong>Next.js</strong>, the site features embedded music videos, fast navigation, gothic styling, and responsive layouts that hold up on stage-side phones and big desktop screens alike. The UI focuses on legibility and punch while keeping performance tight.<br/><br/>
-      Beyond the site itself, I&#39;ve led <strong>album production</strong>, <strong>video production</strong>, and much of the band&#39;s <strong>album &amp; flyer art</strong> over the years — so the design language mirrors our sound and visual identity across releases, flyers, and social promos.
+      The official site for <strong>Short Fuse</strong> — my band of 20+ years, where I play <strong>electronics</strong> and <strong>keyboards</strong> — rebuilt as a single landing page plus an electronic press kit.<br/><br/>
+      Built with <strong>Next.js 15</strong> and <strong>React 19</strong>, statically exported: no server components with runtime data, no API routes, nothing to keep running. <strong>Tailwind 4</strong> configured entirely in CSS through <code>@theme</code>, with a palette of three colors — ink, bone, blood — because artwork and photography supply everything else.<br/><br/>
+      <strong>The design tokens are shared with the <a href="/development/short-fuse-shop" class="underline decoration-emerald-400/40 underline-offset-4">merch store</a></strong>, which is a separate codebase on its own subdomain. That is what makes the two sites read as one brand instead of two projects that happen to share a logo.<br/><br/>
+      <strong>Every piece of swappable content lives in one file.</strong> The section components hold layout and no copy at all, so changing a show, a release, a video or a merch link never means editing JSX. Adding a show is an object and a flyer image — and the flyer strip measures whether its contents overflow their track and renders carousel arrows only if they do, so one flyer and five flyers both look deliberate with nothing to configure.<br/><br/>
+      Show details are repeated as text fields even though they are printed on the poster: <strong>a flyer image is invisible to search engines and screen readers</strong>, and the alt text is assembled from those fields. Videos are click-to-load, so nothing is requested from YouTube until someone presses play. Reduced motion is honoured globally, and the film grain is an inline SVG rather than a network request.<br/><br/>
+      Beyond the site, I have led <strong>album production</strong>, <strong>video production</strong>, and much of the band&#39;s <strong>album &amp; flyer art</strong> over the years — so the design language mirrors the sound rather than being applied to it.
     `,
-    technologies: ['React', 'Next.js', 'Ecommerce', 'Video Editing', 'Music Production'],
-    thumbnail: '/projects/sites-thumb.webp',
-    preview: '/projects/sites-video-small.mp4',
-    screenshots: ['/projects/sites-video.mp4', '/projects/sites-1.webp', '/projects/sites-2.webp'],
+    technologies: [
+      'Next.js',
+      'React',
+      'Tailwind CSS',
+      'Static Export',
+      'Vercel',
+      'Accessibility',
+    ],
+    // The old sites-*.webp captures were of the pre-redesign site and have been
+    // retired. These are the rebuilt page: hero, the release block, and the show
+    // strip above the merch handoff into the store.
+    thumbnail: '/projects/short-fuse-thumb.webp',
+    screenshots: [
+      '/projects/short-fuse-1.webp',
+      '/projects/short-fuse-2.webp',
+      '/projects/short-fuse-3.webp',
+    ],
   },
   {
     slug: 'meowtin-massage',

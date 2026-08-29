@@ -145,11 +145,49 @@ catalog publish. Scrub customer names and real order numbers first.
 Check whether either existing `custom-mics-1.webp` / `custom-mics-2.webp` is
 actually a back-office capture rather than a storefront one — if so, move it.
 
-### 0b. Short Fuse Shop — `short-fuse-shop`
+### 0b. Short Fuse Shop — `short-fuse-shop` ✅
 
-Not blocking, and **deliberately empty**: the store isn't built yet, the entry
-carries an `IN PROGRESS` badge, and a screenshot of something that doesn't exist
-would be the exact wrong fix. Fill this in when the store ships.
+Thumbnail and five detail images are in. **`short-fuse-shop-5.webp` is a real
+order and its customer name, email and shipping address are painted out in the
+image itself** — if that shot is ever re-taken, redact it again before it lands
+in `public/`. No Stripe dashboard captures, ever.
+
+Still open, if the entry ever wants more:
+
+- Product detail on a **shirt** rather than the album, so the size selector and a
+  sold-out size are visible — that's the per-size availability claim, and the
+  current product shot (an album) can't carry it.
+- The offers editor with the four trigger types showing.
+- Mobile storefront. Merch gets bought on phones.
+
+### 0c. Short Fuse site — `short-fuse` ✅
+
+Thumbnail and three detail images are in, replacing the pre-redesign
+`sites-*.webp` captures. The Next.js dev-overlay badge was painted out of the
+bottom-left corner of all three — **shoot the production build next time**, or
+the badge has to be cropped again.
+
+Still open:
+
+- **The shows strip with 3+ flyers**, so the carousel arrows actually render. The
+  current shot has two flyers, which fit, so the auto-carousel the description
+  makes a point of is invisible in it.
+- `/epk` — nothing else in the portfolio shows a press kit.
+- One phone-shaped mobile hero.
+
+**Captures predate the animation commit.** If that work changed the static
+layout, these three need reshooting; if it only added motion, they stand.
+
+**Stills, not video.** `projectImages()` filters `.mp4` out, and the `preview`
+mp4s are legacy and no longer rendered on the redesigned pages.
+
+### 0d. Both Short Fuse projects — the shared-design-system shot
+
+One composite image: the band site's merch row beside the store's homepage.
+That's the "one design system across two repos" claim made visible, and it's the
+only image that argues for both projects at once. Goes in **both** entries'
+`screenshots` arrays. Both halves already exist as source captures —
+`short-fuse-3.webp` has the merch row, `short-fuse-shop-1.webp` the storefront.
 
 ### 1. Sage & Madison — `sage-and-madison`
 
