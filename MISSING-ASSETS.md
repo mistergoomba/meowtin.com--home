@@ -14,27 +14,41 @@ push into `screenshots`) on that project in
 
 ## Done
 
-### AI Agent Platform — `ai-agent-platform` ✅
+### AI capability page — `/development/ai` ✅
 
-Flagship #1. All imagery in place; no red squares remain on this project.
+The three AI engagements are no longer project entries. They were subcontracted
+and stay unbranded, with no public URL and no shareable screenshot, so they now
+live on **/development/ai** as capability with evidence attached. See the header
+comment in [app/development/config/ai.ts](app/development/config/ai.ts).
 
-| Asset | Status |
-|---|---|
-| Card thumbnail (`/development`) | ✅ `agent-platform-thumb.webp` — 1200px, 57 KB |
-| Home page tile (3:4) | ✅ `agent-platform-portrait.webp` — 420px, 28 KB |
-| Detail — tools & skills layer | ✅ `agent-platform-tools.webp` — 1100px, 46 KB |
-| Detail — orgs & inherited authority | ✅ `agent-platform-orgs.webp` — 1100px, 43 KB |
+**That page needs no photography.** The 14 ability cards use drawn line-art
+glyphs from
+[components/development/CapabilityGlyph.tsx](components/development/CapabilityGlyph.tsx)
+— stroke-only SVG inheriting `currentColor`, so there is no asset to go missing
+and nothing to commission. A page of red squares would have been worse than no
+imagery at all.
 
-All four are AI-generated concept illustrations, not UI captures — the client is
-under NDA. The detail-page section is labelled **Architecture** rather than
-Screenshots (`imagesLabel` on the project) so that's stated honestly.
+The four existing illustrations are still in use:
+
+| Asset | Where | Status |
+|---|---|---|
+| `agent-platform-thumb.webp` | `/development` AI spotlight + `/development/ai` Architecture | ✅ 1200px, 57 KB |
+| `agent-platform-portrait.webp` | Home page tile (3:4) | ✅ 420px, 28 KB |
+| `agent-platform-tools.webp` | `/development/ai` Architecture | ✅ 1100px, 46 KB |
+| `agent-platform-orgs.webp` | `/development/ai` Architecture | ✅ 1100px, 43 KB |
+
+All four are AI-generated concept illustrations, not UI captures. The section on
+`/development/ai` is headed **Architecture** and says so in its blurb — implying
+they were screenshots would undercut a page whose whole argument is care with
+the truth.
 
 The portrait tile is a centered 3:4 crop of the card thumbnail source, so it
 stays in sync — rerun `npm run optimize:images` after replacing any PNG.
 
-If NDA-safe UI captures ever become available (branding, org names,
-deal/contact data, and people's names scrubbed or replaced with synthetic data),
-they'd be an upgrade over the diagrams — but they're not blocking.
+Two assets are now **orphaned** and can be deleted once you're sure the copy has
+settled: `ai-casino.webp` / `.png`, `casino-simulator-thumb.webp`,
+`casino-simulator-1.webp`, and `ai-avatar.webp` / `.png` — all belonged to the
+removed casino-simulator and clinical-assessment project entries.
 
 #### Prompts used
 
@@ -152,10 +166,19 @@ easier than screenshots.
 
 ## Home page
 
-✅ Clear — no red squares. The AI Agent Platform tile in
-`components/home/SelectedProjects.tsx` now uses
-`agent-platform-portrait.webp`. Note this grid is **portrait (3:4)**, so any
-replacement needs its own crop rather than the landscape card thumbnail.
+✅ Clear — no red squares. Two tiles in
+`components/home/SelectedProjects.tsx` changed when the AI project pages were
+removed:
+
+- Tile 1 is now **AI & Agent Engineering** → `/development/ai`, still using
+  `agent-platform-portrait.webp`.
+- Tile 2 was Casino Simulator (dead link); it is now **Petition Platform** →
+  `/development/petition-platform`.
+
+⚠️ Tile 2 uses `petition-thumb.webp`, which is a **landscape** thumb being
+cropped into this grid's **portrait (3:4)** tile. It renders, but a dedicated
+portrait crop would look better — same open item as `custom-mics-thumb.webp`
+below.
 
 ---
 
@@ -163,15 +186,14 @@ replacement needs its own crop rather than the landscape card thumbnail.
 
 Not missing, but worth a look:
 
-- **`casino-simulator-thumb.webp` / `casino-simulator-1.webp`** — the old site
-  copy described this project as a React Native + Expo floor-layout tool. The
-  knowledge base describes the current build as React 19 + Phaser + PyTorch. The
-  copy has been rewritten to match the knowledge base; **confirm the screenshots
-  show the current build** and not the earlier one.
-- **`ai-avatar.webp`** — used for the AI Clinical Assessment card and its only
-  screenshot. Confirm it's a real capture and NDA-safe, not stock art.
 - **`custom-mics-thumb.webp` on the home page** — it's a landscape thumb being
   cropped into a 3:4 portrait tile. A dedicated portrait crop would look better.
+  Same now applies to `petition-thumb.webp` in tile 2.
+
+The two earlier entries here — the casino screenshots possibly showing an
+outdated build, and whether `ai-avatar.webp` was a real NDA-safe capture — are
+**resolved by deletion**: both projects are gone from the portfolio and neither
+image is referenced any more.
 
 ---
 

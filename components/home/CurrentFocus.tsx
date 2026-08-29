@@ -17,10 +17,13 @@ const CARDS = [
     src: '/focus/ai.webp',
     label: 'Software & AI Development',
   },
+  // Practice name, modalities, and phrasing all mirror massage.meowtin.com —
+  // this card is a doorway to that site, so it shouldn't invent its own brand or
+  // claim outcomes the practice itself is careful not to claim.
   {
-    title: 'Meowtin Massage',
-    body: 'Therapeutic massage for pain relief, mobility, and whole-body wellness.',
-    cta: 'Book a Massage',
+    title: 'Bodywork by Meowtin',
+    body: 'Deeply relaxing, intentional bodywork to ease tension and support easier movement.',
+    cta: 'Book a Session',
     href: 'https://massage.meowtin.com',
     external: true,
     accent: '#facc7a',

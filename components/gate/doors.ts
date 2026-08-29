@@ -97,7 +97,11 @@ export const DOORS: Door[] = [
   {
     id: 'massage',
     label: 'Massage',
-    statement: { pre: 'I heal ', word: 'bodies.' },
+    // "I heal bodies" was an outcome claim, and outcome claims are the one thing
+    // a bodyworker shouldn't make — the body does the healing. "Support" is the
+    // practice's own word ("...support easier movement..." on massage.meowtin.com),
+    // so the door promises a role rather than a result.
+    statement: { pre: 'I support ', word: 'healing.' },
     href: 'https://massage.meowtin.com',
     external: true,
     // Sampled from meowtin-massage's dark theme: --cream #2b1a38 (its page

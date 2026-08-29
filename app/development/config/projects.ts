@@ -1,18 +1,27 @@
 // Project data for the development portfolio (/development) and its detail pages.
 //
 // Structure (see MISSING-ASSETS.md for the imagery backlog):
-//   - `flagship` + `flagshipRank` promote a project into the large trio at the top
-//     of the page. Exactly three should be flagged, covering three different
-//     reasons to hire: AI capability, deep custom platform, proven scale.
-//   - `section` files a project under one of the four capability sections below.
+//   - `flagship` + `flagshipRank` promote a project into the large case-study
+//     cards under "Work you can go look at". These cover deep custom platform
+//     ownership and proven scale; the third reason to hire — AI capability — is
+//     carried by the spotlight block above them, which links to /development/ai.
+//   - `section` files a project under one of the three capability sections below.
 //     Order within a section is `order`, sorted by proof strength (a hard number +
 //     named client + live URL) rather than recency.
 //   - `thumbnail` omitted => AssetSlot renders a red MISSING IMAGE square.
 //
-// Confidentiality: three AI engagements are deliberately UNNAMED. Do not add the
-// client names to `title`, `navTitle`, `client`, or `description`.
+// THE AI WORK IS NOT IN THIS FILE, ON PURPOSE.
+// Three AI engagements (an enterprise agent platform, a clinical assessment
+// product, an ML casino simulation) were subcontracted and stay unbranded at the
+// client's request. None has a public URL, a named client, or an NDA-safe
+// screenshot — so none can keep the promise a project card makes, which is "go
+// look at this." They live on /development/ai as capability with evidence
+// attached instead; the content is in ./ai.ts. Do not re-add them here.
+//
+// The organizing split for this page is therefore not AI vs. not-AI. It is
+// WORK YOU CAN GO LOOK AT (below) vs. WORK I CAN TELL YOU ABOUT (/development/ai).
 
-export type SectionId = 'ai' | 'platforms' | 'commerce' | 'sites';
+export type SectionId = 'platforms' | 'commerce' | 'sites';
 
 export type Project = {
   slug: string;
@@ -43,12 +52,6 @@ export type Project = {
 
 export const SECTIONS: { id: SectionId; label: string; blurb: string }[] = [
   {
-    id: 'ai',
-    label: 'AI & Agent Engineering',
-    blurb:
-      'Where my work is focused right now: building the tools and skills that turn AI agents into a virtual workforce — and making their output trustworthy enough to run a business on.',
-  },
-  {
     id: 'platforms',
     label: 'Platforms & Internal Tools',
     blurb:
@@ -70,114 +73,6 @@ export const SECTIONS: { id: SectionId; label: string; blurb: string }[] = [
 
 export const projects: Project[] = [
   // ────────────────────────────────────────────────────────────────────────
-  // AI & Agent Engineering
-  // ────────────────────────────────────────────────────────────────────────
-  {
-    slug: 'ai-agent-platform',
-    title: 'AI Agent Platform:\nA Virtual Workforce',
-    navTitle: 'AI Agent Platform',
-    category: 'AI Agents & Tooling',
-    section: 'ai',
-    order: 1,
-    flagship: true,
-    flagshipRank: 1,
-    client: 'Enterprise client — under NDA',
-    metric: '10 agents · 21 skills · 205 tool methods',
-    problem:
-      'Most of what a growing company pays for isn’t the work — it’s the coordination around it. Status meetings, handoffs, routing information between systems that don’t talk.',
-    result:
-      'A virtual workforce: specialized AI agents with shared memory and real authority to act, running that coordination layer 24/7 through the company’s actual systems.',
-    description: `
-      An enterprise platform that gives a company a <strong>virtual workforce</strong> — a fleet of AI agents that do real business work around the clock, while the humans stay at the edge doing the judgment, relationship, and creative work that actually needs a person.<br/><br/>
-      The premise is that most of what a growing company spends on isn&#39;t the work itself, it&#39;s the <strong>coordination around the work</strong>: status meetings, email chains, manual handoffs, someone re-typing a number from one system into another. That layer is what the agents replace.<br/><br/>
-      <strong>The agents.</strong> Each one is specialized by function rather than being one general-purpose chatbot — revenue and pipeline, operations, marketing, finance, customer success, executive assistant, communications, and a QA agent whose job is watching the other agents&#39; output for drift. They have persistent memory, they share context with each other, and they run continuously instead of waiting to be asked. People talk to them in chat, watch what they&#39;re doing, and set what they&#39;re allowed to touch.<br/><br/>
-      <strong>Organizations and sub-organizations.</strong> The whole platform is scoped to an org hierarchy, and <strong>authority inherits downward</strong>. A parent org&#39;s agent can act across its children; a child org&#39;s agent can&#39;t see sideways or upward. That scoping isn&#39;t a UI convention — it&#39;s injected at the data layer, so an agent can&#39;t ask for another organization&#39;s data even if it tries. For a product where the whole value proposition is handing autonomous software real access to your business, that boundary is the thing that makes it adoptable.<br/><br/>
-      <strong>Tools and skills — this is the part I build.</strong> The distinction matters: <strong>tools are the APIs</strong>, the concrete things an agent is capable of doing, and <strong>skills are how and when to use them</strong> — the instructions that turn raw capability into judgment. An agent with a tool can technically call it; an agent with the matching skill knows it should. The platform runs <strong>37 tool groups across 205 methods, with 21 skills</strong> teaching 10 agents how to wield them.<br/><br/>
-      Those tools come in three flavors:<br/><br/>
-      <strong>Internal</strong> — the company&#39;s own operating surface: tasks, tickets, deals and pipeline, metrics, agent management, and the dashboard widgets people read.<br/>
-      <strong>Integrations</strong> — the systems a business already runs on: Google Workspace, Salesforce, Intuit, calendar and email.<br/>
-      <strong>Creative</strong> — the ones that make an agent able to actually produce something rather than just report: HeyGen for video, ElevenLabs for voice, Brandfetch for brand assets.<br/><br/>
-      Every one of them is parsed and validated at the boundary, so a malformed agent call fails loudly instead of quietly writing garbage into a live business system. There&#39;s a test asserting that <em>every</em> tool method has a skill granting it — closing the gap between what an agent can reach and what it&#39;s been taught to reach.<br/><br/>
-      <strong>One thing worth calling out.</strong> When a language model narrates its own tool results back to you in prose, it miscounts rows and invents entries — and a virtual workforce nobody can trust the numbers from is just an expensive demo. So the product renders the <strong>structured payload the tool actually returned</strong>, one-to-one, as real components. Counts are a literal array length. The model never touches the data. That took a persistent class of data errors to zero and cut the token cost at the same time, since the model no longer re-types result sets it already fetched.<br/><br/>
-      Built on Next.js and React with a TypeScript, PostgreSQL, and Drizzle data layer, deployed on Kubernetes and AWS.
-    `,
-    technologies: [
-      'AI / LLM Agents',
-      'Agent Tooling',
-      'Next.js',
-      'React',
-      'TypeScript',
-      'PostgreSQL',
-      'Drizzle ORM',
-      'Kubernetes',
-      'AWS',
-    ],
-    // Client is under NDA, so these are architecture illustrations rather than
-    // UI captures — label the section honestly.
-    imagesLabel: 'Architecture',
-    thumbnail: '/projects/agent-platform-thumb.webp',
-    screenshots: [
-      '/projects/agent-platform-tools.webp',
-      '/projects/agent-platform-orgs.webp',
-    ],
-  },
-  {
-    slug: 'ai-clinical-assessment',
-    title: 'AI Clinical\nAssessment Platform',
-    navTitle: 'AI Clinical Assessment',
-    category: 'AI Development',
-    section: 'ai',
-    order: 2,
-    client: 'Healthcare client — under NDA',
-    metric: '12 assessment domains',
-    description: `
-      An <strong>AI assistant that walks a person through a full clinical assessment</strong> — built for ADHD and autism screening, and designed so the hard part (getting complete, usable evidence) actually gets done.<br/><br/>
-      A conversational avatar conducts a <strong>virtual interview</strong> across roughly <strong>12 domains</strong>. The important design decision is that the interview is <em>directed</em>: rather than marching through a fixed script, the assistant steers the conversation until it has gathered the evidence a given domain requires, and only then moves on. That&#39;s what separates a chatbot from an intake instrument — an incomplete answer doesn&#39;t just get recorded, it gets followed up on.<br/><br/>
-      From there the system produces <strong>AI-generated report overviews for the reviewing clinician</strong> and applies pattern recognition to <strong>raise red flags</strong> worth a closer look. To be exact about what that means: the platform surfaces <strong>suggestions for the clinician — never diagnoses</strong>. It assists the doctor&#39;s judgment; it does not replace it, and it was built that way on purpose.<br/><br/>
-      Delivered end to end as a configurable <strong>multi-clinic</strong> product, so each practice can tailor its own flows and branding: React and TypeScript on the front, Node and Fastify APIs, a PostgreSQL data model for assessments and sessions, and a <strong>local LLM</strong> running the interview engine and report generation — which keeps sensitive clinical conversation off third-party infrastructure. Deployed on Docker, Kubernetes, and AWS.
-    `,
-    technologies: [
-      'AI / LLM',
-      'Local LLM (Ollama)',
-      'React',
-      'TypeScript',
-      'Node.js / Fastify',
-      'PostgreSQL',
-      'Kubernetes',
-    ],
-    thumbnail: '/projects/ai-avatar.webp',
-    screenshots: ['/projects/ai-avatar.webp'],
-  },
-  {
-    slug: 'ai-casino-simulator',
-    title: 'Machine Learning\nCasino Simulator',
-    navTitle: 'ML Casino Simulator',
-    category: 'Machine Learning',
-    section: 'ai',
-    order: 3,
-    client: 'Casino operator — under NDA',
-    metric: '100 neural networks training in parallel',
-    description: `
-      A <strong>machine learning environment disguised as a casino</strong>. The client operated several real casinos, and the simulator is fed by their <strong>real operating data</strong> — the game is arranging a casino floor to make the most money, and the simulation plays it out.<br/><br/>
-      The learning system is the point. A <strong>distributed network of 100 PyTorch Deep Q-Network agents trains in parallel</strong>, each exploring different floor and play strategies, and their results compile into a <strong>master consensus network</strong> that then plays the live game in real time. Because the whole thing is API-first — a Fastify server with the rendering client sitting on top rather than baked in — the models can train headlessly against the same interfaces a human plays through.<br/><br/>
-      The visible half runs a live floor of <strong>100+ concurrent AI players across 50+ tables at 60 FPS</strong> (poker, blackjack, roulette, craps, baccarat), with <strong>13 distinct behavior types</strong> and 2,000 pre-generated players who behave consistently over time. Rendering is Phaser with a PixiJS fallback path, using object pooling and spatial indexing to hold frame rate; state syncs over WebSocket, and financial math runs on exact decimal arithmetic rather than floats, because a simulation that quietly loses fractions of a cent isn&#39;t a simulation of a casino.<br/><br/>
-      Built and deployed solo to AWS — containerized, with S3 holding trained models and SQS pushing updates so the running system picks up new training results without downtime.
-    `,
-    technologies: [
-      'PyTorch',
-      'Deep Q-Networks',
-      'Machine Learning',
-      'React 19',
-      'TypeScript',
-      'Fastify',
-      'WebSocket',
-      'AWS',
-    ],
-    thumbnail: '/projects/casino-simulator-thumb.webp',
-    screenshots: ['/projects/casino-simulator-1.webp'],
-  },
-
-  // ────────────────────────────────────────────────────────────────────────
   // Platforms & Internal Tools
   // ────────────────────────────────────────────────────────────────────────
   {
@@ -188,7 +83,7 @@ export const projects: Project[] = [
     section: 'platforms',
     order: 1,
     flagship: true,
-    flagshipRank: 3,
+    flagshipRank: 2,
     client: 'Care2 / ThePetitionSite',
     metric: 'Millions of users · 12 years',
     problem:
@@ -267,7 +162,7 @@ export const projects: Project[] = [
     section: 'commerce',
     order: 1,
     flagship: true,
-    flagshipRank: 2,
+    flagshipRank: 1,
     client: 'Roswell Pro Audio',
     metric: '15 internal tools · 7 sales channels',
     problem:
@@ -441,15 +336,17 @@ export const projects: Project[] = [
   },
   {
     slug: 'meowtin-massage',
-    title: 'Meowtin Massage\nWebsite',
-    navTitle: 'Meowtin Massage',
+    title: 'Bodywork by Meowtin\nPractice Site',
+    navTitle: 'Bodywork by Meowtin',
     category: 'Web Development',
     section: 'sites',
     order: 4,
+    client: 'My own practice',
     url: 'https://massage.meowtin.com',
     description: `
       Designed and built <strong>massage.meowtin.com</strong>, the home for my licensed massage therapy practice — which also makes it the one project where I was simultaneously the developer, the client, and the person answering the phone when the booking flow doesn&#39;t work.<br/><br/>
-      Built with <strong>React</strong> and <strong>Next.js</strong>, mobile-first, because essentially everyone books a massage from their phone. Clear service and pricing descriptions, a short path from landing to booking, and imagery that sets a calm tone rather than a clinical one.<br/><br/>
+      Built with <strong>React</strong> and <strong>Next.js</strong>, mobile-first, because essentially everyone books a massage from their phone. Three sessions&#39; worth of decisions on one page: what the work is (Swedish, deep tissue, myofascial release), what it costs, and a short path from landing to a request — plus imagery that sets a calm tone rather than a clinical one.<br/><br/>
+      The copy was the harder half. A bodywork site has to describe real benefit without <em>promising outcomes</em> — so every line names what I do rather than what will happen to you: <em>ease tension, support easier movement, bring you back to your body</em>. That constraint shaped the whole voice, and it&#39;s the same discipline that governs the rest of this site.<br/><br/>
       Fast, accessible, and deliberately simple to maintain — I run the practice, so the site had to be something I could update between appointments rather than a project of its own.
     `,
     technologies: ['React', 'Next.js', 'Tailwind CSS', 'Responsive Design'],
@@ -486,7 +383,8 @@ export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
 
-/** The three large case studies at the top of the page, in rank order. */
+/** The large case-study cards, in rank order. Both have a named client, a live
+ *  URL, and a hard number — that combination is the entry fee for this list. */
 export const flagships = projects
   .filter((p) => p.flagship)
   .sort((a, b) => (a.flagshipRank ?? 99) - (b.flagshipRank ?? 99));

@@ -71,15 +71,15 @@ export default function WellnessPage() {
           <div className="grid grid-cols-1 items-center gap-8 rounded-3xl border border-white/10 bg-white/[0.02] p-8 md:grid-cols-2 md:p-12">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">
-                Hands‑On Healing
+                Massage &amp; Bodywork
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
-                Meowtin Massage
+                Bodywork by Meowtin
               </h2>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-white/60">
                 Therapeutic massage is the through‑line of this whole journey — the place where all
-                of it becomes hands‑on. Licensed bodywork for pain relief, mobility, and whole‑body
-                wellness. Book a session and let's get you back to balance.
+                of it becomes hands‑on. Deeply relaxing, intentional bodywork to ease tension,
+                support easier movement, and bring you back to your body.
               </p>
               <a
                 href="https://massage.meowtin.com"

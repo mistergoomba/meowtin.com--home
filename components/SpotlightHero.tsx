@@ -33,7 +33,7 @@ const SLIDES: Slide[] = [
     bg: '/spotlight/massage.webp',
     title: 'MASSAGE THERAPIST',
     body:
-      'Licensed massage therapist offering deep tissue, Swedish, and therapeutic bodywork. Melt away the stress and reset your body.',
+      'Licensed massage therapist working in Swedish, deep tissue, and myofascial release — intentional bodywork to ease tension and support easier movement.',
     cta: 'Book a Session',
     href: 'https://massage.meowtin.com',
     external: true,

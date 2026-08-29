@@ -123,7 +123,8 @@ export default function BioPage() {
                 Licensed Massage Therapist
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-white/60">
-                Therapeutic massage focused on relaxation, recovery, and well-being.
+                Swedish, deep tissue, and myofascial release — intentional bodywork to ease
+                tension and support easier movement. CAMTC certified.
               </p>
               <a
                 href="https://massage.meowtin.com"
