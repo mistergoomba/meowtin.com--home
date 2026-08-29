@@ -124,7 +124,8 @@ export default function BioPage() {
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-white/60">
                 Swedish, deep tissue, and myofascial release — intentional bodywork to ease
-                tension and support easier movement. CAMTC certified.
+                tension and support easier movement. CAMTC certified and a member of the American
+                Massage Therapy Association.
               </p>
               <a
                 href="https://massage.meowtin.com"

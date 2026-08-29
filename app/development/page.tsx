@@ -101,9 +101,16 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
           />
         </div>
         <div className="flex flex-1 flex-col p-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-emerald-400/80">
-            {project.category}
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-emerald-400/80">
+              {project.category}
+            </p>
+            {project.status === 'in-progress' && (
+              <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[9px] uppercase tracking-[0.2em] text-amber-300">
+                In Progress
+              </span>
+            )}
+          </div>
           <h3 className="mt-2 text-lg font-semibold uppercase leading-tight tracking-wide text-white">
             {project.navTitle}
           </h3>
@@ -112,8 +119,10 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
               {project.metric}
             </p>
           )}
+          {/* Three pills, not four — the cards are narrower in a 4-col grid and a
+              fourth pill reliably wraps to a lonely third row. */}
           <div className="mt-4 flex flex-1 flex-wrap content-end gap-1.5">
-            {project.technologies.slice(0, 4).map((t) => (
+            {project.technologies.slice(0, 3).map((t) => (
               <span
                 key={t}
                 className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.15em] text-white/50"
@@ -253,8 +262,9 @@ export default function DevelopmentPage() {
               Selected Case Studies
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/60">
-              Named clients, live URLs, and a hard number each — one for owning a whole custom
-              platform end to end, one for doing it at scale for millions of people.
+              Named clients, live URLs, and a hard number each — one for doing it at scale for
+              millions of people, one for building a product configurator that has to be exactly
+              right before someone spends real money.
             </p>
           </div>
         </Reveal>
@@ -288,9 +298,12 @@ export default function DevelopmentPage() {
               </div>
             </Reveal>
 
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Four across, not three: every section currently holds exactly four
+                projects, and a 3-col grid leaves each one with an orphan on a
+                second row. Jumps 2 → 4 with no 3-col step for the same reason. */}
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {items.map((p, i) => (
-                <ProjectCard key={p.slug} project={p} delay={(i % 3) * 0.06} />
+                <ProjectCard key={p.slug} project={p} delay={(i % 4) * 0.05} />
               ))}
             </div>
           </section>

@@ -125,8 +125,31 @@ pseudo-text, and this sits at the top of the page.
 
 ## Blocking — projects with no imagery at all
 
-These three render a red square on the `/development` grid **and** in the
+These five render a red square on the `/development` grid **and** in the
 Screenshots section of their detail page.
+
+### 0. Roswell Back Office — `roswell-back-office`
+
+| Need | Path to create | Notes |
+|---|---|---|
+| Card thumbnail | `public/projects/roswell-back-office-thumb.webp` | Landscape, 16:10 |
+| Detail screenshots | `public/projects/roswell-back-office-1.webp` … | 2–4 images |
+
+New in the Roswell split — the storefront kept `custom-mics-*`, the back office
+has nothing. **Highest value of the five**, because this is the half with the
+story (serial numbers handwritten at the shipping bench) and it now anchors the
+Internal Tools section. Worth capturing: the serial-entry screen at fulfillment,
+the ShipStation order pull across channels, and the field-level diff before a
+catalog publish. Scrub customer names and real order numbers first.
+
+Check whether either existing `custom-mics-1.webp` / `custom-mics-2.webp` is
+actually a back-office capture rather than a storefront one — if so, move it.
+
+### 0b. Short Fuse Shop — `short-fuse-shop`
+
+Not blocking, and **deliberately empty**: the store isn't built yet, the entry
+carries an `IN PROGRESS` badge, and a screenshot of something that doesn't exist
+would be the exact wrong fix. Fill this in when the store ships.
 
 ### 1. Sage & Madison — `sage-and-madison`
 

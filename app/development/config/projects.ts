@@ -2,13 +2,15 @@
 //
 // Structure (see MISSING-ASSETS.md for the imagery backlog):
 //   - `flagship` + `flagshipRank` promote a project into the large case-study
-//     cards under "Work you can go look at". These cover deep custom platform
-//     ownership and proven scale; the third reason to hire — AI capability — is
-//     carried by the spotlight block above them, which links to /development/ai.
-//   - `section` files a project under one of the three capability sections below.
-//     Order within a section is `order`, sorted by proof strength (a hard number +
-//     named client + live URL) rather than recency.
+//     cards under "Work you can go look at". Flagships are DELIBERATELY EXCLUDED
+//     from the section grids below (see `sectionProjects`) so no project is shown
+//     twice on one page.
+//   - `section` files a non-flagship project under one of the three capability
+//     sections below. Order within a section is `order`.
 //   - `thumbnail` omitted => AssetSlot renders a red MISSING IMAGE square.
+//   - `status: 'in-progress'` marks work that is not shipped yet, and renders an
+//     IN PROGRESS badge. Anything unshipped MUST carry it — a portfolio that
+//     describes planned work in the past tense is just a lie with a nice layout.
 //
 // THE AI WORK IS NOT IN THIS FILE, ON PURPOSE.
 // Three AI engagements (an enterprise agent platform, a clinical assessment
@@ -21,17 +23,21 @@
 // The organizing split for this page is therefore not AI vs. not-AI. It is
 // WORK YOU CAN GO LOOK AT (below) vs. WORK I CAN TELL YOU ABOUT (/development/ai).
 
-export type SectionId = 'platforms' | 'commerce' | 'sites';
+export type SectionId = 'commerce' | 'brands' | 'tools';
 
 export type Project = {
   slug: string;
   title: string; // may contain \n for card display
   navTitle: string;
   category: string;
-  section: SectionId;
+  /** Omitted on a flagship that belongs to no grid (e.g. the petition platform,
+   *  which is neither commerce, a brand site, nor an internal tool). */
+  section?: SectionId;
   order: number;
   flagship?: boolean;
   flagshipRank?: number;
+  /** Not shipped yet. Renders an IN PROGRESS badge; never describe it as done. */
+  status?: 'in-progress';
   /** Short client/context line shown under the title. */
   client?: string;
   /** One hard number, shown on cards. Keep it short enough to read at a glance. */
@@ -52,38 +58,37 @@ export type Project = {
 
 export const SECTIONS: { id: SectionId; label: string; blurb: string }[] = [
   {
-    id: 'platforms',
-    label: 'Platforms & Internal Tools',
-    blurb:
-      'Systems that carry real load and real operators — high-traffic web platforms, back-office tooling, and the infrastructure underneath.',
-  },
-  {
     id: 'commerce',
     label: 'Commerce',
     blurb:
-      'Shopify, WooCommerce, and WordPress builds — storefronts, product configurators, and getting sites off page-builder apps and back onto maintainable code.',
+      'Storefronts that have to take money reliably — Shopify, WooCommerce, and WordPress builds, plus the work of getting a store off third-party page-builder apps and back onto maintainable code.',
   },
   {
-    id: 'sites',
+    id: 'brands',
     label: 'Brand & Product Sites',
     blurb:
-      'Fast, well-built sites for bands, boutique makers, venues, and my own practice — plus a couple of things I built for myself.',
+      'Fast, well-built sites where the job is to make something feel like itself — boutique makers, bands, a venue, and my own practice.',
+  },
+  {
+    id: 'tools',
+    label: 'Internal Tools',
+    blurb:
+      'The software people use to actually run the thing: back-office systems, operator dashboards, and the unglamorous data plumbing that turns a spreadsheet workflow into something queryable.',
   },
 ];
 
 export const projects: Project[] = [
   // ────────────────────────────────────────────────────────────────────────
-  // Platforms & Internal Tools
+  // Flagship — shown only in "Selected Case Studies", never in a grid below.
   // ────────────────────────────────────────────────────────────────────────
   {
     slug: 'petition-platform',
     title: 'Viral Petition\nPlatform Rebuild',
     navTitle: 'Petition Platform',
     category: 'Web Platform',
-    section: 'platforms',
-    order: 1,
+    order: 0,
     flagship: true,
-    flagshipRank: 2,
+    flagshipRank: 1,
     client: 'Care2 / ThePetitionSite',
     metric: 'Millions of users · 12 years',
     problem:
@@ -112,7 +117,7 @@ export const projects: Project[] = [
     title: 'Radio Station\nManagement Platform',
     navTitle: 'Smart Broadcast',
     category: 'Platform / DevOps',
-    section: 'platforms',
+    section: 'tools',
     order: 2,
     metric: 'Multi-tenant · unlimited stations',
     description: `
@@ -138,7 +143,7 @@ export const projects: Project[] = [
     title: 'Custom Video\nPlatform Features',
     navTitle: 'Video Platform',
     category: 'Web Development',
-    section: 'platforms',
+    section: 'tools',
     order: 3,
     client: 'San Francisco studio — under NDA',
     description: `
@@ -152,30 +157,84 @@ export const projects: Project[] = [
   },
 
   // ────────────────────────────────────────────────────────────────────────
+  // Internal Tools
+  // ────────────────────────────────────────────────────────────────────────
+  {
+    slug: 'roswell-back-office',
+    title: 'Roswell Pro Audio\nOrder & Fulfillment Tools',
+    navTitle: 'Roswell Back Office',
+    category: 'Internal Tools',
+    section: 'tools',
+    order: 1,
+    client: 'Roswell Pro Audio',
+    metric: '15 internal tools · 7 sales channels',
+    description: `
+      The operations half of an ongoing solo engagement for a professional microphone manufacturer. (The customer-facing half is the <a href="/development/roswell-custom-shop" class="underline decoration-emerald-400/40 underline-offset-4">custom mic builder</a>.)<br/><br/>
+      When I started, staff were <strong>handwriting serial numbers at the shipping bench and transcribing them into spreadsheets</strong> — at exactly the point where an error is most expensive, because a wrong serial breaks warranty lookup for the entire life of the microphone.<br/><br/>
+      I replaced that with a <strong>suite of 15 internal tools</strong> (~7,900 lines of PHP against a 20+ table MySQL schema) that pulls the live order from <strong>ShipStation across 7 sales channels</strong> — Shopify, Amazon, eBay, Reverb, and more — identifies which line items are actually microphones, prompts for serials at the bench, and writes a full lifecycle record. Every mic they build is now a queryable row instead of a line of handwriting.<br/><br/>
+      Most of the real work was the <strong>long tail of messy order data</strong> that separates a demo from a tool people use every day: Reverb never returns a customer email and the database required one; merged orders delete the number you searched for; cancelled shipping labels zero out a line&#39;s quantity so nothing renders; matched pairs arrive as two line items for the same two physical microphones. Each one now has a visible, reversible prompt rather than a silent guess — the governing rule is <strong>suggest, never silently expand</strong>.<br/><br/>
+      That rule is the whole design philosophy here. Software that quietly corrects messy data on a person&#39;s behalf is software they eventually stop trusting, and an operations tool nobody trusts gets replaced by a spreadsheet again.
+    `,
+    technologies: [
+      'PHP',
+      'MySQL',
+      'ShipStation API',
+      'JavaScript',
+      'REST APIs',
+      'Shopify API',
+    ],
+    screenshots: [],
+  },
+
+  // ────────────────────────────────────────────────────────────────────────
   // Commerce
   // ────────────────────────────────────────────────────────────────────────
   {
-    slug: 'roswell-pro-audio',
-    title: 'Roswell Pro Audio\nStorefront & Fulfillment',
-    navTitle: 'Roswell Pro Audio',
-    category: 'Ecommerce / Internal Tools',
+    slug: 'short-fuse-shop',
+    title: 'Short Fuse\nMerch Store',
+    navTitle: 'Short Fuse Shop',
+    category: 'Ecommerce',
     section: 'commerce',
     order: 1,
-    flagship: true,
-    flagshipRank: 1,
-    client: 'Roswell Pro Audio',
-    metric: '15 internal tools · 7 sales channels',
-    problem:
-      'Staff were handwriting microphone serial numbers at the shipping bench and typing them into spreadsheets.',
-    result:
-      'A queryable lifecycle record for every mic they build, reconciled across all seven places they sell.',
-    url: 'https://register.roswellproaudio.com/cs/',
+    status: 'in-progress',
+    client: 'Short Fuse',
+    metric: 'In development',
+    url: 'https://shortfusemusic.com',
     description: `
-      An ongoing solo engagement for a professional microphone manufacturer, in two halves — both in production, and connected to each other.<br/><br/>
-      <strong>The storefront.</strong> A <strong>custom microphone builder</strong> that lets customers design their own mic and see it as they go: real-time <strong>Canvas image composition</strong> merges layers at full resolution as options change, with live pricing that handles add-ons, modifications, and matched pairs. It plugs straight into <strong>Shopify</strong> for cart and checkout, and encodes the whole configuration in the URL so a customer can share or come back to a build. <strong>6 models, 50+ options, 10+ colors each.</strong> Plus an interactive video browser covering 31 episodes across 23 artists and 39 pedals.<br/><br/>
-      <strong>The back office.</strong> When I started, staff were <strong>handwriting serial numbers at fulfillment and transcribing them into spreadsheets</strong> — at exactly the point where an error is most expensive, because a wrong serial breaks warranty lookup for the life of the microphone. I replaced that with a <strong>suite of 15 internal tools</strong> (~7,900 lines of PHP against a 20+ table MySQL schema) that pulls the live order from <strong>ShipStation across 7 sales channels</strong> — Shopify, Amazon, eBay, Reverb, and more — identifies which line items are actually mics, prompts for serials, and writes a full lifecycle record.<br/><br/>
-      Most of the real work was the <strong>long tail of messy order data</strong> that separates a demo from a tool people use every day: Reverb never returns a customer email and the database required one; merged orders delete the number you searched for; cancelled shipping labels zero out a line&#39;s quantity so nothing renders; matched pairs arrive as two line items for the same two physical mics. Each one now has a visible, reversible prompt rather than a silent guess — the governing rule is <strong>suggest, never silently expand</strong>.<br/><br/>
-      Non-developers can now manage the entire Custom Shop catalog themselves and publish to the live storefront, behind a <strong>field-level diff</strong> that shows exactly what will change before anything overwrites production.
+      <em>In development — this entry describes work in progress, not a shipped store.</em><br/><br/>
+      A merch store for <strong>Short Fuse</strong>, bolted onto the band&#39;s existing Next.js site rather than handed off to a hosted platform. The deciding factor is margin: on the volumes an independent band actually moves, per-transaction fees and a monthly platform subscription eat a meaningful share of what a shirt earns — and a band&#39;s catalog is small enough that most of what those platforms charge for goes unused.<br/><br/>
+      So the plan is a <strong>custom commerce back end</strong>: a small product and variant model, Stripe for payments so card data never touches my infrastructure, and a fulfillment path that tells whoever is packing boxes what to put in them. Shirt sizes, record variants, bundles, and the merch-table reality of selling the same items in person on a Friday night.<br/><br/>
+      It also has to survive the traffic pattern a band actually has, which is nothing at all for weeks and then a spike the hour a record drops.<br/><br/>
+      I&#39;ll update this entry with real numbers once it is live. Until then it is here because it is what I am building next, not because it is done.
+    `,
+    technologies: ['Next.js', 'React', 'TypeScript', 'Stripe', 'PostgreSQL'],
+    screenshots: [],
+  },
+  // Roswell is ONE ongoing engagement presented as TWO projects, because they
+  // sell to different readers: the builder is a customer-facing configurator, the
+  // back office is operations software. Both descriptions point at each other so
+  // the relationship is never hidden.
+  {
+    slug: 'roswell-custom-shop',
+    title: 'Roswell Pro Audio\nCustom Mic Builder',
+    navTitle: 'Roswell Custom Shop',
+    category: 'Ecommerce / Product Configurator',
+    section: 'commerce',
+    order: 0,
+    flagship: true,
+    flagshipRank: 2,
+    client: 'Roswell Pro Audio',
+    metric: '6 models · 50+ options · 10+ colors each',
+    problem:
+      'A boutique microphone company whose whole appeal is customization, selling through a checkout that could only show a customer a fixed photo of a finished product.',
+    result:
+      'A builder where customers design their own mic and watch it assemble in real time, priced live and handed straight to Shopify checkout.',
+    url: 'https://roswellproaudio.com',
+    description: `
+      The customer-facing half of an ongoing solo engagement for a professional microphone manufacturer. (The other half — the <a href="/development/roswell-back-office" class="underline decoration-emerald-400/40 underline-offset-4">order and fulfillment tools</a> behind the shipping bench — is a separate project.)<br/><br/>
+      <strong>A custom microphone builder</strong> that lets customers design their own mic and see it as they go. Real-time <strong>HTML5 Canvas image composition</strong> merges layers at full resolution as options change, so the mic on screen is the mic being ordered rather than an approximation of it. Live pricing handles add-ons, modifications, and matched pairs as the configuration changes.<br/><br/>
+      It plugs straight into <strong>Shopify</strong> for cart and checkout, and encodes the entire configuration <strong>in the URL</strong> — so a customer can send a build to a bandmate, sleep on it, and come back to exactly what they left. <strong>6 models, 50+ options, 10+ colors each.</strong><br/><br/>
+      Alongside it, an interactive video browser covering <strong>31 episodes across 23 artists and 39 pedals</strong>, and — the piece that made the whole thing sustainable — a catalog manager that lets <strong>non-developers run the entire Custom Shop</strong> and publish to the live storefront themselves, behind a <strong>field-level diff</strong> that shows exactly what will change before anything overwrites production.
     `,
     technologies: [
       'Shopify',
@@ -183,7 +242,6 @@ export const projects: Project[] = [
       'HTML5 Canvas',
       'PHP',
       'MySQL',
-      'ShipStation API',
       'REST APIs',
     ],
     thumbnail: '/projects/custom-mics-thumb.webp',
@@ -200,7 +258,7 @@ export const projects: Project[] = [
     navTitle: 'Sage & Madison',
     category: 'Shopify',
     section: 'commerce',
-    order: 2,
+    order: 3,
     client: 'Sage & Madison, Sag Harbor NY',
     metric: '~$690/yr of app cost removed',
     url: 'https://sageandmadison.com',
@@ -227,7 +285,7 @@ export const projects: Project[] = [
     navTitle: 'A Handmade Story',
     category: 'WordPress',
     section: 'commerce',
-    order: 3,
+    order: 2,
     client: 'A Handmade Story',
     metric: '3 page builders → 1 · 31 → 22 plugins',
     url: 'https://ahandmadestory.com',
@@ -271,12 +329,13 @@ export const projects: Project[] = [
   // ────────────────────────────────────────────────────────────────────────
   // Brand & Product Sites
   // ────────────────────────────────────────────────────────────────────────
+
   {
     slug: 'warboy-guitars',
     title: 'Warboy Guitars\nCustom Shop',
     navTitle: 'Warboy Guitars',
     category: 'Web Development',
-    section: 'sites',
+    section: 'brands',
     order: 1,
     url: 'https://warboyguitars.com',
     description: `
@@ -299,8 +358,8 @@ export const projects: Project[] = [
     title: 'Sinwave\nVegas Venue',
     navTitle: 'Sinwave',
     category: 'Web Development',
-    section: 'sites',
-    order: 2,
+    section: 'brands',
+    order: 4,
     url: 'https://sinwavevegas.com',
     description: `
       Founded, owned, and operated <strong>Sinwave</strong>, a Las Vegas venue for underground electronic, metal, and alternative events — handling bookings, production, and daily operations.<br/><br/>
@@ -321,8 +380,8 @@ export const projects: Project[] = [
     title: 'Metal Band\nWebsite',
     navTitle: 'Short Fuse',
     category: 'Web Development',
-    section: 'sites',
-    order: 3,
+    section: 'brands',
+    order: 2,
     url: 'https://shortfusemusic.com',
     description: `
       Designed and developed a high‑impact website for <strong>Short Fuse</strong> — my band of 20+ years, where I handle <strong>electronics</strong> and <strong>keyboards</strong> — to centralize music, videos, and updates in a bold, immersive format.<br/><br/>
@@ -339,8 +398,8 @@ export const projects: Project[] = [
     title: 'Bodywork by Meowtin\nPractice Site',
     navTitle: 'Bodywork by Meowtin',
     category: 'Web Development',
-    section: 'sites',
-    order: 4,
+    section: 'brands',
+    order: 3,
     client: 'My own practice',
     url: 'https://massage.meowtin.com',
     description: `
@@ -358,8 +417,8 @@ export const projects: Project[] = [
     title: 'Tabs Database and\nLyrics Formatter',
     navTitle: 'Tabs Formatter',
     category: 'Mobile App',
-    section: 'sites',
-    order: 5,
+    section: 'tools',
+    order: 4,
     description: `
       I&#39;m an avid ukulele player, so I built a lightweight system to organize my songbook and make it easy to play anywhere — whether that&#39;s solo in the woods or with friends.<br/><br/>
       The mobile app (built with <strong>React Native</strong> + <strong>Expo</strong>) displays lyrics with chord cues, supports <strong>randomized sets</strong>, fast <strong>filter/search</strong>, and <strong>artist‑based filtering</strong> from within song views. It&#39;s designed for <strong>offline use</strong> so I can rely on it on the road.<br/><br/>
@@ -389,9 +448,13 @@ export const flagships = projects
   .filter((p) => p.flagship)
   .sort((a, b) => (a.flagshipRank ?? 99) - (b.flagshipRank ?? 99));
 
-/** Projects for a section, sorted by proof strength. */
+/** Projects for a section, in `order`. Flagships are excluded — they already have
+ *  a large card at the top of the page, and showing the same project twice makes
+ *  a short portfolio look padded. */
 export function sectionProjects(id: SectionId): Project[] {
-  return projects.filter((p) => p.section === id).sort((a, b) => a.order - b.order);
+  return projects
+    .filter((p) => p.section === id && !p.flagship)
+    .sort((a, b) => a.order - b.order);
 }
 
 /** Static screenshots only — the redesigned pages drop the legacy .mp4 captures. */

@@ -42,9 +42,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           >
             ← Back to Portfolio
           </a>
-          <p className="mt-8 text-xs uppercase tracking-[0.3em] text-emerald-400/80">
-            {project.category}
-          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <p className="text-xs uppercase tracking-[0.3em] text-emerald-400/80">
+              {project.category}
+            </p>
+            {project.status === 'in-progress' && (
+              <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-amber-300">
+                In Progress
+              </span>
+            )}
+          </div>
           <h1 className="mt-3 text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
             {displayTitle}
           </h1>
