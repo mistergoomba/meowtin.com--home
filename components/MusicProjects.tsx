@@ -14,12 +14,6 @@ type Project = {
 
 const projects: Project[] = [
   {
-    title: 'Okie Dokie Karaoke',
-    logo: '/okie-dokie-karaoke-logo.webp',
-    url: 'https://kj.meowtin.com',
-    blurb: `Okie Dokie Karaoke is more than just a weekly sing-along—it’s a full-blown community experience where voices of all ranges collide in glorious harmony (and sometimes hilarious chaos). Hosted with infectious energy, quick wit, and a knack for turning any song choice into a crowd favorite, every show celebrates the joy of music in all its forms. From power ballads to punk screams, deep-cut anthems to guilty-pleasure pop, the crowd cheers every performance like it’s the headliner. Whether you’re there to belt, laugh, or just soak up the vibes, Okie Dokie delivers a night of music and unapologetic self-expression.`,
-  },
-  {
     title: 'Short Fuse',
     logo: '/short-fuse-logo.webp',
     url: 'https://shortfusemusic.com',
@@ -30,6 +24,12 @@ const projects: Project[] = [
     logo: '/fart-bubble-logo.webp',
     url: 'https://fartxbubble.com',
     blurb: `Fart Bubble is a filthy, irreverent plunge into the bowels of the porno-gore-grind underground—a sonic sewer where blast beats collide with bowel movements and every riff is smeared with unapologetic absurdity. Equal parts offensive and hilarious, the music is laced with fart samples, toilet humor, and lyrical depravity that would make your grandma faint (or laugh—depending on the grandma). It’s chaotic, abrasive, and deliberately disgusting, crafted for those who like their grindcore raw, rancid, and impossible to play in polite company.`,
+  },
+  {
+    title: 'Okie Dokie Karaoke',
+    logo: '/okie-dokie-karaoke-logo.webp',
+    url: 'https://kj.meowtin.com',
+    blurb: `Okie Dokie Karaoke is more than just a weekly sing-along—it’s a full-blown community experience where voices of all ranges collide in glorious harmony (and sometimes hilarious chaos). Hosted with infectious energy, quick wit, and a knack for turning any song choice into a crowd favorite, every show celebrates the joy of music in all its forms. From power ballads to punk screams, deep-cut anthems to guilty-pleasure pop, the crowd cheers every performance like it’s the headliner. Whether you’re there to belt, laugh, or just soak up the vibes, Okie Dokie delivers a night of music and unapologetic self-expression.`,
   },
   {
     title: 'Mister Goomba',
@@ -46,7 +46,7 @@ const projects: Project[] = [
   {
     title: 'None More Negative',
     logo: '/nmn-logo.webp',
-    url: 'https://none-more-negative.com',
+    url: 'https://www.youtube.com/@nonemorenegative0',
     blurb: `None More Negative is my tongue-in-cheek tribute to Type O Negative—a band we proudly billed as “the worst Type O Negative tribute” and “equal opportunity annoyers.” Equal parts homage and parody, we channel the doom-laden riffs, brooding atmosphere, and sardonic wit of the originals while adding our own brand of irreverence. Expect deep, droning grooves, playful banter, and a healthy disregard for taking ourselves too seriously.`,
   },
 ];
