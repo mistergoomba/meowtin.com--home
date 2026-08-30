@@ -121,26 +121,66 @@ straight back to hexagons and glowing node graphs.
 The **"no text"** instruction is load-bearing — image models produce garbled
 pseudo-text, and this sits at the top of the page.
 
+### Sage & Madison — `sage-and-madison` ✅
+
+Thumbnail and four detail images are in: the homepage (`-1`), the History page
+(`-2`), the events page with the brand-activation block (`-3`), and The Society
+newspaper page (`-4`). The thumbnail is the homepage crop scaled to 1200px.
+
+Still open:
+
+- **The Press page.** Six publication mastheads over horizontal-scrolling
+  clipping rows is the most impressive thing in the rebuild and the description
+  singles it out, but there is no capture of it yet.
+- The History page's **era timeline row** (BC → 2020–Future) sits just below the
+  16:10 crop of `-2`, so the timeline the copy names is not actually visible. A
+  reshoot framed on the timeline would fix it.
+
+### A Handmade Story — `a-handmade-story` ✅
+
+Thumbnail and three detail images are in: the homepage with the rewired nav
+(`-1`), a recipe post (`-2`), and the recipe card (`-3`).
+
+**These are AFTER captures only.** A before/after pair would still sell this one
+far harder — the story is the rescue, not the design — so if any capture of the
+original site survives, it belongs here. Until then the rescue is carried
+entirely by the description.
+
 ---
 
-## Blocking — projects with no imagery at all
+## Nothing is blocking
 
-These five render a red square on the `/development` grid **and** in the
-Screenshots section of their detail page.
+**No project renders a red square any more.** `grep -rl 'data-missing-asset' out/`
+returns only the shared JS chunks, which contain the placeholder component
+itself rather than a live placeholder. Everything below is a follow-up on
+imagery that already exists.
 
-### 0. Roswell Back Office — `roswell-back-office`
+### 0. Roswell Back Office — `roswell-back-office` ✅
 
-| Need | Path to create | Notes |
-|---|---|---|
-| Card thumbnail | `public/projects/roswell-back-office-thumb.webp` | Landscape, 16:10 |
-| Detail screenshots | `public/projects/roswell-back-office-1.webp` … | 2–4 images |
+Thumbnail and two detail images are in: the Serial History Editor (`-1`) and the
+Custom Shop Assets catalog manager (`-2`, also the thumbnail).
 
-New in the Roswell split — the storefront kept `custom-mics-*`, the back office
-has nothing. **Highest value of the five**, because this is the half with the
-story (serial numbers handwritten at the shipping bench) and it now anchors the
-Internal Tools section. Worth capturing: the serial-entry screen at fulfillment,
-the ShipStation order pull across channels, and the field-level diff before a
-catalog publish. Scrub customer names and real order numbers first.
+**Both are redacted, and the fills are painted into the files — never re-export
+from the raw captures.** Solid fill, never blur: blurred short numeric strings
+can be recovered, and these are real serials. Covered in `-1`: every mic serial,
+every order number, and the `SS order ID` / `ownerID` / `shiptoID` on the edited
+entry. A serial paired with its order number is exactly the warranty-lookup key
+this project exists to protect. Covered in `-2`: the RM8 rows (unreleased
+product) across MODEL NAME through VARIANT ID; the SDC / SDC-84 rows are
+unreleased too and fall below the 16:10 crop entirely.
+
+Left visible on purpose: Shopify variant ids for shipping product, which appear
+in any storefront's public product JSON, and the `COST ($)` column, which is
+retail pricing already on the public builder.
+
+Still open:
+
+- **The ShipStation order pull across the 7 sales channels**, and the
+  **field-level diff before a catalog publish** — the two captures MISSING-ASSETS
+  originally asked for. The diff in particular is the "suggest, never silently
+  expand" claim made visible, and neither shot here carries it.
+- The **serial-entry screen at the bench**. `-1` shows the editor for an existing
+  entry, not the moment of capture the description opens with.
 
 Check whether either existing `custom-mics-1.webp` / `custom-mics-2.webp` is
 actually a back-office capture rather than a storefront one — if so, move it.
@@ -188,40 +228,6 @@ That's the "one design system across two repos" claim made visible, and it's the
 only image that argues for both projects at once. Goes in **both** entries'
 `screenshots` arrays. Both halves already exist as source captures —
 `short-fuse-3.webp` has the merch row, `short-fuse-shop-1.webp` the storefront.
-
-### 1. Sage & Madison — `sage-and-madison`
-
-| Need | Path to create | Notes |
-|---|---|---|
-| Card thumbnail | `public/projects/sage-madison-thumb.webp` | Landscape, 16:10 |
-| Detail screenshots | `public/projects/sage-madison-1.webp` … | 2–4 images |
-
-Easiest of the three — the site is public at
-[sageandmadison.com](https://sageandmadison.com). Worth capturing: the homepage
-hero, the rebuilt Press page (the masthead rows are the most impressive piece),
-and the History timeline.
-
-### 2. A Handmade Story — `a-handmade-story`
-
-| Need | Path to create | Notes |
-|---|---|---|
-| Card thumbnail | `public/projects/handmade-story-thumb.webp` | Landscape, 16:10 |
-| Detail screenshots | `public/projects/handmade-story-1.webp` … | 2–4 images |
-
-A **before/after pair** would sell this one far harder than a plain screenshot —
-the story is the rescue, not the design. Note the engagement is still pre-launch
-per the knowledge base, so captures may need to come from the local mirror.
-
-### 3. Smart Broadcast — `smart-broadcast`
-
-| Need | Path to create | Notes |
-|---|---|---|
-| Card thumbnail | `public/projects/smart-broadcast-thumb.webp` | Landscape, 16:10 |
-| Detail screenshots | `public/projects/smart-broadcast-1.webp` … | 2–4 images |
-
-Admin dashboard and the live command-progress UI are the obvious captures. An
-architecture diagram of the microservices would also work here and might be
-easier than screenshots.
 
 ---
 

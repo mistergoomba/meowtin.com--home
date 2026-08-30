@@ -113,32 +113,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'smart-broadcast',
-    title: 'Radio Station\nManagement Platform',
-    navTitle: 'Smart Broadcast',
-    category: 'Platform / DevOps',
-    section: 'tools',
-    order: 2,
-    metric: 'Multi-tenant · unlimited stations',
-    description: `
-      A <strong>multi-tenant platform for running radio stations</strong> — built to modernize day-to-day broadcast operations without throwing away the expensive legacy equipment already in the rack.<br/><br/>
-      The architecture is <strong>microservices in Node.js and TypeScript</strong>, with <strong>DNS-based station routing</strong> giving every station its own address and complete data isolation from every other tenant. One deployment serves an unlimited number of stations, and no station can see another&#39;s data.<br/><br/>
-      Operations happen in real time over <strong>Socket.IO</strong>: commands report live 0–100% execution progress rather than leaving an operator guessing whether a thing worked. Access is controlled by <strong>JWT auth with access/refresh tokens</strong> and three roles (Admin, User, Viewer), with full audit logging behind it.<br/><br/>
-      The piece I&#39;m most pleased with is the <strong>dynamic command framework</strong>: commands are defined as JSON-schema-validated definitions (button, form, toggle, slider), and the interface builds itself from those definitions. That&#39;s what makes integrating a new piece of legacy hardware a configuration change instead of a development cycle.<br/><br/>
-      Solo-developed and fully containerized with Docker Compose — custom Docker networks for service discovery, health checks, persistent volumes, and structured logging with automatic restart on failure.
-    `,
-    technologies: [
-      'Node.js',
-      'TypeScript',
-      'Socket.IO',
-      'Docker',
-      'Microservices',
-      'JWT Auth',
-      'SQLite',
-    ],
-    screenshots: [],
-  },
-  {
     slug: 'video-platform',
     title: 'Custom Video\nPlatform Features',
     navTitle: 'Video Platform',
@@ -183,7 +157,18 @@ export const projects: Project[] = [
       'REST APIs',
       'Shopify API',
     ],
-    screenshots: [],
+    // BOTH IMAGES ARE REDACTED, and the fills are painted into the files
+    // themselves — never re-export from the raw captures. `-1` covers every mic
+    // serial, every order number, and the ShipStation/owner/shipto ids on the
+    // edited entry: a serial paired with its order number is exactly the
+    // warranty-lookup key this whole project exists to protect. `-2` covers the
+    // RM8 rows, which are unreleased product. Solid fill, never blur — blurred
+    // short numeric strings can be recovered.
+    thumbnail: '/projects/roswell-back-office-thumb.webp',
+    screenshots: [
+      '/projects/roswell-back-office-1.webp',
+      '/projects/roswell-back-office-2.webp',
+    ],
   },
 
   // ────────────────────────────────────────────────────────────────────────
@@ -308,7 +293,15 @@ export const projects: Project[] = [
       'CSS',
       'Theme Development',
     ],
-    screenshots: [],
+    thumbnail: '/projects/sage-madison-thumb.webp',
+    // Order follows the description: the homepage that was rebuilt out of
+    // PageFly first, then three of the ported content pages.
+    screenshots: [
+      '/projects/sage-madison-1.webp',
+      '/projects/sage-madison-2.webp',
+      '/projects/sage-madison-3.webp',
+      '/projects/sage-madison-4.webp',
+    ],
   },
   {
     slug: 'a-handmade-story',
@@ -337,7 +330,15 @@ export const projects: Project[] = [
       'Accessibility (WCAG)',
       'Performance',
     ],
-    screenshots: [],
+    thumbnail: '/projects/handmade-story-thumb.webp',
+    // The handed-back site: the homepage with the rewired nav, a post, and the
+    // recipe card. These are AFTER captures only — there is no before shot, so
+    // the rescue story is carried by the description, not by the images.
+    screenshots: [
+      '/projects/handmade-story-1.webp',
+      '/projects/handmade-story-2.webp',
+      '/projects/handmade-story-3.webp',
+    ],
   },
   {
     slug: 'machine-gun-experience',
@@ -452,13 +453,33 @@ export const projects: Project[] = [
     url: 'https://massage.meowtin.com',
     description: `
       Designed and built <strong>massage.meowtin.com</strong>, the home for my licensed massage therapy practice — which also makes it the one project where I was simultaneously the developer, the client, and the person answering the phone when the booking flow doesn&#39;t work.<br/><br/>
-      Built with <strong>React</strong> and <strong>Next.js</strong>, mobile-first, because essentially everyone books a massage from their phone. Three sessions&#39; worth of decisions on one page: what the work is (Swedish, deep tissue, myofascial release), what it costs, and a short path from landing to a request — plus imagery that sets a calm tone rather than a clinical one.<br/><br/>
+      Built with <strong>React 19</strong>, <strong>Vite</strong> and <strong>Tailwind 4</strong>, mobile-first, because essentially everyone books a massage from their phone. Three sessions&#39; worth of decisions on one page: what the work is (Swedish, deep tissue, myofascial release), what it costs, and a short path from landing to a request — plus imagery that sets a calm tone rather than a clinical one.<br/><br/>
+      <strong>The site takes its theme from you, not from me.</strong> There are two full palettes — warm parchment by day, deep aubergine and gold by night — and which one you get is resolved <em>before first paint</em> by a blocking script in the document head: your own explicit choice if you have made one, otherwise <code>prefers-color-scheme</code>. That ordering is why a dark-mode visitor never gets a flash of the cream page on load. React then reads the applied value back off the document rather than working it out again, so the first render can&#39;t disagree with what is already on screen.<br/><br/>
+      The part worth defending is what <em>doesn&#39;t</em> get saved: <strong>only an explicit tap of the toggle writes to storage.</strong> Persisting the resolved default would quietly pin a visitor to whatever their OS happened to say the first time they landed, and every later change to their system setting would stop reaching them. Someone who never touches the toggle keeps following their own preference — including when it flips at sunset.<br/><br/>
       The copy was the harder half. A bodywork site has to describe real benefit without <em>promising outcomes</em> — so every line names what I do rather than what will happen to you: <em>ease tension, support easier movement, bring you back to your body</em>. That constraint shaped the whole voice, and it&#39;s the same discipline that governs the rest of this site.<br/><br/>
       Fast, accessible, and deliberately simple to maintain — I run the practice, so the site had to be something I could update between appointments rather than a project of its own.
     `,
-    technologies: ['React', 'Next.js', 'Tailwind CSS', 'Responsive Design'],
-    thumbnail: '/projects/massage-site.webp',
-    screenshots: ['/projects/massage-site.webp'],
+    // Verified against the repo at ~/dev/meowtin-massage, not from memory: this
+    // entry claimed Next.js, and the site is React 19 on Vite 6.
+    technologies: [
+      'React 19',
+      'Vite',
+      'TypeScript',
+      'Tailwind CSS 4',
+      'Framer Motion',
+      'Responsive Design',
+    ],
+    // Captures of the rebuilt site; the single massage-site.webp shot of the old
+    // design has been deleted. `-1` and `-2` are the SAME view in the dark and
+    // light themes and are adjacent on purpose — the grid is 2-up, so they sit
+    // side by side in one row and read as a theme toggle rather than a
+    // duplicate. Do not separate them or insert anything between them.
+    thumbnail: '/projects/meowtin-massage-thumb.webp',
+    screenshots: [
+      '/projects/meowtin-massage-1.webp',
+      '/projects/meowtin-massage-2.webp',
+      '/projects/meowtin-massage-3.webp',
+    ],
   },
   {
     slug: 'tabs-formatter',

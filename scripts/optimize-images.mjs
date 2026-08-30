@@ -23,7 +23,6 @@ const config = {
   "focus/massage.png":           { maxWidth: 800,  quality: 82 },
   "focus/creative.png":          { maxWidth: 800,  quality: 82 },
   "projects/warboy-site.png":       { maxWidth: 420, quality: 76 },
-  "projects/massage-site.png":      { maxWidth: 420, quality: 76 },
   "projects/aittala-ashes.jpg":     { maxWidth: 420, quality: 76 },
   "projects/apocalyptic-times.jpg": { maxWidth: 420, quality: 76 },
   "projects/ai-casino.png":         { maxWidth: 420, quality: 78 },
